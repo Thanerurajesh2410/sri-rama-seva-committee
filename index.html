@@ -5,6 +5,13 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+          for (let r of registrations) r.unregister();
+        });
+      }
+    </script>
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>శ్రీ రామా సేవా కమిటీ పామినివాండ్లవూరు | Sri Rama Seva Committee Paminivandla Vooru</title>
