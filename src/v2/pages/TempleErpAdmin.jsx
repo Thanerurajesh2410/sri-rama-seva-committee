@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { LayoutDashboard, Users, Heart, DollarSign, Building2, Package, Award, ShieldCheck, FileText, Share2, Plus, Trash2, CheckCircle2, Lock, Download, Printer, Bell, AlertCircle, Eye, Phone, Mail, MapPin, Database, ChevronDown, Receipt, Sliders, Image as ImageIcon, ToggleLeft, ToggleRight, Camera, Upload, Sparkles, Edit3, QrCode } from 'lucide-react';
+import { LayoutDashboard, Users, Heart, DollarSign, Building2, Package, Award, ShieldCheck, FileText, Share2, Plus, Trash2, CheckCircle2, Lock, Download, Printer, Bell, AlertCircle, Eye, Phone, Mail, MapPin, Database, ChevronDown, Receipt, Sliders, Image as ImageIcon, ToggleLeft, ToggleRight, Camera, Upload, Sparkles, Edit3, QrCode, Palette } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
