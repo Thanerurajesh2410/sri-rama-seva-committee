@@ -49,36 +49,6 @@ const v1ClassicDonors = [
   { id: 'SRS-2026-016', donorName: 'Thaneru Munirathnam & Neelamma family', phone: '9866125609', email: 'sriramasevacommitteepvv@gmail.com', amount: 50000, date: '06-07-2026', seva: 'ఆలయ నిర్మాణ నిధి', mode: 'SBI Direct Transfer', city: 'పామినివాండ్లవూరు' }
 ];
 
-// High Contrast Text Color Calculation Helper (WCAG Relative Luminance Standard)
-export const getHighContrastTextColor = (hexColor) => {
-  if (!hexColor || typeof hexColor !== 'string') return '#FFFFFF';
-  let hex = hexColor.trim().replace('#', '');
-  if (hex.length === 3) {
-    hex = hex.split('').map(c => c + c).join('');
-  }
-  if (hex.length !== 6) return '#FFFFFF';
-  const r = parseInt(hex.substring(0, 2), 16);
-  const g = parseInt(hex.substring(2, 4), 16);
-  const b = parseInt(hex.substring(4, 6), 16);
-  const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-  return (yiq >= 140) ? '#0F172A' : '#FFFFFF';
-};
-
-export const defaultBlockColors = {
-  headerBg: '#FFFFFF',
-  tickerBg: '#FB6C00',
-  heroBg: '#F8FAFC',
-  eHundiBg: '#5C121E',
-  bankBg: '#0F172A',
-  sevasBg: '#FFFFFF',
-  galleryBg: '#F8FAFC',
-  committeeBg: '#FFFFFF',
-  eventsBg: '#F8FAFC',
-  reportsBg: '#FFFFFF',
-  footerBg: '#0F172A',
-  primaryButtonBg: '#FB6C00'
-};
-
 export const defaultWebsiteSettings = {
   showSlideshow: true,
   showAbout: true,
@@ -89,9 +59,7 @@ export const defaultWebsiteSettings = {
   showGallery: true,
   showNews: true,
   showReports: true,
-  showContact: true,
-  primaryColor: '#FB6C00',
-  blockColors: { ...defaultBlockColors }
+  showContact: true
 };
 
 export const defaultGalleryImages = [

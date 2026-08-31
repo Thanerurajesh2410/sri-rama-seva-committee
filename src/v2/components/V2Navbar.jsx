@@ -1,16 +1,9 @@
 import React, { useState } from 'react';
 import { LayoutDashboard, Users, Heart, Globe, Menu, X, Building2, Calendar, FileText, Camera, ShieldCheck, Sparkles, Phone, Lock, Zap, Bell, Palette, Sun, Moon } from 'lucide-react';
-import { getAssetUrl, getActiveLogo, getDB, getHighContrastTextColor } from '../data/v2Database';
+import { getAssetUrl, getActiveLogo } from '../data/v2Database';
 
 export default function V2Navbar({ activeModule, setActiveModule, lang, setLang, theme, setTheme, t, v2T, onToggleVersion }) {
   const [isOpen, setIsOpen] = useState(false);
-
-  const db = getDB();
-  const blockColors = db?.websiteSettings?.blockColors || {};
-  const headerBg = blockColors.headerBg || '#FFFFFF';
-  const headerTextColor = getHighContrastTextColor(headerBg);
-  const tickerBg = blockColors.tickerBg || '#FB6C00';
-  const tickerTextColor = getHighContrastTextColor(tickerBg);
 
   const toggleLang = () => {
     setLang(lang === 'te' ? 'en' : 'te');
@@ -23,18 +16,18 @@ export default function V2Navbar({ activeModule, setActiveModule, lang, setLang,
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b-2 border-slate-200 shadow-md backdrop-blur-md transition-colors" style={{ backgroundColor: headerBg, color: headerTextColor }}>
+    <header className="sticky top-0 z-50 bg-white/95 border-b border-slate-200 text-slate-900 shadow-sm backdrop-blur-md">
 
-      {/* ⚡ ATTENTION-GRABBING FLASH NEWS SCROLLING TICKER BAR (Visible on ALL Pages) */}
-      <div className="py-2 px-3 flex items-center justify-between gap-3 overflow-hidden shadow-md relative z-20 transition-colors" style={{ backgroundColor: tickerBg, color: tickerTextColor }}>
-        <div className="flex items-center gap-2 bg-white text-slate-900 font-black text-xs md:text-sm px-3.5 py-1 rounded-full shadow-md shrink-0 animate-pulse border border-amber-300">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#FB6C00] border border-white animate-ping" />
-          <Zap className="w-4 h-4 fill-[#FB6C00] text-[#FB6C00]" />
+      {/* ⚡ ATTENTION-GRABBING FLASH NEWS SCROLLING TICKER BAR */}
+      <div className="bg-gradient-to-r from-amber-700 via-orange-600 to-amber-700 py-2 px-3 flex items-center justify-between gap-3 text-white overflow-hidden shadow-sm relative z-20">
+        <div className="flex items-center gap-2 bg-white text-slate-900 font-black text-xs md:text-sm px-3.5 py-1 rounded-full shadow shrink-0 animate-pulse border border-amber-300">
+          <span className="w-2.5 h-2.5 rounded-full bg-amber-500 border border-white animate-ping" />
+          <Zap className="w-4 h-4 fill-amber-500 text-amber-600" />
           <span>⚡ తాజా ప్రకటన (FLASH NEWS)</span>
         </div>
 
         <div className="overflow-hidden w-full relative">
-          <div className="flash-news-content text-xs sm:text-sm md:text-base font-extrabold heading-telugu tracking-wide hover:[animation-play-state:paused] cursor-pointer" style={{ color: tickerTextColor }}>
+          <div className="flash-news-content text-xs sm:text-sm md:text-base font-extrabold text-amber-50 heading-telugu tracking-wide hover:[animation-play-state:paused] cursor-pointer">
             {lang === 'te' ? (
               <>
                 📢 ముఖ్య గమనిక: ఆలయ వెబ్‌సైట్‌లో ప్రదర్శించబడుతున్న విరాళాల వివరాలు, శ్రీ రామా సేవా కమిటీ పామినివాండ్లవూరు అధికారిక బ్యాంక్ ఖాతా సృష్టించిన తర్వాత NEFT లేదా UPI ద్వారా నేరుగా ఖాతాకు జమ కాబడినవి మాత్రమే ప్రదర్శించబడుతున్నాయి.
@@ -52,7 +45,7 @@ export default function V2Navbar({ activeModule, setActiveModule, lang, setLang,
       <div className="w-full px-4 md:px-6 py-2.5 overflow-x-auto scrollbar-none">
         <div className="flex items-center justify-between gap-4 whitespace-nowrap min-w-max">
           
-          {/* Crystal Clear Brand Logo & Left Alignment */}
+          {/* Brand Logo & Title */}
           <div className="flex items-center gap-3 shrink-0 select-none cursor-pointer group" onClick={() => setActiveModule('public-home')}>
             <div className="relative shrink-0">
               <img
@@ -62,22 +55,22 @@ export default function V2Navbar({ activeModule, setActiveModule, lang, setLang,
                   e.currentTarget.onerror = null;
                   e.currentTarget.src = getAssetUrl('assets/logo.jpg');
                 }}
-                className="w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-[#FB6C00] shadow-lg object-cover bg-white p-0.5 ring-2 ring-[#FB6C00]/40 transform group-hover:scale-105 transition-transform"
+                className="w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-amber-500 shadow-md object-cover bg-white p-0.5 ring-2 ring-amber-400/30 transform group-hover:scale-105 transition-transform"
               />
-              <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-[#FB6C00] rounded-full border-2 border-white shadow" title="Official Verified ERP Active" />
+              <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-white shadow" title="Official Verified ERP Active" />
             </div>
 
             <div className="flex flex-col justify-center">
-              <h1 className="text-base md:text-xl font-black heading-telugu leading-tight transition-colors" style={{ color: headerTextColor }}>
+              <h1 className="text-base md:text-xl font-black text-slate-900 heading-telugu leading-tight group-hover:text-amber-700 transition-colors">
                 {t.nav.title}
               </h1>
-              <p className="text-[11px] md:text-xs font-extrabold" style={{ color: headerTextColor === '#FFFFFF' ? '#FFD700' : '#FB6C00' }}>
+              <p className="text-[11px] md:text-xs text-amber-700 font-extrabold">
                 {v2T.tagline}
               </p>
             </div>
           </div>
 
-          {/* Left Aligned Module Navigation - Fits All Screen Widths */}
+          {/* Module Navigation */}
           <div className="flex items-center gap-2 md:gap-3 shrink-0">
             
             {/* 1. Global View (Public Website) */}
@@ -85,12 +78,12 @@ export default function V2Navbar({ activeModule, setActiveModule, lang, setLang,
               onClick={() => setActiveModule('public-home')}
               className={`btn-autofit px-3.5 md:px-4 py-2 rounded-xl text-xs md:text-sm font-black transition-all flex items-center gap-1.5 shrink-0 ${
                 activeModule.startsWith('public')
-                  ? 'bg-[#FB6C00] text-white border-2 border-[#FB6C00] shadow-md scale-105'
-                  : 'text-slate-700 bg-slate-100 border border-slate-200 hover:bg-orange-50 hover:text-[#FB6C00]'
+                  ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white border border-amber-500 shadow-sm scale-105'
+                  : 'text-slate-700 bg-slate-100 border border-slate-200 hover:bg-amber-50 hover:text-amber-800'
               }`}
               title="Global Public View - Temple website, donation wall & events"
             >
-              <Globe className="w-4 h-4 text-[#FB6C00]" />
+              <Globe className="w-4 h-4 text-amber-600" />
               <span>🌐 Global View (ప్రజా వెబ్‌సైట్)</span>
             </button>
 
@@ -99,12 +92,12 @@ export default function V2Navbar({ activeModule, setActiveModule, lang, setLang,
               onClick={() => setActiveModule('devotee-portal')}
               className={`btn-autofit px-3.5 md:px-4 py-2 rounded-xl text-xs md:text-sm font-black transition-all flex items-center gap-1.5 shrink-0 ${
                 activeModule === 'devotee-portal'
-                  ? 'bg-[#FB6C00] text-white border-2 border-[#FB6C00] shadow-md scale-105'
-                  : 'text-slate-700 bg-slate-100 border border-slate-200 hover:bg-orange-50 hover:text-[#FB6C00]'
+                  ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white border border-amber-500 shadow-sm scale-105'
+                  : 'text-slate-700 bg-slate-100 border border-slate-200 hover:bg-amber-50 hover:text-amber-800'
               }`}
               title="Devotee View - My donations, pooja bookings & receipts"
             >
-              <Users className="w-4 h-4 text-[#FB6C00]" />
+              <Users className="w-4 h-4 text-amber-600" />
               <span>🛕 Devotee View (భక్తుల పోర్టల్)</span>
             </button>
 
@@ -113,51 +106,51 @@ export default function V2Navbar({ activeModule, setActiveModule, lang, setLang,
               onClick={() => setActiveModule('erp-admin')}
               className={`btn-autofit px-3.5 md:px-4 py-2 rounded-xl text-xs md:text-sm font-black transition-all flex items-center gap-1.5 shrink-0 ${
                 activeModule === 'erp-admin'
-                  ? 'bg-[#FB6C00] text-white border-2 border-[#FB6C00] shadow-md scale-105'
-                  : 'text-slate-700 bg-slate-100 border border-slate-200 hover:bg-orange-50 hover:text-[#FB6C00]'
+                  ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white border border-amber-500 shadow-sm scale-105'
+                  : 'text-slate-700 bg-slate-100 border border-slate-200 hover:bg-amber-50 hover:text-amber-800'
               }`}
               title="Admin View - Financial management, donor approvals & database"
             >
-              <LayoutDashboard className="w-4 h-4 text-[#FB6C00]" />
+              <LayoutDashboard className="w-4 h-4 text-amber-600" />
               <span>⚙️ Admin View (టెంపుల్ ERP అడ్మిన్)</span>
             </button>
 
             {/* 4. Swagger API Explorer Button */}
             <button
               onClick={() => setActiveModule('api-explorer')}
-              className={`px-3.5 md:px-4.5 py-2 rounded-xl text-sm md:text-base lg:text-[17px] font-black transition-all flex items-center gap-1.5 shrink-0 ${
+              className={`px-3.5 md:px-4.5 py-2 rounded-xl text-sm md:text-base font-black transition-all flex items-center gap-1.5 shrink-0 ${
                 activeModule === 'api-explorer'
-                  ? 'bg-[#FB6C00] text-white border-2 border-[#FB6C00] shadow-md scale-105'
-                  : 'text-slate-700 bg-slate-100 border border-slate-200 hover:bg-orange-50 hover:text-[#FB6C00]'
+                  ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white border border-amber-500 shadow-sm scale-105'
+                  : 'text-slate-700 bg-slate-100 border border-slate-200 hover:bg-amber-50 hover:text-amber-800'
               }`}
             >
-              <FileText className="w-4 h-4 text-[#FB6C00]" />
+              <FileText className="w-4 h-4 text-amber-600" />
               <span>Swagger REST API</span>
             </button>
 
             {/* Donate CTA */}
             <button
               onClick={() => setActiveModule('public-donations')}
-              className="btn-primary text-sm md:text-base lg:text-[17px] !py-2 !px-4 md:!px-5 shadow-lg border-2 border-orange-400 font-black shrink-0 rounded-xl"
+              className="btn-primary text-sm md:text-base !py-2 !px-4 md:!px-5 shadow border border-orange-500 font-black shrink-0 rounded-xl"
             >
               <Heart className="w-4 h-4 fill-white text-white" />
               <span>ఈ-హుండి విరాళం</span>
             </button>
 
-            {/* Theme Toggle Button (Light Theme / Dark Theme) */}
+            {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
-              className="px-3.5 py-2 rounded-xl text-xs md:text-sm font-black bg-orange-100 text-orange-950 border-2 border-[#FB6C00] hover:bg-orange-200 transition-all flex items-center gap-1.5 shrink-0 shadow-sm"
+              className="px-3.5 py-2 rounded-xl text-xs md:text-sm font-black bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100 transition-all flex items-center gap-1.5 shrink-0 shadow-xs"
               title="థీమ్ మార్చుకోండి (Light / Dark Theme Toggle)"
             >
               {theme === 'theme-light' ? (
                 <>
-                  <Sun className="w-4 h-4 text-[#FB6C00]" />
+                  <Sun className="w-4 h-4 text-amber-600" />
                   <span>లైట్ థీమ్</span>
                 </>
               ) : (
                 <>
-                  <Moon className="w-4 h-4 text-[#FB6C00]" />
+                  <Moon className="w-4 h-4 text-amber-600" />
                   <span>డార్క్ థీమ్</span>
                 </>
               )}

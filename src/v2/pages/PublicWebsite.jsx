@@ -3,7 +3,7 @@ import { Building2, Heart, Calendar, FileText, Camera, ShieldCheck, MapPin, Mail
 import confetti from 'canvas-confetti';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
-import { getDB, saveDB, addAuditLog, getAssetUrl, getActiveLogo, getActiveQrCode, getHighContrastTextColor } from '../data/v2Database';
+import { getDB, saveDB, addAuditLog, getAssetUrl, getActiveLogo, getActiveQrCode } from '../data/v2Database';
 
 const slideshowImages = [
   { id: 1, src: getAssetUrl('assets/temple_photo_1.png'), title: 'శ్రీ రామాలయ శంకుస్థాపన పవిత్ర రాతి స్తంభాల పూజ', tag: 'పామినివాండ్లవూరు శంకుస్థాపన' },
@@ -244,17 +244,17 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
   return (
     <div className="text-slate-900 min-h-screen sacred-temple-bg-masked">
       
-      {/* Sub-Navigation Menu Bar - Dynamic Filtering Based on Admin Settings */}
-      <div className="bg-white/95 border-b border-slate-200 sticky top-[73px] z-40 backdrop-blur-md overflow-x-auto scrollbar-none py-3 px-3 shadow-md">
-        <div className="flex items-center justify-start gap-2.5 md:gap-3.5 whitespace-nowrap text-sm sm:text-base md:text-lg font-black px-2">
+      {/* Sub-Navigation Menu Bar */}
+      <div className="bg-white/95 border-b border-slate-200 sticky top-[73px] z-40 backdrop-blur-md overflow-x-auto scrollbar-none py-2.5 px-3 shadow-xs">
+        <div className="flex items-center justify-start gap-2.5 md:gap-3 whitespace-nowrap text-sm sm:text-base md:text-lg font-black px-2">
           {navTabs.map(tab => (
             <button
               key={tab.id}
               onClick={() => { setActiveTab(tab.id); if (setSubSection) setSubSection(tab.id); }}
-              className={`px-4 sm:px-5 py-2.5 rounded-full transition-all border shrink-0 ${
+              className={`px-4 sm:px-5 py-2 rounded-full transition-all border shrink-0 ${
                 activeTab === tab.id
-                  ? 'bg-[#FB6C00] text-white border-2 border-[#FB6C00] shadow-md scale-105 font-black'
-                  : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-orange-50 hover:text-[#FB6C00] font-extrabold'
+                  ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white border-amber-500 shadow-sm scale-105 font-black'
+                  : 'bg-slate-100/90 text-slate-700 border-slate-200 hover:bg-amber-50 hover:text-amber-800 font-extrabold'
               }`}
             >
               {tab.label}
@@ -268,16 +268,16 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
         <div className="space-y-10 animate-fadeIn">
           
           <div className="container mx-auto px-4 py-4 relative z-10">
-            {/* Hero Header Section with Divine Lord Rama Logo */}
+            {/* Hero Header Section with Divine Lord Rama Emblem */}
             <div className="text-center max-w-4xl mx-auto py-2">
-              <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full text-xs md:text-sm font-black bg-[#FB6C00] text-white border-2 border-orange-300 shadow-md mb-4 animate-bounce">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs md:text-sm font-black bg-amber-100 text-amber-900 border border-amber-300 shadow-xs mb-4">
                 <span>🚩 {t.hero.badge}</span>
               </div>
 
-              {/* Fixed Lord Rama Divine Portrait Logo */}
+              {/* Lord Rama Divine Portrait Emblem */}
               <div className="flex justify-center my-4">
                 <div className="relative group">
-                  <div className="absolute -inset-6 bg-gradient-to-r from-[#FB6C00] via-orange-400 to-[#FB6C00] rounded-full blur-2xl opacity-75 group-hover:opacity-100 transition duration-1000 animate-pulse" />
+                  <div className="absolute -inset-4 bg-gradient-to-r from-amber-500 via-orange-400 to-amber-600 rounded-full blur-xl opacity-50 group-hover:opacity-75 transition duration-700 animate-pulse" />
                   <img
                     src={getActiveLogo()}
                     alt="Lord Rama Portrait"
@@ -285,9 +285,9 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                       e.currentTarget.onerror = null;
                       e.currentTarget.src = getAssetUrl('assets/logo.jpg');
                     }}
-                    className="relative w-40 h-40 md:w-52 md:h-52 rounded-full border-4 border-[#FB6C00] shadow-[0_0_40px_rgba(251,108,0,0.45)] object-cover bg-white"
+                    className="relative w-40 h-40 md:w-48 md:h-48 rounded-full border-4 border-amber-500 shadow-[0_0_30px_rgba(217,119,6,0.25)] object-cover bg-white"
                   />
-                  <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-[#C25200] text-white border-2 border-[#FB6C00] px-4 py-1 rounded-full text-xs font-black shadow-lg flex items-center gap-1.5 whitespace-nowrap">
+                  <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-800 to-orange-900 text-amber-100 border border-amber-400 px-4 py-1 rounded-full text-xs font-black shadow-md flex items-center gap-1.5 whitespace-nowrap">
                     <Sparkles className="w-3.5 h-3.5 fill-amber-300 text-amber-300" />
                     <span>॥ జై శ్రీ రామ్ ॥</span>
                   </div>
@@ -297,7 +297,7 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
               <h1 className="text-3xl md:text-5xl font-black heading-telugu leading-tight mb-2 text-slate-900">
                 <span className="heading-gold">{t.hero.title}</span>
               </h1>
-              <p className="text-lg md:text-xl font-extrabold text-[#FB6C00] heading-telugu mb-6">
+              <p className="text-lg md:text-xl font-extrabold text-amber-800 heading-telugu mb-6">
                 "{t.hero.slogan}"
               </p>
             </div>
@@ -387,25 +387,25 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
             <div ref={bankSectionRef} className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
               
               {/* E-Hundi & QR Scanner Card */}
-              <div className="gold-card border-3 border-[#FB6C00] shadow-xl bg-gradient-to-b from-[#FB6C00] via-orange-600 to-[#C25200] text-white flex flex-col justify-between !p-6 sm:!p-8 rounded-3xl">
+              <div className="gold-card border border-amber-500/40 shadow-xl bg-gradient-to-br from-[#4A0E17] via-[#2A060B] to-[#1A0306] text-white flex flex-col justify-between !p-6 sm:!p-8 rounded-3xl">
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-xs sm:text-sm font-black uppercase tracking-wider text-black bg-white px-3.5 py-1.5 rounded-full shadow-md flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 fill-[#FB6C00] text-[#FB6C00]" />
+                    <span className="text-xs sm:text-sm font-black uppercase tracking-wider text-amber-950 bg-amber-300 px-3.5 py-1 rounded-full shadow-sm flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 fill-amber-950 text-amber-950" />
                       ఈ-హుండి (E-HUNDI)
                     </span>
-                    <span className="text-xs sm:text-sm font-black text-orange-100">100% SECURE & DIRECT</span>
+                    <span className="text-xs sm:text-sm font-black text-amber-300">100% SECURE & DIRECT</span>
                   </div>
 
                   <h3 className="text-2xl sm:text-3xl font-black text-white heading-telugu mb-3">
                     PhonePe & UPI E-Hundi Scanner
                   </h3>
 
-                  <p className="text-sm sm:text-base text-orange-50 mb-6 leading-relaxed font-semibold">
+                  <p className="text-sm sm:text-base text-gray-200 mb-6 leading-relaxed font-semibold">
                     {t.donation.scanQr}
                   </p>
 
-                  <div className="bg-black/40 p-5 rounded-2xl border-2 border-dashed border-white/40 flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left shadow-2xl">
+                  <div className="bg-black/50 p-5 rounded-2xl border border-amber-500/40 flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left shadow-lg">
                     <img
                       src={getActiveQrCode()}
                       alt="PhonePe QR Scanner"
@@ -413,7 +413,7 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                         e.currentTarget.onerror = null;
                         e.currentTarget.src = getAssetUrl('assets/phonepe_qr.png');
                       }}
-                      className="w-36 h-36 rounded-xl object-contain bg-white p-1.5 border-2 border-amber-400 shadow-2xl cursor-pointer hover:scale-105 transition-transform"
+                      className="w-36 h-36 rounded-xl object-contain bg-white p-1.5 border border-amber-400 shadow-lg cursor-pointer hover:scale-105 transition-transform"
                       onClick={() => setShowQrModal(true)}
                     />
 
@@ -421,37 +421,37 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                       <h4 className="text-base sm:text-lg font-black text-white mb-1.5 leading-snug">
                         SRI RAMA SEVA COMMITTEE PAMINIVANDLAVOORU
                       </h4>
-                      <p className="text-sm sm:text-base font-mono text-amber-200 font-black mb-3">
+                      <p className="text-sm sm:text-base font-mono text-amber-300 font-black mb-3">
                         UPI ID: {t.donation.upiId}
                       </p>
 
                       <button
                         onClick={() => copyToClipboard(t.donation.upiId, 'upi')}
-                        className="btn-gold text-xs sm:text-sm !py-2 !px-4 rounded-xl font-bold bg-white text-orange-950 hover:bg-orange-100"
+                        className="btn-gold text-xs sm:text-sm !py-2 !px-4 rounded-xl font-bold"
                       >
-                        {copiedUpi ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4 text-orange-950" />}
+                        {copiedUpi ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
                         <span>{copiedUpi ? "UPI ID కాపీ అయింది" : "UPI ID కాపీ చేయి"}</span>
                       </button>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-8 pt-5 border-t border-white/20 flex justify-center">
+                <div className="mt-8 pt-5 border-t border-white/15 flex justify-center">
                   <button
                     onClick={() => setShowQrModal(true)}
-                    className="btn-primary text-sm sm:text-base w-full py-4 shadow-2xl flex items-center justify-center gap-2.5 font-black rounded-2xl bg-white text-orange-950 border-2 border-white hover:bg-orange-100"
+                    className="btn-primary text-sm sm:text-base w-full py-3.5 shadow-lg flex items-center justify-center gap-2.5 font-black rounded-2xl"
                   >
-                    <QrCode className="w-5 h-5 text-orange-950" />
+                    <QrCode className="w-5 h-5" />
                     <span>QR కోడ్ జూమ్ చేసి స్కాన్ చేయండి (Open Scanner)</span>
                   </button>
                 </div>
               </div>
 
               {/* Direct SBI Bank Account Transfer Card */}
-              <div className="gold-card border-3 border-amber-400 bg-gradient-to-b from-[#4A0E17] via-[#2A060B] to-[#1A0306] flex flex-col justify-between !p-6 sm:!p-8 rounded-3xl shadow-2xl">
+              <div className="gold-card border border-amber-500/40 bg-gradient-to-br from-[#4A0E17] via-[#2A060B] to-[#1A0306] text-white flex flex-col justify-between !p-6 sm:!p-8 rounded-3xl shadow-xl">
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-xs sm:text-sm font-black uppercase tracking-wider text-[#FFD700] bg-[#5C121E] px-3.5 py-1.5 rounded-full border border-[#FFD700]/50 flex items-center gap-2">
+                    <span className="text-xs sm:text-sm font-black uppercase tracking-wider text-amber-300 bg-black/50 px-3.5 py-1.5 rounded-full border border-amber-500/40 flex items-center gap-2">
                       <Building2 className="w-4 h-4 text-amber-300" />
                       BANK TRANSFER
                     </span>

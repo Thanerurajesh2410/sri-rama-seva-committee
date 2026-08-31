@@ -3,10 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --primary-theme-color: #FB6C00;
-  --primary-orange: var(--primary-theme-color, #FB6C00);
-  --primary-gold: var(--primary-theme-color, #FB6C00);
-  --primary-saffron: var(--primary-theme-color, #FB6C00);
+  --primary-orange: #EA580C;
+  --primary-gold: #D97706;
+  --primary-saffron: #C2410C;
   --font-heading: 'Cinzel', serif;
   --font-telugu: 'Noto Sans Telugu', sans-serif;
   --font-body: 'Outfit', sans-serif;
@@ -23,7 +22,7 @@ html {
 }
 
 /* =========================================================
-   THEME 1: Clean Modern Light Slate & Vibrant #FB6C00 Orange (Default)
+   THEME 1: Clean Modern Light Slate Devotional Theme
    ========================================================= */
 body, body.theme-light, body.theme-light-slate, body.theme-cream {
   font-family: var(--font-body), var(--font-telugu), sans-serif;
@@ -34,11 +33,9 @@ body, body.theme-light, body.theme-light-slate, body.theme-cream {
   line-height: 1.6;
   position: relative;
   background-image: 
-    radial-gradient(circle at 50% 0%, rgba(251, 108, 0, 0.09) 0%, transparent 45%),
-    radial-gradient(circle at 20% 25%, rgba(251, 108, 0, 0.06) 0%, transparent 40%),
-    radial-gradient(circle at 80% 60%, rgba(251, 108, 0, 0.06) 0%, transparent 45%),
-    linear-gradient(180deg, #F8FAFC 0%, #F1F5F9 50%, #E2E8F0 100%),
-    url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23FB6C00' fill-opacity='0.03'%3E%3Cpath d='M50 5 C 25 5, 5 25, 5 50 C 5 75, 25 95, 50 95 C 75 95, 95 75, 95 50 C 95 25, 75 5, 50 5 Z'/%3E%3C/g%3E%3C/svg%3E");
+    radial-gradient(circle at 50% 0%, rgba(234, 88, 12, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 40%, rgba(217, 119, 6, 0.04) 0%, transparent 40%),
+    linear-gradient(180deg, #F8FAFC 0%, #F1F5F9 100%);
   background-attachment: fixed;
 }
 
@@ -46,8 +43,7 @@ body, body.theme-light, body.theme-light-slate, body.theme-cream {
 .sacred-temple-bg-masked {
   position: relative;
   background-image: 
-    radial-gradient(circle at 50% 20%, rgba(255, 247, 237, 0.85) 0%, rgba(241, 245, 249, 0.92) 50%, rgba(226, 232, 240, 0.98) 90%),
-    linear-gradient(180deg, rgba(248, 250, 252, 0.9) 0%, rgba(241, 245, 249, 0.95) 50%, rgba(226, 232, 240, 0.98) 100%),
+    radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.96) 60%, rgba(241, 245, 249, 0.98) 100%),
     url('/assets/temple_bg.jpg');
   background-size: cover;
   background-position: center top;
@@ -57,9 +53,9 @@ body, body.theme-light, body.theme-light-slate, body.theme-cream {
 
 body.theme-light .gold-card, body.theme-light-slate .gold-card, body.theme-cream .gold-card {
   background: #FFFFFF;
-  border: 1.5px solid #E2E8F0;
+  border: 1px solid #E2E8F0;
   color: #0F172A;
-  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.07), 0 4px 6px -4px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
 }
 
 body.theme-light h1, body.theme-light h2, body.theme-light h3, body.theme-light h4,

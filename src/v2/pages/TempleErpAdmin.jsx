@@ -3,7 +3,7 @@ import { LayoutDashboard, Users, Heart, DollarSign, Building2, Package, Award, S
 import confetti from 'canvas-confetti';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
-import { getDB, saveDB, validateUniqueDevotee, addAuditLog, defaultWebsiteSettings, defaultGalleryImages, generateSqlDump, resetToInitialDB, getAssetUrl, getActiveLogo, getActiveQrCode, updateMediaAsset, resetMediaAsset, getHighContrastTextColor, defaultBlockColors } from '../data/v2Database';
+import { getDB, saveDB, validateUniqueDevotee, addAuditLog, defaultWebsiteSettings, defaultGalleryImages, generateSqlDump, resetToInitialDB, getAssetUrl, getActiveLogo, getActiveQrCode, updateMediaAsset, resetMediaAsset } from '../data/v2Database';
 
 export default function TempleErpAdmin({ t, v2T, showToast }) {
   const [db, setDbState] = useState(getDB());
@@ -1709,144 +1709,10 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
 
               return (
                 <div className="space-y-6">
-                  
-                  {/* 🎨 BLOCK-BY-BLOCK COLOR & CONTRAST CUSTOMIZER */}
-                  <div className="gold-card border-3 border-[#FB6C00] p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white shadow-2xl space-y-6">
-                    <div className="flex items-center justify-between flex-wrap gap-4 border-b border-slate-700 pb-4">
-                      <div className="flex items-center gap-3">
-                        <Palette className="w-8 h-8 text-[#FB6C00] animate-pulse" />
-                        <div>
-                          <h3 className="text-xl sm:text-2xl font-black text-white heading-telugu flex items-center gap-2">
-                            <span>🎨 ప్రతి విభాగానికి వర్ణ నియంత్రకం (Block-by-Block Color & High-Contrast Customizer)</span>
-                          </h3>
-                          <p className="text-xs sm:text-sm text-slate-300 font-extrabold">
-                            వెబ్‌సైట్ లోని ప్రతి విభాగం (Block) కి మీకు నచ్చిన బ్యాక్‌గ్రౌండ్ రంగును అమర్చండి. రంగును బట్టి అక్షరాల రంగు (Text Color) ఆటోమేటిక్‌గా హై-కాంట్రాస్ట్‌లో క్లియర్‌గా కనిపిస్తుంది!
-                          </p>
-                        </div>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (window.confirm("అన్ని విభాగాల రంగులను ఒరిజినల్ డిఫాల్ట్ కు రీసెట్ చేయాలా?")) {
-                            const currentDB = getDB();
-                            if (!currentDB.websiteSettings) currentDB.websiteSettings = { ...defaultWebsiteSettings };
-                            currentDB.websiteSettings.blockColors = { ...defaultBlockColors };
-                            saveDB(currentDB);
-                            setDbState({ ...currentDB });
-                            showToast("అన్ని విభాగాల రంగులు డిఫాల్ట్‌కు రీసెట్ అయ్యాయి!");
-                          }
-                        }}
-                        className="px-4 py-2 rounded-xl text-xs font-black bg-slate-800 text-amber-300 border border-slate-700 hover:bg-slate-700 transition-all flex items-center gap-1.5 shrink-0 shadow"
-                      >
-                        <span>🔄 రీసెట్ (Reset All Blocks to Default)</span>
-                      </button>
-                    </div>
-
-                    {/* Block-by-Block Cards Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {[
-                        { key: 'headerBg', label: '1. హెడర్ & నెవిగేషన్ బార్ (Header Navigation Bar)', desc: 'సైట్ టాప్ లోగో & మెనూ బార్' },
-                        { key: 'tickerBg', label: '2. ఫ్లాష్ న్యూస్ టిక్కర్ (Flash News Scrolling Ticker)', desc: 'తాజా ప్రకటనల స్క్రోలింగ్ పట్టీ' },
-                        { key: 'heroBg', label: '3. హోమ్ బానర్ & లోగో వర్గం (Hero Emblem Section)', desc: 'శ్రీ రాములవారి పవిత్ర లోగో & స్వాగత శీర్షిక' },
-                        { key: 'eHundiBg', label: '4. ఈ-హుండి PhonePe QR కార్డ్ (E-Hundi QR Scanner Card)', desc: 'డిజిటల్ విరాళాల PhonePe QR స్కేనర్' },
-                        { key: 'bankBg', label: '5. SBI బ్యాంక్ ఖాతా కార్డ్ (Direct SBI Bank Account Card)', desc: 'అధికారిక SBI అకౌంట్ వివరాల కార్డ్' },
-                        { key: 'sevasBg', label: '6. ఆలయ వేళలు & సేవలు (Pooja Timings & Sevas)', desc: 'స్వామివారి నిత్య పూజ వేళలు & రథోత్సవం' },
-                        { key: 'galleryBg', label: '7. ఫోటో గ్యాలరీ విభాగం (Construction Photo Gallery)', desc: 'శ్రీ రామాలయ శంకుస్థాపన & నిర్మాణ ఫోటోలు' },
-                        { key: 'eventsBg', label: '8. వార్షిక ఉత్సవాలు (Events & Festivals)', desc: 'శ్రీరామనవమి, దసరా & వార్షిక ఉత్సవాలు' },
-                        { key: 'committeeBg', label: '9. పాలక మండలి సభ్యులు (Committee Members)', desc: 'కమిటీ పెద్దలు, అధ్యక్షులు & సభ్యులు' },
-                        { key: 'reportsBg', label: '10. ఆడిటింగ్ నివేదికలు (Financial Audit Reports)', desc: 'డబ్బుల జమ ఖర్చు పారదర్శక నివేదికలు' },
-                        { key: 'footerBg', label: '11. ఫుటర్ & సమాచారం (Footer & Contact Section)', desc: 'ఆలయ అడ్రస్ & సంప్రదింపు ఫుటర్' },
-                      ].map(block => {
-                        const currentBlockColors = settings.blockColors || defaultBlockColors;
-                        const blockColor = currentBlockColors[block.key] || defaultBlockColors[block.key] || '#FFFFFF';
-                        const computedTextColor = getHighContrastTextColor(blockColor);
-
-                        return (
-                          <div key={block.key} className="p-4 rounded-2xl bg-slate-800/80 border border-slate-700 space-y-3 shadow-lg">
-                            <div className="flex items-center justify-between gap-2">
-                              <div>
-                                <h4 className="text-sm font-black text-white heading-telugu">{block.label}</h4>
-                                <p className="text-[11px] text-slate-400 font-bold">{block.desc}</p>
-                              </div>
-                            </div>
-
-                            <div className="flex items-center gap-3">
-                              <input
-                                type="color"
-                                value={blockColor}
-                                onChange={(e) => {
-                                  const newColor = e.target.value;
-                                  const currentDB = getDB();
-                                  if (!currentDB.websiteSettings) currentDB.websiteSettings = { ...defaultWebsiteSettings };
-                                  if (!currentDB.websiteSettings.blockColors) currentDB.websiteSettings.blockColors = { ...defaultBlockColors };
-                                  currentDB.websiteSettings.blockColors[block.key] = newColor;
-                                  saveDB(currentDB);
-                                  setDbState({ ...currentDB });
-                                  showToast(`${block.label.split('(')[0]} రంగు అప్‌డేట్ అయింది!`);
-                                }}
-                                className="w-12 h-12 rounded-xl cursor-pointer bg-slate-900 border-2 border-slate-600 p-1 shadow shrink-0"
-                                title="Color Picker"
-                              />
-
-                              <input
-                                type="text"
-                                value={blockColor}
-                                onChange={(e) => {
-                                  const newColor = e.target.value;
-                                  const currentDB = getDB();
-                                  if (!currentDB.websiteSettings) currentDB.websiteSettings = { ...defaultWebsiteSettings };
-                                  if (!currentDB.websiteSettings.blockColors) currentDB.websiteSettings.blockColors = { ...defaultBlockColors };
-                                  currentDB.websiteSettings.blockColors[block.key] = newColor;
-                                  saveDB(currentDB);
-                                  setDbState({ ...currentDB });
-                                }}
-                                className="w-28 bg-slate-900 border border-slate-700 text-white rounded-xl px-3 py-2 text-sm font-mono font-bold"
-                              />
-
-                              {/* Preset Color Swatches */}
-                              <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none py-1">
-                                {['#FFFFFF', '#F8FAFC', '#5C121E', '#0F172A', '#FB6C00', '#059669', '#2563EB', '#DC2626'].map(presetHex => (
-                                  <button
-                                    key={presetHex}
-                                    type="button"
-                                    onClick={() => {
-                                      const currentDB = getDB();
-                                      if (!currentDB.websiteSettings) currentDB.websiteSettings = { ...defaultWebsiteSettings };
-                                      if (!currentDB.websiteSettings.blockColors) currentDB.websiteSettings.blockColors = { ...defaultBlockColors };
-                                      currentDB.websiteSettings.blockColors[block.key] = presetHex;
-                                      saveDB(currentDB);
-                                      setDbState({ ...currentDB });
-                                      showToast(`${block.label.split('(')[0]} రంగు అప్‌డేట్ అయింది!`);
-                                    }}
-                                    className="w-6 h-6 rounded-full border border-white/40 shadow-sm shrink-0 transition-transform hover:scale-110 active:scale-95"
-                                    style={{ backgroundColor: presetHex }}
-                                    title={presetHex}
-                                  />
-                                ))}
-                              </div>
-                            </div>
-
-                            {/* Live Text Contrast Preview Box */}
-                            <div
-                              className="p-3 rounded-xl border-2 transition-all flex items-center justify-between text-xs font-black shadow-inner"
-                              style={{ backgroundColor: blockColor, color: computedTextColor, borderColor: computedTextColor === '#FFFFFF' ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.2)' }}
-                            >
-                              <span>అక్షరాల కాంట్రాస్ట్: {computedTextColor === '#FFFFFF' ? '🌙 వెలుగు అక్షరాలు (White Text)' : '☀️ నలుపు అక్షరాలు (Dark Text)'}</span>
-                              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold border" style={{ backgroundColor: computedTextColor === '#FFFFFF' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)', color: computedTextColor }}>
-                                100% VISIBLE
-                              </span>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <div className="gold-card border-3 border-[#FFD700] p-6 rounded-3xl bg-gradient-to-r from-[#5C121E] via-[#3A0A11] to-[#5C121E]">
+                  <div className="gold-card border border-amber-500/40 p-6 rounded-3xl bg-gradient-to-br from-[#4A0E17] via-[#2A060B] to-[#1A0306] text-white shadow-xl">
                     <div className="flex items-center gap-3 mb-2">
-                      <Sliders className="w-8 h-8 text-[#FFD700]" />
-                      <h3 className="text-xl sm:text-2xl font-black text-[#FFD700] heading-telugu">
+                      <Sliders className="w-8 h-8 text-amber-300" />
+                      <h3 className="text-xl sm:text-2xl font-black text-amber-300 heading-telugu">
                         పబ్లిక్ వెబ్‌సైట్ డిస్‌ప్లే కంట్రోలర్ (Public Website Visibility Manager)
                       </h3>
                     </div>

@@ -51,16 +51,7 @@ export default function App() {
   const [donorList, setDonorList] = useState(t.donorWall.donors);
   const [committeeList, setCommitteeList] = useState(t.committee.members);
 
-  // Sync theme & dynamic primary color theme
   useEffect(() => {
-    try {
-      const db = getDB();
-      const primaryColor = db?.websiteSettings?.primaryColor || '#FB6C00';
-      document.documentElement.style.setProperty('--primary-theme-color', primaryColor);
-      document.documentElement.style.setProperty('--primary-saffron', primaryColor);
-    } catch (err) {
-      console.warn("Theme sync err:", err);
-    }
     document.body.className = theme;
     localStorage.setItem('sri_rama_theme', theme);
   }, [theme]);
