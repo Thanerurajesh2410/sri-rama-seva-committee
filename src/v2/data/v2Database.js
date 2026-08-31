@@ -59,7 +59,8 @@ export const defaultWebsiteSettings = {
   showGallery: true,
   showNews: true,
   showReports: true,
-  showContact: true
+  showContact: true,
+  primaryColor: '#FB6C00'
 };
 
 export const defaultGalleryImages = [

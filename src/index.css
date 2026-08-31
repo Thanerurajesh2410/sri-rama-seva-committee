@@ -3,15 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --primary-orange: #FB6C00;
-  --primary-orange-hover: #E05D00;
-  --primary-gold: #FB6C00;
-  --primary-gold-light: #FFEDD5;
-  --primary-gold-dark: #C25200;
-  --primary-saffron: #FB6C00;
-  --primary-saffron-dark: #C25200;
-  --sacred-crimson: #FB6C00;
-  --sacred-maroon: #C25200;
+  --primary-theme-color: #FB6C00;
+  --primary-orange: var(--primary-theme-color, #FB6C00);
+  --primary-gold: var(--primary-theme-color, #FB6C00);
+  --primary-saffron: var(--primary-theme-color, #FB6C00);
   --font-heading: 'Cinzel', serif;
   --font-telugu: 'Noto Sans Telugu', sans-serif;
   --font-body: 'Outfit', sans-serif;
@@ -243,14 +238,14 @@ body.theme-navy .gold-card {
   top: 0;
   left: -100%;
   width: 100%;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, #FB6C00, #FF8526, transparent);
+  height: 3.5px;
+  background: linear-gradient(90deg, transparent, var(--primary-theme-color, #FB6C00), transparent);
   transition: left 0.7s ease;
 }
 
 .gold-card:hover {
   transform: translateY(-4px);
-  border-color: #FB6C00;
+  border-color: var(--primary-theme-color, #FB6C00);
   box-shadow: 0 15px 35px rgba(251, 108, 0, 0.22);
 }
 
@@ -267,19 +262,18 @@ header button, nav button, nav a {
   line-height: 1.4;
 }
 
-
 /* Buttons */
 .btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  background: linear-gradient(135deg, #FB6C00 0%, #E05D00 100%);
+  background: var(--primary-theme-color, #FB6C00);
   color: #FFFFFF;
   font-weight: 800;
   padding: 0.9rem 1.8rem;
   border-radius: 50px;
-  border: 1.5px solid #C25200;
+  border: 1.5px solid var(--primary-theme-color, #FB6C00);
   cursor: pointer;
   transition: all 0.3s ease;
   text-decoration: none;
@@ -289,7 +283,7 @@ header button, nav button, nav a {
 .btn-primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 25px rgba(251, 108, 0, 0.6);
-  background: linear-gradient(135deg, #E05D00 0%, #FB6C00 100%);
+  filter: brightness(0.9);
 }
 
 .btn-gold {
@@ -297,7 +291,7 @@ header button, nav button, nav a {
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  background: linear-gradient(135deg, #FB6C00 0%, #C25200 100%);
+  background: var(--primary-theme-color, #FB6C00);
   color: #FFFFFF;
   font-weight: 800;
   padding: 0.9rem 1.8rem;
@@ -312,7 +306,7 @@ header button, nav button, nav a {
 .btn-gold:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 25px rgba(251, 108, 0, 0.65);
-  background: linear-gradient(135deg, #FF8526 0%, #FB6C00 100%);
+  filter: brightness(1.1);
 }
 
 .btn-outline {
@@ -321,11 +315,11 @@ header button, nav button, nav a {
   justify-content: center;
   gap: 0.6rem;
   background: #FFF7ED;
-  color: #C25200;
+  color: var(--primary-theme-color, #FB6C00);
   font-weight: 700;
   padding: 0.85rem 1.6rem;
   border-radius: 50px;
-  border: 1.5px solid #FB6C00;
+  border: 1.5px solid var(--primary-theme-color, #FB6C00);
   cursor: pointer;
   transition: all 0.3s ease;
   text-decoration: none;
@@ -333,8 +327,7 @@ header button, nav button, nav a {
 
 .btn-outline:hover {
   background: #FFEDD5;
-  border-color: #C25200;
-  color: #9A3E00;
+  border-color: var(--primary-theme-color, #FB6C00);
   transform: translateY(-2px);
 }
 
@@ -343,8 +336,8 @@ header button, nav button, nav a {
   position: fixed;
   bottom: 2rem;
   right: 2rem;
-  background: #C25200;
-  border: 2px solid #FB6C00;
+  background: var(--primary-theme-color, #FB6C00);
+  border: 2px solid #FFFFFF;
   color: #FFFFFF;
   padding: 1rem 1.6rem;
   border-radius: 14px;
@@ -386,7 +379,7 @@ header button, nav button, nav a {
 
 .modal-content {
   background: #FFFFFF;
-  border: 3px solid #FB6C00;
+  border: 3.5px solid var(--primary-theme-color, #FB6C00);
   color: #0F172A;
   border-radius: 24px;
   max-width: 650px;
@@ -395,7 +388,7 @@ header button, nav button, nav a {
   overflow-y: auto;
   padding: 2.25rem;
   position: relative;
-  box-shadow: 0 25px 70px rgba(251, 108, 0, 0.3);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
 }
 
 .modal-close {
@@ -443,9 +436,9 @@ header button, nav button, nav a {
 
 /* ⚡ Flash News High-Visibility Attention-Grabbing Ticker Bar */
 .flash-news-banner {
-  background: linear-gradient(90deg, #9A3E00 0%, #FB6C00 35%, #E05D00 70%, #803300 100%);
-  border-bottom: 2px solid #FF9B42;
-  box-shadow: 0 4px 20px rgba(251, 108, 0, 0.3);
+  background: var(--primary-theme-color, #FB6C00);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   color: #FFFFFF;
 }
 

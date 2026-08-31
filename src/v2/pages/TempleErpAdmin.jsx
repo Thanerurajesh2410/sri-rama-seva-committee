@@ -1709,6 +1709,153 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
 
               return (
                 <div className="space-y-6">
+                  
+                  {/* 🎨 GLOBAL SITE-WIDE COLOR THEME CONTROLLER */}
+                  <div className="gold-card border-3 border-[#FB6C00] p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white shadow-2xl space-y-6">
+                    <div className="flex items-center justify-between flex-wrap gap-4 border-b border-slate-700 pb-4">
+                      <div className="flex items-center gap-3">
+                        <Palette className="w-8 h-8 text-[#FB6C00] animate-pulse" />
+                        <div>
+                          <h3 className="text-xl sm:text-2xl font-black text-white heading-telugu flex items-center gap-2">
+                            <span>🎨 వెబ్‌సైట్ మొత్తం రంగుల అమరిక (Entire Website Site-Wide Color Theme Selector)</span>
+                          </h3>
+                          <p className="text-xs sm:text-sm text-slate-300 font-extrabold">
+                            ఇక్కడ మీరు ఎంచుకున్న రంగు వెబ్‌సైట్ ప్రతి మూలకు, అన్ని బటన్లు, వ్యూ హెడర్‌లు, బాడ్జీలు, మ్యాప్‌లు మరియు పాపప్‌లకు ప్రపంచవ్యాప్తంగా వర్తిస్తుంది.
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-3 bg-slate-800/90 px-4 py-2 rounded-2xl border border-slate-700">
+                        <span className="text-xs font-bold text-slate-300">ప్రస్తుత రంగు:</span>
+                        <div className="w-6 h-6 rounded-full border-2 border-white shadow-inner" style={{ backgroundColor: settings.primaryColor || '#FB6C00' }} />
+                        <span className="font-mono font-black text-sm text-[#FB6C00]">{settings.primaryColor || '#FB6C00'}</span>
+                      </div>
+                    </div>
+
+                    {/* Color Input Controls & One-Click Presets */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      
+                      {/* Left: Custom Color Picker & Hex Input */}
+                      <div className="space-y-4 bg-slate-800/60 p-5 rounded-2xl border border-slate-700">
+                        <label className="block text-xs font-black text-slate-200 uppercase tracking-wider">
+                          1. మీకు నచ్చిన రంగును పిక్ చేయండి లేదా Hex Code నమోదు చేయండి:
+                        </label>
+                        <div className="flex items-center gap-3">
+                          <input
+                            type="color"
+                            value={settings.primaryColor || '#FB6C00'}
+                            onChange={(e) => {
+                              const newColor = e.target.value;
+                              const currentDB = getDB();
+                              if (!currentDB.websiteSettings) currentDB.websiteSettings = { ...defaultWebsiteSettings };
+                              currentDB.websiteSettings.primaryColor = newColor;
+                              saveDB(currentDB);
+                              setDbState({ ...currentDB });
+                              document.documentElement.style.setProperty('--primary-theme-color', newColor);
+                              document.documentElement.style.setProperty('--primary-saffron', newColor);
+                              showToast(`ప్రైమరీ కలర్ థీమ్ మార్చబడింది! (${newColor})`);
+                            }}
+                            className="w-14 h-14 rounded-xl cursor-pointer bg-slate-900 border-2 border-slate-600 p-1 shadow-md shrink-0"
+                            title="Color Spectrum Picker"
+                          />
+                          <input
+                            type="text"
+                            placeholder="#FB6C00"
+                            value={settings.primaryColor || '#FB6C00'}
+                            onChange={(e) => {
+                              const newColor = e.target.value;
+                              const currentDB = getDB();
+                              if (!currentDB.websiteSettings) currentDB.websiteSettings = { ...defaultWebsiteSettings };
+                              currentDB.websiteSettings.primaryColor = newColor;
+                              saveDB(currentDB);
+                              setDbState({ ...currentDB });
+                              if (/^#[0-9A-F]{6}$/i.test(newColor)) {
+                                document.documentElement.style.setProperty('--primary-theme-color', newColor);
+                                document.documentElement.style.setProperty('--primary-saffron', newColor);
+                              }
+                            }}
+                            className="w-full bg-slate-900 border-2 border-slate-700 text-white rounded-xl px-4 py-3 text-lg font-mono font-black focus:outline-none focus:border-[#FB6C00]"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Right: Curated Authentic Color Presets */}
+                      <div className="space-y-4 bg-slate-800/60 p-5 rounded-2xl border border-slate-700">
+                        <label className="block text-xs font-black text-slate-200 uppercase tracking-wider">
+                          2. ప్రముఖ సిద్ధమైన రంగుల పాలెట్లు (One-Click Preset Color Themes):
+                        </label>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                          {[
+                            { name: 'విబ్రంట్ కాషాయం (Saffron Orange)', hex: '#FB6C00' },
+                            { name: 'పవిత్ర కెంపు (Sacred Crimson)', hex: '#DC2626' },
+                            { name: 'మరకత పచ్చ (Emerald Green)', hex: '#059669' },
+                            { name: 'రాయల్ బ్లూ (Royal Blue)', hex: '#2563EB' },
+                            { name: 'స్వర్ణ పసుపు (Golden Amber)', hex: '#D97706' },
+                            { name: 'దివ్య ఊదా (Divine Purple)', hex: '#8B5CF6' },
+                            { name: 'గులాబీ వర్ణం (Deep Rose)', hex: '#EC4899' },
+                            { name: 'మిడ్‌నైట్ నలుపు (Midnight Slate)', hex: '#1E293B' },
+                          ].map(preset => (
+                            <button
+                              key={preset.hex}
+                              type="button"
+                              onClick={() => {
+                                const currentDB = getDB();
+                                if (!currentDB.websiteSettings) currentDB.websiteSettings = { ...defaultWebsiteSettings };
+                                currentDB.websiteSettings.primaryColor = preset.hex;
+                                saveDB(currentDB);
+                                setDbState({ ...currentDB });
+                                document.documentElement.style.setProperty('--primary-theme-color', preset.hex);
+                                document.documentElement.style.setProperty('--primary-saffron', preset.hex);
+                                addAuditLog(userRole, `Changed Website Global Theme Color to ${preset.name} (${preset.hex})`);
+                                showToast(`🎉 వెబ్‌సైట్ మొత్తం కలర్ థీమ్ ${preset.name} కి మార్చబడింది!`);
+                              }}
+                              className={`p-2.5 rounded-xl border-2 transition-all flex items-center gap-2 text-left active:scale-95 ${
+                                (settings.primaryColor || '#FB6C00').toUpperCase() === preset.hex.toUpperCase()
+                                  ? 'border-white bg-slate-700 shadow-lg ring-2 ring-[#FB6C00]'
+                                  : 'border-slate-700 bg-slate-900/80 hover:bg-slate-700'
+                              }`}
+                            >
+                              <span className="w-5 h-5 rounded-full shrink-0 border border-white/40 shadow-sm" style={{ backgroundColor: preset.hex }} />
+                              <span className="text-[11px] font-bold text-white truncate">{preset.name.split(' ')[0]}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                    </div>
+
+                    {/* Real-time Dynamic Preview Card */}
+                    <div className="p-4 rounded-2xl bg-slate-900 border-2 border-dashed border-slate-700 space-y-3">
+                      <span className="text-xs font-black uppercase tracking-wider text-slate-400 block">
+                        👁️ రంగుల ప్రదర్శన (Live Dynamic Component Preview):
+                      </span>
+                      <div className="flex flex-wrap items-center gap-3">
+                        <button
+                          type="button"
+                          className="px-5 py-2.5 rounded-full text-sm font-black text-white shadow-lg transition-all"
+                          style={{ backgroundColor: settings.primaryColor || '#FB6C00' }}
+                        >
+                          ప్రధాన బటన్ (Primary Button)
+                        </button>
+
+                        <button
+                          type="button"
+                          className="px-5 py-2.5 rounded-full text-sm font-black transition-all bg-white border-2"
+                          style={{ borderColor: settings.primaryColor || '#FB6C00', color: settings.primaryColor || '#FB6C00' }}
+                        >
+                          అవుట్‌లైన్ బటన్ (Outline Button)
+                        </button>
+
+                        <span
+                          className="px-4 py-1.5 rounded-full text-xs font-black text-white shadow-md"
+                          style={{ backgroundColor: settings.primaryColor || '#FB6C00' }}
+                        >
+                          🚩 లైవ్ బ్యాడ్జ్ (Live Badge)
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="gold-card border-3 border-[#FFD700] p-6 rounded-3xl bg-gradient-to-r from-[#5C121E] via-[#3A0A11] to-[#5C121E]">
                     <div className="flex items-center gap-3 mb-2">
                       <Sliders className="w-8 h-8 text-[#FFD700]" />

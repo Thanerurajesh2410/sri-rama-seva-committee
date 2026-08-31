@@ -23,6 +23,7 @@ import DevoteePortal from './v2/pages/DevoteePortal';
 import TempleErpAdmin from './v2/pages/TempleErpAdmin';
 import ApiExplorer from './components/ApiExplorer';
 
+import { getDB } from './v2/data/v2Database';
 import { CheckCircle, Palette, MessageSquare, Layers } from 'lucide-react';
 
 export default function App() {
@@ -50,7 +51,16 @@ export default function App() {
   const [donorList, setDonorList] = useState(t.donorWall.donors);
   const [committeeList, setCommitteeList] = useState(t.committee.members);
 
+  // Sync theme & dynamic primary color theme
   useEffect(() => {
+    try {
+      const db = getDB();
+      const primaryColor = db?.websiteSettings?.primaryColor || '#FB6C00';
+      document.documentElement.style.setProperty('--primary-theme-color', primaryColor);
+      document.documentElement.style.setProperty('--primary-saffron', primaryColor);
+    } catch (err) {
+      console.warn("Theme sync err:", err);
+    }
     document.body.className = theme;
     localStorage.setItem('sri_rama_theme', theme);
   }, [theme]);
