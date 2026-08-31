@@ -3,16 +3,15 @@
 @tailwind utilities;
 
 :root {
-  --primary-emerald: #059669;
-  --primary-emerald-hover: #047857;
-  --primary-emerald-light: #ECFDF5;
-  --primary-gold: #F59E0B;
-  --primary-gold-light: #FDE68A;
-  --primary-gold-dark: #D97706;
-  --primary-saffron: #D97706;
-  --primary-saffron-dark: #B45309;
-  --sacred-crimson: #059669;
-  --sacred-maroon: #047857;
+  --primary-orange: #FB6C00;
+  --primary-orange-hover: #E05D00;
+  --primary-gold: #FB6C00;
+  --primary-gold-light: #FFEDD5;
+  --primary-gold-dark: #C25200;
+  --primary-saffron: #FB6C00;
+  --primary-saffron-dark: #C25200;
+  --sacred-crimson: #FB6C00;
+  --sacred-maroon: #C25200;
   --font-heading: 'Cinzel', serif;
   --font-telugu: 'Noto Sans Telugu', sans-serif;
   --font-body: 'Outfit', sans-serif;
@@ -29,7 +28,7 @@ html {
 }
 
 /* =========================================================
-   THEME 1: Clean Modern Light Slate & Emerald Green (Default)
+   THEME 1: Clean Modern Light Slate & Vibrant #FB6C00 Orange (Default)
    ========================================================= */
 body, body.theme-light, body.theme-light-slate, body.theme-cream {
   font-family: var(--font-body), var(--font-telugu), sans-serif;
@@ -40,19 +39,19 @@ body, body.theme-light, body.theme-light-slate, body.theme-cream {
   line-height: 1.6;
   position: relative;
   background-image: 
-    radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.09) 0%, transparent 45%),
-    radial-gradient(circle at 20% 25%, rgba(245, 158, 11, 0.06) 0%, transparent 40%),
-    radial-gradient(circle at 80% 60%, rgba(5, 150, 105, 0.06) 0%, transparent 45%),
+    radial-gradient(circle at 50% 0%, rgba(251, 108, 0, 0.09) 0%, transparent 45%),
+    radial-gradient(circle at 20% 25%, rgba(251, 108, 0, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 80% 60%, rgba(251, 108, 0, 0.06) 0%, transparent 45%),
     linear-gradient(180deg, #F8FAFC 0%, #F1F5F9 50%, #E2E8F0 100%),
-    url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23059669' fill-opacity='0.03'%3E%3Cpath d='M50 5 C 25 5, 5 25, 5 50 C 5 75, 25 95, 50 95 C 75 95, 95 75, 95 50 C 95 25, 75 5, 50 5 Z'/%3E%3C/g%3E%3C/svg%3E");
+    url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23FB6C00' fill-opacity='0.03'%3E%3Cpath d='M50 5 C 25 5, 5 25, 5 50 C 5 75, 25 95, 50 95 C 75 95, 95 75, 95 50 C 95 25, 75 5, 50 5 Z'/%3E%3C/g%3E%3C/svg%3E");
   background-attachment: fixed;
 }
 
-/* Sacred Temple Masked Background Utility for Light Slate Theme */
+/* Sacred Temple Masked Background Utility */
 .sacred-temple-bg-masked {
   position: relative;
   background-image: 
-    radial-gradient(circle at 50% 20%, rgba(236, 253, 245, 0.85) 0%, rgba(241, 245, 249, 0.92) 50%, rgba(226, 232, 240, 0.98) 90%),
+    radial-gradient(circle at 50% 20%, rgba(255, 247, 237, 0.85) 0%, rgba(241, 245, 249, 0.92) 50%, rgba(226, 232, 240, 0.98) 90%),
     linear-gradient(180deg, rgba(248, 250, 252, 0.9) 0%, rgba(241, 245, 249, 0.95) 50%, rgba(226, 232, 240, 0.98) 100%),
     url('/assets/temple_bg.jpg');
   background-size: cover;
@@ -89,6 +88,29 @@ body.theme-light-cream header h1, body.theme-light-cream header a, body.theme-li
   white-space: nowrap !important;
   flex-shrink: 0 !important;
   box-sizing: border-box;
+}
+
+/* =========================================================
+   THEME 2: Sacred Royal Maroon & #FB6C00 Orange
+   ========================================================= */
+body.theme-maroon {
+  font-family: var(--font-body), var(--font-telugu), sans-serif;
+  background-color: #2A060B;
+  color: #FFFFFF;
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+  position: relative;
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(251, 108, 0, 0.35) 0%, transparent 45%),
+    linear-gradient(180deg, #4A0E17 0%, #2A060B 40%, #3B0A11 70%, #230408 100%);
+  background-attachment: fixed;
+}
+
+body.theme-maroon .gold-card {
+  background: linear-gradient(180deg, rgba(74, 14, 23, 0.95) 0%, rgba(45, 8, 14, 0.98) 100%);
+  border: 1.5px solid #FB6C00;
+  color: #FFFFFF;
 }
 
 /* =========================================================
@@ -132,10 +154,10 @@ body.theme-navy .gold-card {
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #1A0306;
+  background: #F1F5F9;
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #FF9933, #FFD700);
+  background: linear-gradient(180deg, #FB6C00, #FF8526);
   border-radius: 5px;
 }
 
@@ -153,13 +175,13 @@ body.theme-navy .gold-card {
 }
 
 .heading-gold {
-  background: linear-gradient(135deg, #FFFFFF 0%, #FFF5C0 40%, #FFD700 100%);
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 40%, #FB6C00 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .heading-saffron {
-  background: linear-gradient(135deg, #FFE082 0%, #FF9933 50%, #E65100 100%);
+  background: linear-gradient(135deg, #C25200 0%, #FB6C00 50%, #E05D00 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -170,16 +192,16 @@ body.theme-navy .gold-card {
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1.4rem;
-  background: linear-gradient(135deg, rgba(92, 18, 30, 0.9), rgba(58, 10, 17, 0.9));
-  border: 1.5px solid rgba(255, 215, 0, 0.6);
+  background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+  border: 1.5px solid #FB6C00;
   border-radius: 50px;
-  color: #FFD700;
+  color: #C25200;
   font-size: 0.85rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   margin-bottom: 1rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 15px rgba(251, 108, 0, 0.2);
 }
 
 .section-title {
@@ -201,7 +223,7 @@ body.theme-navy .gold-card {
   border-radius: 22px;
   padding: 1.75rem;
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
   position: relative;
   overflow: hidden;
   word-break: break-word;
@@ -222,14 +244,14 @@ body.theme-navy .gold-card {
   left: -100%;
   width: 100%;
   height: 3px;
-  background: linear-gradient(90deg, transparent, #FF9933, #FFD700, transparent);
+  background: linear-gradient(90deg, transparent, #FB6C00, #FF8526, transparent);
   transition: left 0.7s ease;
 }
 
 .gold-card:hover {
   transform: translateY(-4px);
-  border-color: #FFD700;
-  box-shadow: 0 15px 45px rgba(255, 215, 0, 0.35);
+  border-color: #FB6C00;
+  box-shadow: 0 15px 35px rgba(251, 108, 0, 0.22);
 }
 
 .gold-card:hover::before {
@@ -252,22 +274,22 @@ header button, nav button, nav a {
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  background: linear-gradient(135deg, #FF9933 0%, #E65100 100%);
-  color: #FFF;
+  background: linear-gradient(135deg, #FB6C00 0%, #E05D00 100%);
+  color: #FFFFFF;
   font-weight: 800;
   padding: 0.9rem 1.8rem;
   border-radius: 50px;
-  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  border: 1.5px solid #C25200;
   cursor: pointer;
   transition: all 0.3s ease;
   text-decoration: none;
-  box-shadow: 0 6px 25px rgba(230, 81, 0, 0.6);
+  box-shadow: 0 6px 20px rgba(251, 108, 0, 0.4);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 35px rgba(230, 81, 0, 0.8);
-  background: linear-gradient(135deg, #FFB74D 0%, #FF9933 100%);
+  box-shadow: 0 10px 25px rgba(251, 108, 0, 0.6);
+  background: linear-gradient(135deg, #E05D00 0%, #FB6C00 100%);
 }
 
 .btn-gold {
@@ -275,8 +297,8 @@ header button, nav button, nav a {
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
-  color: #1A0306;
+  background: linear-gradient(135deg, #FB6C00 0%, #C25200 100%);
+  color: #FFFFFF;
   font-weight: 800;
   padding: 0.9rem 1.8rem;
   border-radius: 50px;
@@ -284,13 +306,13 @@ header button, nav button, nav a {
   cursor: pointer;
   transition: all 0.3s ease;
   text-decoration: none;
-  box-shadow: 0 6px 25px rgba(245, 158, 11, 0.55);
+  box-shadow: 0 6px 20px rgba(251, 108, 0, 0.45);
 }
 
 .btn-gold:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 35px rgba(245, 158, 11, 0.8);
-  background: linear-gradient(135deg, #FDE68A 0%, #F59E0B 100%);
+  box-shadow: 0 10px 25px rgba(251, 108, 0, 0.65);
+  background: linear-gradient(135deg, #FF8526 0%, #FB6C00 100%);
 }
 
 .btn-outline {
@@ -298,21 +320,21 @@ header button, nav button, nav a {
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  background: rgba(92, 18, 30, 0.6);
-  color: #FFF;
+  background: #FFF7ED;
+  color: #C25200;
   font-weight: 700;
   padding: 0.85rem 1.6rem;
   border-radius: 50px;
-  border: 1.5px solid rgba(255, 215, 0, 0.5);
+  border: 1.5px solid #FB6C00;
   cursor: pointer;
   transition: all 0.3s ease;
   text-decoration: none;
 }
 
 .btn-outline:hover {
-  background: rgba(255, 215, 0, 0.22);
-  border-color: #FFD700;
-  color: #FFF5C0;
+  background: #FFEDD5;
+  border-color: #C25200;
+  color: #9A3E00;
   transform: translateY(-2px);
 }
 
@@ -321,12 +343,12 @@ header button, nav button, nav a {
   position: fixed;
   bottom: 2rem;
   right: 2rem;
-  background: linear-gradient(135deg, #5C121E, #2A060B);
-  border: 2px solid #FFD700;
-  color: #FFF5C0;
+  background: #C25200;
+  border: 2px solid #FB6C00;
+  color: #FFFFFF;
   padding: 1rem 1.6rem;
   border-radius: 14px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.85);
+  box-shadow: 0 12px 35px rgba(251, 108, 0, 0.4);
   z-index: 9999;
   display: flex;
   align-items: center;
@@ -347,7 +369,7 @@ header button, nav button, nav a {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.92);
+  background: rgba(15, 23, 42, 0.75);
   backdrop-filter: blur(12px);
   z-index: 9000;
   display: flex;
@@ -363,8 +385,9 @@ header button, nav button, nav a {
 }
 
 .modal-content {
-  background: linear-gradient(180deg, #3A0A11 0%, #1D0407 100%);
-  border: 2px solid #FFD700;
+  background: #FFFFFF;
+  border: 3px solid #FB6C00;
+  color: #0F172A;
   border-radius: 24px;
   max-width: 650px;
   width: 100%;
@@ -372,16 +395,16 @@ header button, nav button, nav a {
   overflow-y: auto;
   padding: 2.25rem;
   position: relative;
-  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.95);
+  box-shadow: 0 25px 70px rgba(251, 108, 0, 0.3);
 }
 
 .modal-close {
   position: absolute;
   top: 1.25rem;
   right: 1.25rem;
-  background: rgba(255, 255, 255, 0.15);
+  background: #F1F5F9;
   border: none;
-  color: #FFF;
+  color: #0F172A;
   width: 38px;
   height: 38px;
   border-radius: 50%;
@@ -393,7 +416,8 @@ header button, nav button, nav a {
 }
 
 .modal-close:hover {
-  background: #900C3F;
+  background: #EF4444;
+  color: #FFFFFF;
   transform: rotate(90deg);
 }
 
@@ -401,9 +425,10 @@ header button, nav button, nav a {
 .marquee-container {
   overflow: hidden;
   white-space: nowrap;
-  background: linear-gradient(90deg, #5C121E, #2A060B, #5C121E);
-  border-bottom: 1.5px solid rgba(255, 215, 0, 0.6);
+  background: #FFFFFF;
+  border-bottom: 1.5px solid #E2E8F0;
   padding: 0.65rem 0;
+  color: #0F172A;
 }
 
 .marquee-content {
@@ -418,9 +443,10 @@ header button, nav button, nav a {
 
 /* ⚡ Flash News High-Visibility Attention-Grabbing Ticker Bar */
 .flash-news-banner {
-  background: linear-gradient(90deg, #8B0000 0%, #E65100 25%, #C62828 50%, #E65100 75%, #8B0000 100%);
-  border-bottom: 2px solid #FFD700;
-  box-shadow: 0 4px 25px rgba(230, 81, 0, 0.8);
+  background: linear-gradient(90deg, #9A3E00 0%, #FB6C00 35%, #E05D00 70%, #803300 100%);
+  border-bottom: 2px solid #FF9B42;
+  box-shadow: 0 4px 20px rgba(251, 108, 0, 0.3);
+  color: #FFFFFF;
 }
 
 .flash-news-content {

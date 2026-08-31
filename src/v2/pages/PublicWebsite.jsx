@@ -253,8 +253,8 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
               onClick={() => { setActiveTab(tab.id); if (setSubSection) setSubSection(tab.id); }}
               className={`px-4 sm:px-5 py-2.5 rounded-full transition-all border shrink-0 ${
                 activeTab === tab.id
-                  ? 'bg-emerald-600 text-white border-2 border-emerald-500 shadow-md scale-105 font-black'
-                  : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-emerald-50 hover:text-emerald-800 font-extrabold'
+                  ? 'bg-[#FB6C00] text-white border-2 border-[#FB6C00] shadow-md scale-105 font-black'
+                  : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-orange-50 hover:text-[#FB6C00] font-extrabold'
               }`}
             >
               {tab.label}
@@ -270,14 +270,14 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
           <div className="container mx-auto px-4 py-4 relative z-10">
             {/* Hero Header Section with Divine Lord Rama Logo */}
             <div className="text-center max-w-4xl mx-auto py-2">
-              <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full text-xs md:text-sm font-black bg-emerald-700 text-white border-2 border-emerald-400 shadow-md mb-4 animate-bounce">
+              <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full text-xs md:text-sm font-black bg-[#FB6C00] text-white border-2 border-orange-300 shadow-md mb-4 animate-bounce">
                 <span>🚩 {t.hero.badge}</span>
               </div>
 
               {/* Fixed Lord Rama Divine Portrait Logo */}
               <div className="flex justify-center my-4">
                 <div className="relative group">
-                  <div className="absolute -inset-6 bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-500 rounded-full blur-2xl opacity-75 group-hover:opacity-100 transition duration-1000 animate-pulse" />
+                  <div className="absolute -inset-6 bg-gradient-to-r from-[#FB6C00] via-orange-400 to-[#FB6C00] rounded-full blur-2xl opacity-75 group-hover:opacity-100 transition duration-1000 animate-pulse" />
                   <img
                     src={getActiveLogo()}
                     alt="Lord Rama Portrait"
@@ -285,9 +285,9 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                       e.currentTarget.onerror = null;
                       e.currentTarget.src = getAssetUrl('assets/logo.jpg');
                     }}
-                    className="relative w-40 h-40 md:w-52 md:h-52 rounded-full border-4 border-emerald-500 shadow-[0_0_40px_rgba(16,185,129,0.35)] object-cover bg-white"
+                    className="relative w-40 h-40 md:w-52 md:h-52 rounded-full border-4 border-[#FB6C00] shadow-[0_0_40px_rgba(251,108,0,0.45)] object-cover bg-white"
                   />
-                  <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-emerald-800 text-white border-2 border-emerald-400 px-4 py-1 rounded-full text-xs font-black shadow-lg flex items-center gap-1.5 whitespace-nowrap">
+                  <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-[#C25200] text-white border-2 border-[#FB6C00] px-4 py-1 rounded-full text-xs font-black shadow-lg flex items-center gap-1.5 whitespace-nowrap">
                     <Sparkles className="w-3.5 h-3.5 fill-amber-300 text-amber-300" />
                     <span>॥ జై శ్రీ రామ్ ॥</span>
                   </div>
@@ -297,7 +297,7 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
               <h1 className="text-3xl md:text-5xl font-black heading-telugu leading-tight mb-2 text-slate-900">
                 <span className="heading-gold">{t.hero.title}</span>
               </h1>
-              <p className="text-lg md:text-xl font-extrabold text-emerald-800 heading-telugu mb-6">
+              <p className="text-lg md:text-xl font-extrabold text-[#FB6C00] heading-telugu mb-6">
                 "{t.hero.slogan}"
               </p>
             </div>
@@ -387,25 +387,25 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
             <div ref={bankSectionRef} className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
               
               {/* E-Hundi & QR Scanner Card */}
-              <div className="gold-card border-3 border-[#FFD700] shadow-[0_0_50px_rgba(255,215,0,0.45)] bg-gradient-to-b from-[#5C121E] via-[#3A0A11] to-[#200407] flex flex-col justify-between !p-6 sm:!p-8 rounded-3xl">
+              <div className="gold-card border-3 border-[#FB6C00] shadow-xl bg-gradient-to-b from-[#FB6C00] via-orange-600 to-[#C25200] text-white flex flex-col justify-between !p-6 sm:!p-8 rounded-3xl">
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-xs sm:text-sm font-black uppercase tracking-wider text-black bg-[#FFD700] px-3.5 py-1.5 rounded-full shadow-md flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 fill-black" />
+                    <span className="text-xs sm:text-sm font-black uppercase tracking-wider text-black bg-white px-3.5 py-1.5 rounded-full shadow-md flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 fill-[#FB6C00] text-[#FB6C00]" />
                       ఈ-హుండి (E-HUNDI)
                     </span>
-                    <span className="text-xs sm:text-sm font-black text-amber-300">100% SECURE & DIRECT</span>
+                    <span className="text-xs sm:text-sm font-black text-orange-100">100% SECURE & DIRECT</span>
                   </div>
 
                   <h3 className="text-2xl sm:text-3xl font-black text-white heading-telugu mb-3">
                     PhonePe & UPI E-Hundi Scanner
                   </h3>
 
-                  <p className="text-sm sm:text-base text-gray-100 mb-6 leading-relaxed font-semibold">
+                  <p className="text-sm sm:text-base text-orange-50 mb-6 leading-relaxed font-semibold">
                     {t.donation.scanQr}
                   </p>
 
-                  <div className="bg-black/70 p-5 rounded-2xl border-2 border-dashed border-[#FFD700] flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left shadow-2xl">
+                  <div className="bg-black/40 p-5 rounded-2xl border-2 border-dashed border-white/40 flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left shadow-2xl">
                     <img
                       src={getActiveQrCode()}
                       alt="PhonePe QR Scanner"
@@ -421,27 +421,27 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                       <h4 className="text-base sm:text-lg font-black text-white mb-1.5 leading-snug">
                         SRI RAMA SEVA COMMITTEE PAMINIVANDLAVOORU
                       </h4>
-                      <p className="text-sm sm:text-base font-mono text-amber-300 font-black mb-3">
+                      <p className="text-sm sm:text-base font-mono text-amber-200 font-black mb-3">
                         UPI ID: {t.donation.upiId}
                       </p>
 
                       <button
                         onClick={() => copyToClipboard(t.donation.upiId, 'upi')}
-                        className="btn-gold text-xs sm:text-sm !py-2 !px-4 rounded-xl font-bold"
+                        className="btn-gold text-xs sm:text-sm !py-2 !px-4 rounded-xl font-bold bg-white text-orange-950 hover:bg-orange-100"
                       >
-                        {copiedUpi ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+                        {copiedUpi ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4 text-orange-950" />}
                         <span>{copiedUpi ? "UPI ID కాపీ అయింది" : "UPI ID కాపీ చేయి"}</span>
                       </button>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-8 pt-5 border-t border-white/15 flex justify-center">
+                <div className="mt-8 pt-5 border-t border-white/20 flex justify-center">
                   <button
                     onClick={() => setShowQrModal(true)}
-                    className="btn-primary text-sm sm:text-base w-full py-4 shadow-2xl flex items-center justify-center gap-2.5 font-black rounded-2xl"
+                    className="btn-primary text-sm sm:text-base w-full py-4 shadow-2xl flex items-center justify-center gap-2.5 font-black rounded-2xl bg-white text-orange-950 border-2 border-white hover:bg-orange-100"
                   >
-                    <QrCode className="w-5 h-5" />
+                    <QrCode className="w-5 h-5 text-orange-950" />
                     <span>QR కోడ్ జూమ్ చేసి స్కాన్ చేయండి (Open Scanner)</span>
                   </button>
                 </div>
@@ -1220,22 +1220,22 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
 
       {/* 📄 INSTANT DIGITAL RECEIPT MODAL (TTD Devasthanam Formal Style with Watermark) */}
       {digitalReceipt && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-fadeIn">
-          <div className="bg-gradient-to-b from-[#4A0E17] via-[#2A060B] to-[#1A0306] border-4 border-[#FFD700] p-6 sm:p-8 rounded-3xl max-w-2xl w-full max-h-[94vh] overflow-y-auto shadow-2xl relative text-white space-y-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md animate-fadeIn">
+          <div className="bg-white border-4 border-[#FB6C00] p-6 sm:p-8 rounded-3xl max-w-2xl w-full max-h-[94vh] overflow-y-auto shadow-2xl relative text-slate-900 space-y-6">
             
             <button
               type="button"
               onClick={() => setDigitalReceipt(null)}
-              className="absolute top-4 right-4 p-2 rounded-full bg-white/10 text-white hover:bg-red-600 hover:text-white transition-colors"
+              className="absolute top-4 right-4 p-2 rounded-full bg-slate-100 text-slate-700 hover:bg-red-600 hover:text-white transition-colors"
             >
               <X className="w-6 h-6" />
             </button>
 
             <div className="text-center">
-              <span className="bg-emerald-500 text-black font-black text-xs uppercase px-4 py-1 rounded-full shadow-lg inline-block mb-2">
+              <span className="bg-[#FB6C00] text-white font-black text-xs uppercase px-4 py-1 rounded-full shadow-md inline-block mb-2">
                 ✓ విరాళం నమోదైంది
               </span>
-              <h3 className="text-2xl sm:text-3xl font-black text-[#FFD700] heading-telugu">శ్రీ రామాలయం అధికారిక డిజిటల్ రశీదు</h3>
+              <h3 className="text-2xl sm:text-3xl font-black text-[#FB6C00] heading-telugu">శ్రీ రామాలయం అధికారిక డిజిటల్ రశీదు</h3>
             </div>
 
             {/* Rendered Printable Formal TTD-Style Receipt Card with Watermark */}
@@ -1245,7 +1245,7 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none opacity-[0.14] z-0">
                 <div className="text-center">
                   <img src={getActiveLogo()} alt="Sri Rama Seva Committee Logo Watermark" className="w-72 h-72 sm:w-80 sm:h-80 mx-auto rounded-full object-cover border-4 border-amber-600/40 shadow-2xl" />
-                  <span className="text-3xl sm:text-4xl font-black uppercase text-[#5C121E] tracking-widest block mt-2">SRI RAMA SEVA COMMITTEE</span>
+                  <span className="text-3xl sm:text-4xl font-black uppercase text-[#C25200] tracking-widest block mt-2">SRI RAMA SEVA COMMITTEE</span>
                   <span className="text-xl font-black text-amber-900 block mt-0.5">పామినివాండ్లవూరు</span>
                 </div>
               </div>
@@ -1253,9 +1253,9 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
               {/* Header Section */}
               <div className="flex justify-between items-start border-b-2 border-gray-800 pb-4 mb-4 relative z-10">
                 <div className="flex items-center gap-3">
-                  <img src={getActiveLogo()} alt="Logo" className="w-16 h-16 rounded-full border-2 border-amber-600 shadow-md" />
+                  <img src={getActiveLogo()} alt="Logo" className="w-16 h-16 rounded-full border-2 border-[#FB6C00] shadow-md" />
                   <div>
-                    <h3 className="text-lg sm:text-xl font-black text-[#5C121E] heading-telugu">శ్రీ రామా సేవా కమిటీ (SRI RAMA SEVA COMMITTEE)</h3>
+                    <h3 className="text-lg sm:text-xl font-black text-[#C25200] heading-telugu">శ్రీ రామా సేవా కమిటీ (SRI RAMA SEVA COMMITTEE)</h3>
                     <p className="text-xs font-bold text-gray-700">పామినివాండ్లవూరు • మంగళపల్లె పంచాయతీ • బంగారుపాళెం మండలం</p>
                     <p className="text-[11px] font-semibold text-gray-600">చిత్తూరు జిల్లా - 517416, ఆంధ్రప్రదేశ్, భారతదేశం</p>
                   </div>
@@ -1263,13 +1263,13 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                 
                 <div className="text-right shrink-0">
                   <span className="text-[11px] font-bold text-gray-600 block">రశీదు సంఖ్య (Receipt No):</span>
-                  <span className="text-sm sm:text-base font-mono font-black text-[#5C121E] bg-gray-100 px-3 py-1 rounded border border-gray-400 inline-block">{digitalReceipt.id}</span>
+                  <span className="text-sm sm:text-base font-mono font-black text-[#C25200] bg-gray-100 px-3 py-1 rounded border border-gray-400 inline-block">{digitalReceipt.id}</span>
                 </div>
               </div>
 
               {/* Receipt Title Badge */}
               <div className="text-center mb-4 relative z-10">
-                <h4 className="text-base sm:text-lg font-black text-[#5C121E] uppercase tracking-wide underline decoration-amber-600 underline-offset-4 heading-telugu">
+                <h4 className="text-base sm:text-lg font-black text-[#C25200] uppercase tracking-wide underline decoration-[#FB6C00] underline-offset-4 heading-telugu">
                   శ్రీ రామాలయం విరాళం రశీదు / Official Donation Receipt
                 </h4>
               </div>
@@ -1288,12 +1288,12 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
 
                 <div className="grid grid-cols-3 border-b border-gray-400">
                   <div className="p-2.5 font-bold bg-gray-100 border-r border-gray-400">ఆలయ ట్రస్ట్ పేరు (Trust Name):</div>
-                  <div className="p-2.5 font-bold col-span-2 text-[#5C121E]">SRI RAMA SEVA COMMITTEE PAMINIVANDLAVOORU</div>
+                  <div className="p-2.5 font-bold col-span-2 text-[#C25200]">SRI RAMA SEVA COMMITTEE PAMINIVANDLAVOORU</div>
                 </div>
 
-                <div className="grid grid-cols-3 border-b border-gray-400 bg-amber-50">
-                  <div className="p-2.5 font-black bg-amber-100 border-r border-gray-400 text-sm sm:text-base text-[#5C121E]">విరాళం కానుక మొత్తం (Donation Amount):</div>
-                  <div className="p-2.5 font-mono font-black text-lg text-emerald-800 col-span-2">Rs. {digitalReceipt.amount.toLocaleString()} /-</div>
+                <div className="grid grid-cols-3 border-b border-gray-400 bg-orange-50">
+                  <div className="p-2.5 font-black bg-orange-100 border-r border-gray-400 text-sm sm:text-base text-[#C25200]">విరాళం కానుక మొత్తం (Donation Amount):</div>
+                  <div className="p-2.5 font-mono font-black text-lg text-[#FB6C00] col-span-2">Rs. {digitalReceipt.amount.toLocaleString()} /-</div>
                 </div>
 
                 <div className="grid grid-cols-3 border-b border-gray-400">
@@ -1313,18 +1313,18 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
 
                 <div className="grid grid-cols-3 border-b border-gray-400">
                   <div className="p-2.5 font-bold bg-gray-100 border-r border-gray-400">విరాళం విభాగం & సేవ (Category & Seva):</div>
-                  <div className="p-2.5 font-bold col-span-2 text-[#5C121E]">{digitalReceipt.seva}</div>
+                  <div className="p-2.5 font-bold col-span-2 text-[#C25200]">{digitalReceipt.seva}</div>
                 </div>
 
                 <div className="grid grid-cols-3">
                   <div className="p-2.5 font-bold bg-gray-100 border-r border-gray-400">చెల్లింపు మార్గం (Payment Mode):</div>
-                  <div className="p-2.5 font-bold col-span-2 text-sky-800">{digitalReceipt.mode || 'PhonePe Standee QR / UPI'}</div>
+                  <div className="p-2.5 font-bold col-span-2 text-orange-900">{digitalReceipt.mode || 'PhonePe Standee QR / UPI'}</div>
                 </div>
               </div>
 
               {/* Important Information Box (TTD Format) */}
-              <div className="border border-red-800 bg-red-50/70 p-3 rounded text-[11px] text-red-950 mb-4 space-y-1 relative z-10">
-                <p className="font-bold text-red-900 border-b border-red-300 pb-1">Important Information to the Donor:</p>
+              <div className="border border-orange-300 bg-orange-50 p-3 rounded text-[11px] text-orange-950 mb-4 space-y-1 relative z-10">
+                <p className="font-bold text-orange-900 border-b border-orange-200 pb-1">Important Information to the Donor:</p>
                 <p>1. Sri Ramalayam construction donations are strictly utilized for temple stone wall work, sanctum sanctorum, and religious rituals.</p>
                 <p>2. This receipt is automatically recorded in the official Sri Rama Seva Committee ERP audit ledger.</p>
                 <p>3. For further information or donation queries, please contact Sri Rama Seva Committee at +91 9866125609.</p>
@@ -1336,7 +1336,7 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                   <p className="text-gray-500 italic">NOTE: This is an electronically generated document and does not require a physical signature.</p>
                 </div>
                 <div className="text-right border-t border-gray-800 pt-1">
-                  <p className="font-black text-[#5C121E] text-xs">Executive Committee</p>
+                  <p className="font-black text-[#C25200] text-xs">Executive Committee</p>
                   <p className="font-bold text-gray-800">Sri Rama Seva Committee, Paminivandlavooru</p>
                 </div>
               </div>
@@ -1344,7 +1344,7 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
             </div>
 
             <div className="flex flex-wrap gap-3">
-              <button onClick={downloadDigitalReceiptPDF} className="btn-primary text-sm py-3.5 px-6 w-full rounded-2xl font-bold flex items-center justify-center gap-2">
+              <button onClick={downloadDigitalReceiptPDF} className="btn-primary text-sm py-3.5 px-6 w-full rounded-2xl font-bold flex items-center justify-center gap-2 bg-[#FB6C00] text-white">
                 <Download className="w-5 h-5" />
                 <span>రశీదు PDF డౌన్‌లోడ్ చేసుకోండి</span>
               </button>
@@ -1355,29 +1355,29 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
 
       {/* 📷 PHONEPE STANDEE QR CODE FULL SCREEN LARGE POPUP MODAL */}
       {showQrModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-fadeIn" onClick={() => setShowQrModal(false)}>
-          <div className="bg-gradient-to-b from-[#4A0E17] via-[#2A060B] to-[#1A0306] border-4 border-[#FFD700] p-6 sm:p-10 rounded-3xl max-w-2xl w-full shadow-[0_0_80px_rgba(255,215,0,0.6)] relative text-center text-white space-y-6" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md animate-fadeIn" onClick={() => setShowQrModal(false)}>
+          <div className="bg-white border-4 border-[#FB6C00] p-6 sm:p-10 rounded-3xl max-w-2xl w-full shadow-2xl relative text-center text-slate-900 space-y-6" onClick={(e) => e.stopPropagation()}>
             <button
               type="button"
               onClick={() => setShowQrModal(false)}
-              className="absolute top-4 right-4 p-2.5 rounded-full bg-white/10 text-white hover:bg-red-600 hover:text-white transition-colors"
+              className="absolute top-4 right-4 p-2.5 rounded-full bg-slate-100 text-slate-700 hover:bg-red-600 hover:text-white transition-colors"
             >
               <X className="w-7 h-7" />
             </button>
 
             <div className="space-y-2">
-              <span className="inline-block px-5 py-1.5 rounded-full text-xs sm:text-sm font-black bg-[#FFD700] text-black shadow-lg">
+              <span className="inline-block px-5 py-1.5 rounded-full text-xs sm:text-sm font-black bg-[#FB6C00] text-white shadow-md">
                 🚩 PHONEPE OFFICIAL STANDEE QR SCANNER
               </span>
 
-              <h3 className="text-2xl sm:text-3xl font-black text-white heading-telugu">
+              <h3 className="text-2xl sm:text-3xl font-black text-slate-900 heading-telugu">
                 శ్రీ రామా సేవా కమిటీ పామినివాండ్లవూరు
               </h3>
-              <p className="text-xs sm:text-sm text-amber-200 font-bold">100% పారదర్శకత • నేరుగా ఆలయ అధికారిక బ్యాంక్ ఖాతాకు జమ</p>
+              <p className="text-xs sm:text-sm text-[#FB6C00] font-extrabold">100% పారదర్శకత • నేరుగా ఆలయ అధికారిక బ్యాంక్ ఖాతాకు జమ</p>
             </div>
 
             {/* High-Resolution Large QR Code Display Container */}
-            <div className="bg-white p-5 sm:p-6 rounded-3xl border-4 border-[#FFD700] shadow-2xl inline-block my-2">
+            <div className="bg-white p-5 sm:p-6 rounded-3xl border-4 border-[#FB6C00] shadow-xl inline-block my-2">
               <img
                 src={getActiveQrCode()}
                 alt="PhonePe QR Standee Scanner Large View"
@@ -1385,19 +1385,19 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
               />
             </div>
 
-            <div className="bg-black/80 p-4 rounded-2xl border-2 border-white/20 max-w-md mx-auto space-y-1">
-              <span className="text-xs text-amber-300 font-bold uppercase block">అధికారిక UPI ID:</span>
-              <span className="text-base sm:text-xl font-mono font-black text-[#FFD700] block my-0.5">8431806098@ibl</span>
-              <span className="text-xs text-gray-300 font-semibold block">మొబైల్ ఫోన్‌లోని PhonePe, GPay, Paytm లేదా ఏ ఇతర UPI యాప్ ద్వారా స్కాన్ చేయండి</span>
+            <div className="bg-orange-50 p-4 rounded-2xl border-2 border-orange-200 max-w-md mx-auto space-y-1">
+              <span className="text-xs text-orange-950 font-bold uppercase block">అధికారిక UPI ID:</span>
+              <span className="text-base sm:text-xl font-mono font-black text-[#FB6C00] block my-0.5">8431806098@ibl</span>
+              <span className="text-xs text-slate-700 font-semibold block">మొబైల్ ఫోన్‌లోని PhonePe, GPay, Paytm లేదా ఏ ఇతర UPI యాప్ ద్వారా స్కాన్ చేయండి</span>
             </div>
 
             <div className="flex gap-4 max-w-md mx-auto">
               <button
                 type="button"
                 onClick={() => copyToClipboard('8431806098@ibl', 'upi')}
-                className="btn-gold text-sm sm:text-base w-full py-3.5 rounded-2xl font-black flex items-center justify-center gap-2 shadow-xl"
+                className="btn-gold text-sm sm:text-base w-full py-3.5 rounded-2xl font-black flex items-center justify-center gap-2 shadow-xl bg-[#FB6C00] text-white"
               >
-                {copiedUpi ? <CheckCircle2 className="w-5 h-5 text-emerald-950" /> : <Copy className="w-5 h-5" />}
+                {copiedUpi ? <CheckCircle2 className="w-5 h-5 text-white" /> : <Copy className="w-5 h-5" />}
                 <span>{copiedUpi ? "UPI ID కాపీ చేయబడింది!" : "UPI ID కాపీ చేయండి"}</span>
               </button>
             </div>
