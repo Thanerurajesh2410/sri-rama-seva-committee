@@ -3,7 +3,7 @@ import { Building2, Heart, Calendar, FileText, Camera, ShieldCheck, MapPin, Mail
 import confetti from 'canvas-confetti';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
-import { getDB, saveDB, addAuditLog, getAssetUrl, getActiveLogo, getActiveQrCode } from '../data/v2Database';
+import { getDB, saveDB, addAuditLog, getAssetUrl, getActiveLogo, getActiveQrCode, getHighContrastTextColor } from '../data/v2Database';
 
 const slideshowImages = [
   { id: 1, src: getAssetUrl('assets/temple_photo_1.png'), title: 'శ్రీ రామాలయ శంకుస్థాపన పవిత్ర రాతి స్తంభాల పూజ', tag: 'పామినివాండ్లవూరు శంకుస్థాపన' },

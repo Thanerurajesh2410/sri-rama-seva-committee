@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
 import { LayoutDashboard, Users, Heart, Globe, Menu, X, Building2, Calendar, FileText, Camera, ShieldCheck, Sparkles, Phone, Lock, Zap, Bell, Palette, Sun, Moon } from 'lucide-react';
-import { getAssetUrl, getActiveLogo } from '../data/v2Database';
+import { getAssetUrl, getActiveLogo, getDB, getHighContrastTextColor } from '../data/v2Database';
 
 export default function V2Navbar({ activeModule, setActiveModule, lang, setLang, theme, setTheme, t, v2T, onToggleVersion }) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const db = getDB();
+  const blockColors = db?.websiteSettings?.blockColors || {};
+  const headerBg = blockColors.headerBg || '#FFFFFF';
+  const headerTextColor = getHighContrastTextColor(headerBg);
+  const tickerBg = blockColors.tickerBg || '#FB6C00';
+  const tickerTextColor = getHighContrastTextColor(tickerBg);
 
   const toggleLang = () => {
     setLang(lang === 'te' ? 'en' : 'te');
@@ -16,18 +23,18 @@ export default function V2Navbar({ activeModule, setActiveModule, lang, setLang,
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 border-b-2 border-slate-200 text-slate-900 shadow-md backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b-2 border-slate-200 shadow-md backdrop-blur-md transition-colors" style={{ backgroundColor: headerBg, color: headerTextColor }}>
 
       {/* ⚡ ATTENTION-GRABBING FLASH NEWS SCROLLING TICKER BAR (Visible on ALL Pages) */}
-      <div className="flash-news-banner py-2 px-3 flex items-center justify-between gap-3 text-white overflow-hidden shadow-md relative z-20">
-        <div className="flex items-center gap-2 bg-white text-orange-950 font-black text-xs md:text-sm px-3.5 py-1 rounded-full shadow-md shrink-0 animate-pulse border border-orange-300">
+      <div className="py-2 px-3 flex items-center justify-between gap-3 overflow-hidden shadow-md relative z-20 transition-colors" style={{ backgroundColor: tickerBg, color: tickerTextColor }}>
+        <div className="flex items-center gap-2 bg-white text-slate-900 font-black text-xs md:text-sm px-3.5 py-1 rounded-full shadow-md shrink-0 animate-pulse border border-amber-300">
           <span className="w-2.5 h-2.5 rounded-full bg-[#FB6C00] border border-white animate-ping" />
           <Zap className="w-4 h-4 fill-[#FB6C00] text-[#FB6C00]" />
           <span>⚡ తాజా ప్రకటన (FLASH NEWS)</span>
         </div>
 
         <div className="overflow-hidden w-full relative">
-          <div className="flash-news-content text-xs sm:text-sm md:text-base font-extrabold text-orange-50 heading-telugu tracking-wide hover:[animation-play-state:paused] cursor-pointer">
+          <div className="flash-news-content text-xs sm:text-sm md:text-base font-extrabold heading-telugu tracking-wide hover:[animation-play-state:paused] cursor-pointer" style={{ color: tickerTextColor }}>
             {lang === 'te' ? (
               <>
                 📢 ముఖ్య గమనిక: ఆలయ వెబ్‌సైట్‌లో ప్రదర్శించబడుతున్న విరాళాల వివరాలు, శ్రీ రామా సేవా కమిటీ పామినివాండ్లవూరు అధికారిక బ్యాంక్ ఖాతా సృష్టించిన తర్వాత NEFT లేదా UPI ద్వారా నేరుగా ఖాతాకు జమ కాబడినవి మాత్రమే ప్రదర్శించబడుతున్నాయి.
@@ -61,10 +68,10 @@ export default function V2Navbar({ activeModule, setActiveModule, lang, setLang,
             </div>
 
             <div className="flex flex-col justify-center">
-              <h1 className="text-base md:text-xl font-black text-slate-900 heading-telugu leading-tight group-hover:text-[#FB6C00] transition-colors">
+              <h1 className="text-base md:text-xl font-black heading-telugu leading-tight transition-colors" style={{ color: headerTextColor }}>
                 {t.nav.title}
               </h1>
-              <p className="text-[11px] md:text-xs text-[#FB6C00] font-extrabold">
+              <p className="text-[11px] md:text-xs font-extrabold" style={{ color: headerTextColor === '#FFFFFF' ? '#FFD700' : '#FB6C00' }}>
                 {v2T.tagline}
               </p>
             </div>
