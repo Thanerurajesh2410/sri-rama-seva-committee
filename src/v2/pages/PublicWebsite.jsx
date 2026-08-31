@@ -242,10 +242,10 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
   const safeSlideIdx = slideIdx % (activeGalleryImages.length || 1);
 
   return (
-    <div className="bg-[#090914] text-white min-h-screen sacred-temple-bg-masked">
+    <div className="text-slate-900 min-h-screen sacred-temple-bg-masked">
       
       {/* Sub-Navigation Menu Bar - Dynamic Filtering Based on Admin Settings */}
-      <div className="bg-[#1A0306]/95 border-b border-[#FFD700]/40 sticky top-[73px] z-40 backdrop-blur-md overflow-x-auto scrollbar-none py-3 px-3 shadow-2xl">
+      <div className="bg-white/95 border-b border-slate-200 sticky top-[73px] z-40 backdrop-blur-md overflow-x-auto scrollbar-none py-3 px-3 shadow-md">
         <div className="flex items-center justify-start gap-2.5 md:gap-3.5 whitespace-nowrap text-sm sm:text-base md:text-lg font-black px-2">
           {navTabs.map(tab => (
             <button
@@ -253,8 +253,8 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
               onClick={() => { setActiveTab(tab.id); if (setSubSection) setSubSection(tab.id); }}
               className={`px-4 sm:px-5 py-2.5 rounded-full transition-all border shrink-0 ${
                 activeTab === tab.id
-                  ? 'bg-[#5C121E] text-[#FFD700] border-2 border-[#FFD700] shadow-lg scale-105 font-black'
-                  : 'bg-white/10 text-gray-200 border-white/20 hover:bg-white/20 hover:text-white'
+                  ? 'bg-emerald-600 text-white border-2 border-emerald-500 shadow-md scale-105 font-black'
+                  : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-emerald-50 hover:text-emerald-800 font-extrabold'
               }`}
             >
               {tab.label}
@@ -270,14 +270,14 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
           <div className="container mx-auto px-4 py-4 relative z-10">
             {/* Hero Header Section with Divine Lord Rama Logo */}
             <div className="text-center max-w-4xl mx-auto py-2">
-              <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full text-xs md:text-sm font-black bg-[#5C121E]/90 text-[#FFD700] border-2 border-[#FFD700] shadow-[0_0_25px_rgba(255,215,0,0.5)] mb-4 animate-bounce">
+              <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full text-xs md:text-sm font-black bg-emerald-700 text-white border-2 border-emerald-400 shadow-md mb-4 animate-bounce">
                 <span>🚩 {t.hero.badge}</span>
               </div>
 
               {/* Fixed Lord Rama Divine Portrait Logo */}
               <div className="flex justify-center my-4">
                 <div className="relative group">
-                  <div className="absolute -inset-6 bg-gradient-to-r from-amber-400 via-yellow-300 to-orange-500 rounded-full blur-2xl opacity-85 group-hover:opacity-100 transition duration-1000 animate-pulse" />
+                  <div className="absolute -inset-6 bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-500 rounded-full blur-2xl opacity-75 group-hover:opacity-100 transition duration-1000 animate-pulse" />
                   <img
                     src={getActiveLogo()}
                     alt="Lord Rama Portrait"
@@ -285,19 +285,19 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                       e.currentTarget.onerror = null;
                       e.currentTarget.src = getAssetUrl('assets/logo.jpg');
                     }}
-                    className="relative w-40 h-40 md:w-52 md:h-52 rounded-full border-4 border-[#FFD700] shadow-[0_0_60px_rgba(255,215,0,0.8)] object-cover"
+                    className="relative w-40 h-40 md:w-52 md:h-52 rounded-full border-4 border-emerald-500 shadow-[0_0_40px_rgba(16,185,129,0.35)] object-cover bg-white"
                   />
-                  <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-[#5C121E] text-[#FFD700] border-2 border-[#FFD700] px-4 py-1 rounded-full text-xs font-black shadow-2xl flex items-center gap-1.5 whitespace-nowrap">
-                    <Sparkles className="w-3.5 h-3.5 fill-[#FFD700]" />
+                  <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-emerald-800 text-white border-2 border-emerald-400 px-4 py-1 rounded-full text-xs font-black shadow-lg flex items-center gap-1.5 whitespace-nowrap">
+                    <Sparkles className="w-3.5 h-3.5 fill-amber-300 text-amber-300" />
                     <span>॥ జై శ్రీ రామ్ ॥</span>
                   </div>
                 </div>
               </div>
 
-              <h1 className="text-3xl md:text-5xl font-black heading-telugu leading-tight mb-2 drop-shadow-[0_4px_10px_rgba(0,0,0,0.9)]">
+              <h1 className="text-3xl md:text-5xl font-black heading-telugu leading-tight mb-2 text-slate-900">
                 <span className="heading-gold">{t.hero.title}</span>
               </h1>
-              <p className="text-lg md:text-xl font-extrabold text-[var(--primary-saffron)] heading-telugu mb-6 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+              <p className="text-lg md:text-xl font-extrabold text-emerald-800 heading-telugu mb-6">
                 "{t.hero.slogan}"
               </p>
             </div>

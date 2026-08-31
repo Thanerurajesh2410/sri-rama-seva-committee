@@ -28,7 +28,7 @@ import { CheckCircle, Palette, MessageSquare, Layers } from 'lucide-react';
 export default function App() {
   const [lang, setLang] = useState('te');
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('sri_rama_theme') || 'theme-cream';
+    return localStorage.getItem('sri_rama_theme') || 'theme-light';
   });
   const [toastMessage, setToastMessage] = useState('');
   
