@@ -51,21 +51,41 @@ body, body.theme-light, body.theme-light-slate, body.theme-cream {
   background-attachment: fixed;
 }
 
-body.theme-light .gold-card, body.theme-light-slate .gold-card, body.theme-cream .gold-card {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  color: #0F172A;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+/* Card Design System: High Contrast Devotional Cards */
+.gold-card {
+  background: linear-gradient(135deg, #4A0E17 0%, #2D080E 60%, #1A0306 100%) !important;
+  border: 2px solid #FFD700 !important;
+  border-radius: 24px;
+  padding: 1.75rem;
+  color: #FFFFFF !important;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 215, 0, 0.15) !important;
+  position: relative;
+  overflow: hidden;
 }
 
-body.theme-light h1, body.theme-light h2, body.theme-light h3, body.theme-light h4,
-body.theme-light-slate h1, body.theme-light-slate h2, body.theme-light-slate h3, body.theme-light-slate h4 {
-  color: #0F172A;
+.gold-card h1, .gold-card h2, .gold-card h3, .gold-card h4 {
+  color: #FFFFFF !important;
 }
 
-body.theme-light header, body.theme-light-slate header {
-  background: #FFFFFF;
-  color: #0F172A;
+.gold-card p, .gold-card li {
+  color: #F1F5F9 !important;
+}
+
+.light-card {
+  background: #FFFFFF !important;
+  border: 2px solid #FED7AA !important;
+  border-radius: 24px;
+  padding: 1.75rem;
+  color: #0F172A !important;
+  box-shadow: 0 10px 30px rgba(234, 88, 12, 0.08) !important;
+}
+
+.light-card h1, .light-card h2, .light-card h3, .light-card h4 {
+  color: #0F172A !important;
+}
+
+.light-card p, .light-card span, .light-card li {
+  color: #334155 !important;
 }
 
 /* Typography & Headings */

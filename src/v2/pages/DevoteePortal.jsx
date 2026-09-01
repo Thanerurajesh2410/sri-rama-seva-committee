@@ -272,7 +272,7 @@ export default function DevoteePortal({ t, showToast }) {
                     </div>
                   </div>
 
-                  <button type="submit" className="btn-gold w-full py-4 text-base md:text-xl font-black shadow-2xl rounded-2xl border-2 border-yellow-200 transform hover:scale-[1.02] active:scale-95 transition-all">
+                  <button type="submit" className="btn-gold w-full py-3.5 px-4 text-xs sm:text-sm md:text-base font-black shadow-2xl rounded-2xl border-2 border-yellow-200 hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-2 leading-snug">
                     <span>✨ పోర్టల్‌లోకి ప్రవేశించండి (Login Now)</span>
                   </button>
                 </form>
@@ -280,52 +280,61 @@ export default function DevoteePortal({ t, showToast }) {
                 /* 2. Devotee Registration Form with Unique Phone & Email Validation */
                 <form onSubmit={handleRegister} className="relative z-10 space-y-4 max-w-md mx-auto text-left">
                   <div>
-                    <label className="block text-xs md:text-sm font-black text-amber-200 mb-1 uppercase">భక్తుడి పూర్తి పేరు (Full Name) *</label>
+                    <label className="block text-xs font-black text-amber-200 mb-1 uppercase">
+                      పూర్తి పేరు (Full Devotee Name) *
+                    </label>
                     <div className="relative">
                       <input
                         type="text"
                         required
-                        placeholder="మీ పూర్తి పేరు"
+                        placeholder="ఉదా: కొండూరు శ్రీనివాసులు"
                         value={regName}
                         onChange={(e) => setRegName(e.target.value)}
-                        className="w-full bg-[#1A0306]/90 border-2 border-[#FFD700] rounded-2xl py-3 px-4 pl-11 text-sm md:text-base text-white focus:outline-none focus:ring-2 focus:ring-[#FFD700] font-bold"
+                        className="w-full bg-[#1A0306]/90 border-2 border-white/30 rounded-2xl py-3 px-4 pl-11 text-sm md:text-base text-white focus:outline-none focus:border-[#FFD700] font-bold"
                       />
                       <User className="w-5 h-5 text-amber-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block text-xs md:text-sm font-black text-amber-200 mb-1 uppercase">ఫోన్ నంబర్ (Unique Phone) *</label>
-                    <div className="relative">
-                      <input
-                        type="tel"
-                        required
-                        placeholder="ఉదా: 9866125609"
-                        value={regPhone}
-                        onChange={(e) => setRegPhone(e.target.value)}
-                        className="w-full bg-[#1A0306]/90 border-2 border-[#FFD700] rounded-2xl py-3 px-4 pl-11 text-sm md:text-base text-amber-300 focus:outline-none focus:ring-2 focus:ring-[#FFD700] font-mono font-bold"
-                      />
-                      <Phone className="w-5 h-5 text-amber-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-black text-amber-200 mb-1 uppercase">
+                        ఫోన్ నంబర్ *
+                      </label>
+                      <div className="relative">
+                        <input
+                          type="tel"
+                          required
+                          placeholder="9866125609"
+                          value={regPhone}
+                          onChange={(e) => setRegPhone(e.target.value)}
+                          className="w-full bg-[#1A0306]/90 border-2 border-white/30 rounded-2xl py-3 px-4 pl-11 text-sm md:text-base text-white focus:outline-none focus:border-[#FFD700] font-mono font-bold"
+                        />
+                        <Phone className="w-5 h-5 text-amber-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-black text-amber-200 mb-1 uppercase">
+                        ఈమెయిల్ (Email)
+                      </label>
+                      <div className="relative">
+                        <input
+                          type="email"
+                          placeholder="devotee@gmail.com"
+                          value={regEmail}
+                          onChange={(e) => setRegEmail(e.target.value)}
+                          className="w-full bg-[#1A0306]/90 border-2 border-white/30 rounded-2xl py-3 px-4 pl-11 text-sm md:text-base text-white focus:outline-none focus:border-[#FFD700] font-mono font-bold"
+                        />
+                        <Mail className="w-5 h-5 text-amber-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                      </div>
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs md:text-sm font-black text-amber-200 mb-1 uppercase">ఇమెయిల్ అడ్రస్ (Unique Email) *</label>
-                    <div className="relative">
-                      <input
-                        type="email"
-                        required
-                        placeholder="ఉదా: devotee@gmail.com"
-                        value={regEmail}
-                        onChange={(e) => setRegEmail(e.target.value)}
-                        className="w-full bg-[#1A0306]/90 border-2 border-[#FFD700] rounded-2xl py-3 px-4 pl-11 text-sm md:text-base text-white focus:outline-none focus:ring-2 focus:ring-[#FFD700] font-bold"
-                      />
-                      <Mail className="w-5 h-5 text-amber-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs md:text-sm font-black text-amber-200 mb-1 uppercase">గ్రామం / ఊరు (City / Village)</label>
+                    <label className="block text-xs font-black text-amber-200 mb-1 uppercase">
+                      గ్రామం / నివాస స్థలం (City/Village)
+                    </label>
                     <div className="relative">
                       <input
                         type="text"
