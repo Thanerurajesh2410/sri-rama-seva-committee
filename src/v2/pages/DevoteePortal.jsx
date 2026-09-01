@@ -193,7 +193,7 @@ export default function DevoteePortal({ t, showToast }) {
               
               {/* Background God Photo Watermark Overlay */}
               <div
-                className="absolute inset-0 opacity-15 bg-cover bg-center pointer-events-none"
+                className="absolute inset-0 opacity-30 bg-cover bg-center pointer-events-none"
                 style={{ backgroundImage: `url('${getAssetUrl('assets/temple_bg.jpg')}')` }}
               />
 

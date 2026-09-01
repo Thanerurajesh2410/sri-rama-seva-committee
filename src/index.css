@@ -43,7 +43,7 @@ body, body.theme-light, body.theme-light-slate, body.theme-cream {
 .sacred-temple-bg-masked {
   position: relative;
   background-image: 
-    radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.96) 60%, rgba(241, 245, 249, 0.98) 100%),
+    radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.78) 0%, rgba(248, 250, 252, 0.82) 60%, rgba(241, 245, 249, 0.86) 100%),
     url('/assets/temple_bg.jpg');
   background-size: cover;
   background-position: center top;
