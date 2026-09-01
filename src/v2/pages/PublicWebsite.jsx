@@ -303,65 +303,65 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
             </div>
           </div>
 
-          {/* 📸 100% FULL SCREEN TEMPLE SLIDESHOW BANNER (Placed BELOW the Logo & Title) */}
+          {/* 📸 80% SCREEN SIZE TEMPLE SLIDESHOW BANNER WITH HIGH CONTRAST PHOTO CAPTIONS */}
           {websiteSettings.showSlideshow !== false && activeGalleryImages.length > 0 && (
-            <div className="relative w-full overflow-hidden shadow-2xl bg-black border-y-4 border-[#FFD700] group my-4">
-              <div className="relative h-[380px] sm:h-[540px] md:h-[660px] lg:h-[760px] w-full">
-                {/* Blurred Background Backdrop for Full Image Aspect Ratio */}
+            <div className="w-[92%] md:w-[80%] max-w-6xl mx-auto shadow-2xl bg-black rounded-3xl border-4 border-[#FFD700] overflow-hidden group my-6 relative">
+              <div className="relative h-[340px] sm:h-[460px] md:h-[540px] lg:h-[600px] w-full">
+                {/* Blurred Background Backdrop for Full Aspect Ratio Fill */}
                 <div
-                  className="absolute inset-0 bg-cover bg-center filter blur-2xl opacity-40 scale-110 pointer-events-none"
+                  className="absolute inset-0 bg-cover bg-center filter blur-xl opacity-50 scale-110 pointer-events-none"
                   style={{ backgroundImage: `url('${activeGalleryImages[safeSlideIdx].src}')` }}
                 />
 
-                {/* Uncropped Full Image Display */}
+                {/* Uncropped Image Display */}
                 <img
                   src={activeGalleryImages[safeSlideIdx].src}
                   alt={activeGalleryImages[safeSlideIdx].title}
                   className="relative z-10 w-full h-full object-contain object-center transition-all duration-700"
                 />
                 
-                {/* Gradient Overlay */}
-                <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/95 via-black/25 to-transparent flex flex-col justify-end p-6 sm:p-12 md:p-16 pointer-events-none">
-                  <div className="max-w-5xl mx-auto w-full pointer-events-auto">
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className="text-xs sm:text-sm font-black text-[#FFD700] bg-[#5C121E]/95 px-4 py-1.5 rounded-full border-2 border-[#FFD700] shadow-xl">
-                        🚩 {activeGalleryImages[safeSlideIdx].tag}
+                {/* Text & Photo Information Bar Overlay (High Contrast & Clear) */}
+                <div className="absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-black/95 via-black/80 to-transparent p-5 sm:p-8 md:p-10 pointer-events-none pb-12 sm:pb-14">
+                  <div className="max-w-4xl mx-auto w-full pointer-events-auto space-y-2">
+                    <div className="flex flex-wrap items-center gap-2.5">
+                      <span className="text-xs sm:text-sm font-black text-[#FFD700] bg-[#5C121E] px-4 py-1 rounded-full border border-[#FFD700] shadow-md">
+                        🚩 {activeGalleryImages[safeSlideIdx].tag || 'ఆలయ ప్రగతి ఫోటో'}
                       </span>
-                      <span className="text-xs sm:text-sm font-mono font-black text-amber-300 bg-black/80 px-4 py-1 rounded-full border border-amber-400/40">
+                      <span className="text-xs sm:text-sm font-mono font-black text-amber-300 bg-black/90 px-3.5 py-1 rounded-full border border-amber-400/50">
                         {safeSlideIdx + 1} / {activeGalleryImages.length}
                       </span>
                     </div>
                     
-                    <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white heading-telugu drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)] leading-tight">
+                    <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-black text-white heading-telugu leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,1)]">
                       {activeGalleryImages[safeSlideIdx].title}
                     </h2>
                   </div>
                 </div>
 
-                {/* Slideshow Arrows */}
+                {/* Slideshow Navigation Arrows */}
                 <button
                   onClick={() => setSlideIdx((prev) => (prev === 0 ? activeGalleryImages.length - 1 : prev - 1))}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 z-30 p-3.5 sm:p-5 rounded-full bg-black/70 text-[#FFD700] hover:bg-[#5C121E] border-2 border-[#FFD700] transition-transform hover:scale-110 shadow-2xl"
+                  className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 z-30 p-2.5 sm:p-4 rounded-full bg-black/80 text-[#FFD700] hover:bg-[#5C121E] border-2 border-[#FFD700] transition-transform hover:scale-110 shadow-2xl"
                   aria-label="Previous Slide"
                 >
-                  <ChevronLeft className="w-6 h-6 sm:w-8 sm:h-8" />
+                  <ChevronLeft className="w-5 h-5 sm:w-7 sm:h-7" />
                 </button>
                 <button
                   onClick={() => setSlideIdx((prev) => (prev + 1) % activeGalleryImages.length)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 z-30 p-3.5 sm:p-5 rounded-full bg-black/70 text-[#FFD700] hover:bg-[#5C121E] border-2 border-[#FFD700] transition-transform hover:scale-110 shadow-2xl"
+                  className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-30 p-2.5 sm:p-4 rounded-full bg-black/80 text-[#FFD700] hover:bg-[#5C121E] border-2 border-[#FFD700] transition-transform hover:scale-110 shadow-2xl"
                   aria-label="Next Slide"
                 >
-                  <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8" />
+                  <ChevronRight className="w-5 h-5 sm:w-7 sm:h-7" />
                 </button>
 
                 {/* Slide Position Dots */}
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex justify-center items-center gap-2 z-20">
+                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex justify-center items-center gap-2 z-30">
                   {activeGalleryImages.map((_, idx) => (
                     <button
                       key={idx}
                       onClick={() => setSlideIdx(idx)}
-                      className={`h-3 rounded-full transition-all ${
-                        idx === safeSlideIdx ? 'w-10 bg-[#FFD700] shadow-[0_0_15px_#FFD700]' : 'w-3 bg-[#ffffff66] hover:bg-white'
+                      className={`h-2.5 rounded-full transition-all ${
+                        idx === safeSlideIdx ? 'w-8 bg-[#FFD700] shadow-[0_0_12px_#FFD700]' : 'w-2.5 bg-white/50 hover:bg-white'
                       }`}
                     />
                   ))}
