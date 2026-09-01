@@ -181,8 +181,8 @@ export default function DevoteePortal({ t, showToast }) {
             <User className="w-4 h-4 text-amber-300" />
             <span>🚩 పామినివాండ్లవూరు శ్రీ రామాలయం - భక్తుల అధికారిక డిజిటల్ పోర్టల్</span>
           </div>
-          <h2 className="text-2xl md:text-4xl font-black text-white heading-telugu leading-tight">
-            భక్తుల డిజిటల్ సేవల నమోదు & పారదర్శకత పోర్టల్
+          <h2 className="text-2xl md:text-4xl font-black text-slate-900 heading-telugu leading-tight">
+            <span className="heading-gold">భక్తుల డిజిటల్ సేవల నమోదు & పారదర్శకత పోర్టల్</span>
           </h2>
         </div>
 

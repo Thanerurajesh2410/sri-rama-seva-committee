@@ -532,7 +532,9 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
           <div className="max-w-5xl mx-auto space-y-8 animate-fadeIn">
             <div className="text-center mb-8">
               <span className="section-tag text-sm sm:text-base font-black px-5 py-2">ఆలయ విశేషాలు</span>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white heading-telugu mt-3">శ్రీ రామాలయం పామినివాండ్లవూరు - చరిత్ర & వివరాలు</h2>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black heading-telugu mt-3 text-slate-900">
+                <span className="heading-gold">శ్రీ రామాలయం పామినివాండ్లవూరు - చరిత్ర & వివరాలు</span>
+              </h2>
             </div>
 
             <div className="gold-card space-y-6 text-base sm:text-lg leading-relaxed text-gray-100 bg-[#5C121E]/95 border-3 border-amber-400/80 !p-8 rounded-3xl shadow-2xl">
@@ -556,8 +558,10 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
           <div className="max-w-5xl mx-auto space-y-8 animate-fadeIn">
             <div className="text-center mb-8">
               <span className="section-tag text-sm sm:text-base font-black px-5 py-2">విరాళాల వర్గీకరణ & సమర్పణ</span>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white heading-telugu mt-3 mb-2">శ్రీ రామాలయం విరాళాల పథకాలు & విభాగాలు</h2>
-              <p className="text-sm sm:text-base md:text-lg text-amber-300 font-extrabold max-w-3xl mx-auto mt-2">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black heading-telugu mt-3 mb-2 text-slate-900">
+                <span className="heading-gold">శ్రీ రామాలయం విరాళాల పథకాలు & విభాగాలు</span>
+              </h2>
+              <p className="text-sm sm:text-base md:text-lg text-amber-900 font-extrabold max-w-3xl mx-auto mt-2">
                 పారదర్శకత మరియు సులువైన లెక్కల నిర్వహణ కొరకు విరాళాలు పవిత్ర వర్గాలుగా వర్గీకరించబడ్డాయి.
               </p>
             </div>
@@ -695,8 +699,10 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
           <div className="max-w-5xl mx-auto space-y-8 animate-fadeIn">
             <div className="text-center mb-8">
               <span className="section-tag text-sm sm:text-base font-black px-5 py-2">కమిటీ సభ్యులు</span>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white heading-telugu mt-3">శ్రీ రామా సేవా కమిటీ పాలక వర్గం & సభ్యులు</h2>
-              <p className="text-sm sm:text-base text-amber-300 font-bold max-w-2xl mx-auto mt-2">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black heading-telugu mt-3 text-slate-900">
+                <span className="heading-gold">శ్రీ రామా సేవా కమిటీ పాలక వర్గం & సభ్యులు</span>
+              </h2>
+              <p className="text-sm sm:text-base text-amber-900 font-extrabold max-w-2xl mx-auto mt-2">
                 పామినివాండ్లవూరు గ్రామ శ్రీ రామాలయ నిర్మాణ నిర్వహణ సమితి సభ్యుల వివరాలు.
               </p>
             </div>
@@ -764,8 +770,10 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
           <div className="max-w-5xl mx-auto space-y-8 animate-fadeIn">
             <div className="text-center mb-8">
               <span className="section-tag text-sm sm:text-base font-black px-5 py-2">అధికారిక నిబంధనలు</span>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white heading-telugu mt-3">శ్రీ రామాలయం పామినివాండ్లవూరు - నిబంధనలు & షరతులు</h2>
-              <p className="text-sm sm:text-base text-amber-300 font-bold max-w-2xl mx-auto mt-2">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black heading-telugu mt-3 text-slate-900">
+                <span className="heading-gold">శ్రీ రామాలయం పామినివాండ్లవూరు - నిబంధనలు & షరతులు</span>
+              </h2>
+              <p className="text-sm sm:text-base text-amber-900 font-extrabold max-w-2xl mx-auto mt-2">
                 ఆలయ నిధుల పారదర్శకత, విరాళాల వినియోగం మరియు భక్తుల హక్కుల కొరకు పవిత్ర నిబంధనలు.
               </p>
             </div>
@@ -795,7 +803,9 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
           <div className="max-w-5xl mx-auto space-y-8 animate-fadeIn">
             <div className="text-center mb-8">
               <span className="section-tag text-sm sm:text-base font-black px-5 py-2">ఉత్సవాలు</span>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white heading-telugu mt-3">వార్షిక శ్రీరామనవమి & ధార్మిక కార్యక్రమాలు</h2>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black heading-telugu mt-3 text-slate-900">
+                <span className="heading-gold">వార్షిక శ్రీరామనవమి & ధార్మిక కార్యక్రమాలు</span>
+              </h2>
             </div>
 
             <div className="space-y-5">
@@ -822,7 +832,9 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
           <div className="max-w-5xl mx-auto space-y-8 animate-fadeIn">
             <div className="text-center mb-8">
               <span className="section-tag text-sm sm:text-base font-black px-5 py-2">ఆలయ ప్రగతి చిత్రాలు</span>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white heading-telugu mt-3">శ్రీ రామాలయ నిర్మాణ & శంకుస్థాపన ఫోటోల గ్యాలరీ</h2>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black heading-telugu mt-3 text-slate-900">
+                <span className="heading-gold">శ్రీ రామాలయ నిర్మాణ & శంకుస్థాపన ఫోటోల గ్యాలరీ</span>
+              </h2>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -846,7 +858,9 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
           <div className="max-w-5xl mx-auto space-y-8 animate-fadeIn">
             <div className="text-center mb-8">
               <span className="section-tag text-sm sm:text-base font-black px-5 py-2">వార్తలు & ప్రకటనలు</span>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white heading-telugu mt-3">తాజా వివరాలు & పత్రికా ప్రకటనలు</h2>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black heading-telugu mt-3 text-slate-900">
+                <span className="heading-gold">తాజా వివరాలు & పత్రికా ప్రకటనలు</span>
+              </h2>
             </div>
 
             <div className="space-y-5">
@@ -866,8 +880,10 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
           <div className="max-w-5xl mx-auto space-y-8 animate-fadeIn">
             <div className="text-center mb-8">
               <span className="section-tag text-sm sm:text-base font-black px-5 py-2">పారదర్శకత నివేదికలు</span>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white heading-telugu mt-3 mb-2">ఆదాయ వ్యయాలు & ఆడిట్ నివేదిక</h2>
-              <p className="text-sm sm:text-base md:text-lg text-amber-300 font-extrabold max-w-3xl mx-auto mt-2">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black heading-telugu mt-3 mb-2 text-slate-900">
+                <span className="heading-gold">ఆదాయ వ్యయాలు & ఆడిట్ నివేదిక</span>
+              </h2>
+              <p className="text-sm sm:text-base md:text-lg text-amber-900 font-extrabold max-w-3xl mx-auto mt-2">
                 ఆలయ డేటాబేస్ నుండి లైవ్ విరాళాల జాబితా ప్రకారం లెక్కించబడిన అధికారిక ఆర్థిక నివేదిక.
               </p>
             </div>
@@ -972,7 +988,9 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
           <div className="max-w-5xl mx-auto space-y-8 animate-fadeIn">
             <div className="text-center mb-8">
               <span className="section-tag text-sm sm:text-base font-black px-5 py-2">సంప్రదించండి</span>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white heading-telugu mt-3">అధికారిక చిరునామా & WhatsApp నేరుగా సంప్రదింపుల ఫారం</h2>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black heading-telugu mt-3 text-slate-900">
+                <span className="heading-gold">అధికారిక చిరునామా & WhatsApp నేరుగా సంప్రదింపుల ఫారం</span>
+              </h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

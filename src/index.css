@@ -68,9 +68,34 @@ body.theme-light header, body.theme-light-slate header {
   color: #0F172A;
 }
 
-body.theme-cream header h1, body.theme-cream header a, body.theme-cream header p, body.theme-cream header span,
-body.theme-light-cream header h1, body.theme-light-cream header a, body.theme-light-cream header p, body.theme-light-cream header span {
-  color: #FFFFFF;
+/* Typography & Headings */
+.heading-gold {
+  color: #0F172A;
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #7C2D12 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.heading-saffron {
+  color: #9A3412;
+}
+
+/* Section Tags */
+.section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 1.25rem;
+  background: #FFF7ED;
+  border: 1.5px solid #FDBA74;
+  border-radius: 50px;
+  color: #9A3412;
+  font-size: 0.8rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 2px 8px rgba(234, 88, 12, 0.12);
 }
 
 /* Auto-fitting responsive button rule preventing text overflow and awkward line breaks */
