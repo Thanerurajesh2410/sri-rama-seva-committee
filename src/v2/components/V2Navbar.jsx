@@ -137,25 +137,6 @@ export default function V2Navbar({ activeModule, setActiveModule, lang, setLang,
               <span>ఈ-హుండి విరాళం</span>
             </button>
 
-            {/* Theme Toggle Button */}
-            <button
-              onClick={toggleTheme}
-              className="px-3.5 py-2 rounded-xl text-xs md:text-sm font-black bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100 transition-all flex items-center gap-1.5 shrink-0 shadow-xs"
-              title="థీమ్ మార్చుకోండి (Light / Dark Theme Toggle)"
-            >
-              {theme === 'theme-light' ? (
-                <>
-                  <Sun className="w-4 h-4 text-amber-600" />
-                  <span>లైట్ థీమ్</span>
-                </>
-              ) : (
-                <>
-                  <Moon className="w-4 h-4 text-amber-600" />
-                  <span>డార్క్ థీమ్</span>
-                </>
-              )}
-            </button>
-
           </div>
 
           {/* Mobile Menu Button */}
