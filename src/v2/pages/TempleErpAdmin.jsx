@@ -955,7 +955,7 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
                   <input
                     type="password"
                     required
-                    placeholder={selectedRole === 'treasurer' ? 'Password (ఉదా: 7777)' : 'Password (ఉదా: Rajesh@2410)'}
+                    placeholder=""
                     value={adminPass}
                     onChange={(e) => setAdminPass(e.target.value)}
                     className="w-full bg-[#1A0306]/90 border-3 border-[#FFD700] text-amber-300 rounded-2xl p-3.5 px-4 text-base md:text-lg font-mono focus:outline-none focus:ring-4 focus:ring-[#FFD700]/50 shadow-inner placeholder-gray-500 font-bold"
@@ -989,9 +989,9 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
           <div className="space-y-6 animate-fadeIn">
             
             {/* Top Bar Header */}
-            <div className="gold-card border-3 border-[#FFD700] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 !p-6">
+            <div className="gold-card bg-gradient-to-r from-[#4A0E17] via-[#2D080E] to-[#4A0E17] border-3 border-[#FFD700] p-6 rounded-3xl shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="flex items-center gap-4">
-                <div className="p-3.5 rounded-2xl bg-[#5C121E] text-[#FFD700] border-2 border-[#FFD700] shadow-lg">
+                <div className="p-3 bg-black/60 rounded-2xl border-2 border-[#FFD700] text-[#FFD700] shadow-md">
                   <LayoutDashboard className="w-8 h-8" />
                 </div>
                 <div>
@@ -1025,38 +1025,40 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
               </div>
             </div>
 
-                {/* Navigation Tabs Bar - Filtered by Role (Treasurer vs Admin) */}
-                <div className="flex flex-wrap items-center justify-start md:justify-center gap-2 md:gap-3 border-b border-white/10 pb-4 text-base md:text-lg xl:text-[19px] font-black">
-                  {[
-                    { id: 'dashboard', label: '📊 డ్యాష్‌బోర్డ్', roles: ['admin', 'treasurer'] },
-                    { id: 'donations', label: '🧾 రశీదుల జారీ', roles: ['admin', 'treasurer'] },
-                    { id: 'donors', label: '👤 దాతల CRM', roles: ['admin', 'treasurer'] },
-                    { id: 'expenses', label: '💸 ఖర్చులు & బిల్లులు', roles: ['admin', 'treasurer'] },
-                    { id: 'reports', label: '📥 నివేదికలు & షేరింగ్', roles: ['admin', 'treasurer'] },
-                    { id: 'materials', label: '🏗️ సామగ్రి విరాళాలు', roles: ['admin', 'treasurer'] },
-                    { id: 'volunteers', label: '🤝 వాలంటీర్లు', roles: ['admin'] },
-                    { id: 'website-settings', label: '⚙️ వెబ్‌సైట్ విభాగాలు', roles: ['admin'] },
-                    { id: 'media-manager', label: '🏷️ లోగో & QR మేనేజర్', roles: ['admin'] },
-                    { id: 'gallery-manager', label: '🖼️ గ్యాలరీ & స్లైడ్‌షో ఫోటోలు', roles: ['admin'] },
-                    { id: 'poster-designer', label: '🎨 పోస్టర్లు, పాంప్లెట్లు & రశీదు పుస్తకం', roles: ['admin'] },
-                    { id: 'swagger-api', label: '⚡ Swagger REST API', roles: ['admin'] },
-                    { id: 'audit', label: '📋 ఆడిట్ & డేటాబేస్', roles: ['admin'] }
-              ].filter(tab => {
-                const isTreasurer = userRole.includes('TREASURER') || userRole.includes('కోశాధికారి');
-                return isTreasurer ? tab.roles.includes('treasurer') : true;
-              }).map(tab => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`px-4 xl:px-5 py-2.5 xl:py-3 rounded-xl xl:rounded-2xl transition-all shrink-0 ${
-                    activeTab === tab.id
-                      ? 'bg-[#5C121E] text-[#FFD700] border-2 md:border-3 border-[#FFD700] shadow-2xl font-black scale-105'
-                      : 'bg-white/10 text-gray-200 border border-white/20 hover:bg-white/20 hover:text-white'
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
+            {/* Navigation Tabs Bar Container - High Contrast Dark Maroon & Gold Background */}
+            <div className="bg-gradient-to-r from-[#3A0A11] via-[#2A060B] to-[#3A0A11] p-3.5 sm:p-4 rounded-3xl border-3 border-[#FFD700] shadow-2xl mb-6">
+              <div className="flex flex-wrap items-center justify-start md:justify-center gap-2 md:gap-2.5 text-xs sm:text-sm md:text-base font-black">
+                {[
+                  { id: 'dashboard', label: '📊 డ్యాష్‌బోర్డ్', roles: ['admin', 'treasurer'] },
+                  { id: 'donations', label: '🧾 రశీదుల జారీ', roles: ['admin', 'treasurer'] },
+                  { id: 'donors', label: '👤 దాతల CRM', roles: ['admin', 'treasurer'] },
+                  { id: 'expenses', label: '💸 ఖర్చులు & బిల్లులు', roles: ['admin', 'treasurer'] },
+                  { id: 'reports', label: '📥 నివేదికలు & షేరింగ్', roles: ['admin', 'treasurer'] },
+                  { id: 'materials', label: '🏗️ సామగ్రి విరాళాలు', roles: ['admin', 'treasurer'] },
+                  { id: 'volunteers', label: '🤝 వాలంటీర్లు', roles: ['admin'] },
+                  { id: 'website-settings', label: '⚙️ వెబ్‌సైట్ విభాగాలు', roles: ['admin'] },
+                  { id: 'media-manager', label: '🏷️ లోగో & QR మేనేజర్', roles: ['admin'] },
+                  { id: 'gallery-manager', label: '🖼️ గ్యాలరీ & స్లైడ్‌షో ఫోటోలు', roles: ['admin'] },
+                  { id: 'poster-designer', label: '🎨 పోస్టర్లు & పాంప్లెట్లు', roles: ['admin'] },
+                  { id: 'swagger-api', label: '⚡ REST API Explorer', roles: ['admin'] },
+                  { id: 'audit', label: '📋 ఆడిట్ & డేటాబేస్', roles: ['admin'] }
+                ].filter(tab => {
+                  const isTreasurer = userRole.includes('TREASURER') || userRole.includes('కోశాధికారి');
+                  return isTreasurer ? tab.roles.includes('treasurer') : true;
+                }).map(tab => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl transition-all shrink-0 ${
+                      activeTab === tab.id
+                        ? 'bg-gradient-to-r from-[#5C121E] to-[#7A1828] text-[#FFD700] border-2 border-[#FFD700] shadow-xl font-black scale-105'
+                        : 'bg-black/60 text-amber-100 border border-amber-500/40 hover:bg-[#5C121E] hover:text-[#FFD700] hover:border-[#FFD700] font-extrabold'
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* TAB 1: EXECUTIVE DASHBOARD WIDGETS */}
