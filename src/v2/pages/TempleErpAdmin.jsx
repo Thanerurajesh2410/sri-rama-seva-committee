@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { LayoutDashboard, Users, Heart, DollarSign, Building2, Package, Award, ShieldCheck, FileText, Share2, Plus, Trash2, CheckCircle2, Lock, Download, Printer, Bell, AlertCircle, Eye, Phone, Mail, MapPin, Database, ChevronDown, Receipt, Sliders, Image as ImageIcon, ToggleLeft, ToggleRight, Camera, Upload, Sparkles, Edit3, QrCode, Palette } from 'lucide-react';
+import { LayoutDashboard, Users, Heart, DollarSign, Building2, Package, Award, ShieldCheck, FileText, Share2, Plus, Trash2, CheckCircle2, Lock, Download, Printer, Bell, AlertCircle, Eye, Phone, Mail, MapPin, Database, ChevronDown, Receipt, Sliders, Image as ImageIcon, ToggleLeft, ToggleRight, Camera, Upload, Sparkles, Edit3, QrCode, Palette, Code2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
+import ApiExplorer from '../../components/ApiExplorer';
 import { getDB, saveDB, validateUniqueDevotee, addAuditLog, defaultWebsiteSettings, defaultGalleryImages, generateSqlDump, resetToInitialDB, getAssetUrl, getActiveLogo, getActiveQrCode, updateMediaAsset, resetMediaAsset } from '../data/v2Database';
 
 export default function TempleErpAdmin({ t, v2T, showToast }) {
@@ -14,9 +15,11 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
   const reportRef = useRef(null);
   const receiptRef = useRef(null);
 
-  // ERP Role State
+  // ERP Role & Login State
   const [selectedRole, setSelectedRole] = useState('admin'); // 'admin' or 'treasurer'
   const [userRole, setUserRole] = useState('ADMIN / CHIEF EXECUTIVE');
+  const [adminUser, setAdminUser] = useState('Admin');
+  const [adminPass, setAdminPass] = useState('');
 
   // New Donor Form State (With Unique Phone & Email Validation)
   const [newDonorName, setNewDonorName] = useState('');
@@ -357,36 +360,37 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
     setDbState(getDB());
   }, []);
 
-  // Handle Login (Supports both Super Admin and Separate Treasurer Role)
+  // Handle Login (Username: Admin, Password: Rajesh@2410 or Separate Treasurer Role)
   const handleLogin = (e) => {
     e.preventDefault();
-    const pin = passcode.trim();
+    const u = adminUser.trim();
+    const p = adminPass.trim();
 
-    // Dedicated Treasurer Login PINs (or Treasurer Login selection with Admin/Treasurer PINs)
-    if (selectedRole === 'treasurer' || pin === '7777' || pin === 'treasurer123' || pin === '5555') {
-      if (pin === '7777' || pin === 'treasurer123' || pin === '5555' || pin === '1252026' || pin === 'admin123' || pin === '9866125609') {
+    // Treasurer Login Handling
+    if (selectedRole === 'treasurer' || u.toLowerCase() === 'treasurer') {
+      if ((u.toLowerCase() === 'treasurer' && (p === '7777' || p === 'treasurer123')) || p === '7777' || p === '5555' || (u.toLowerCase() === 'admin' && p === 'Rajesh@2410')) {
         setUserRole('TREASURER (కోశాధికారి)');
         setIsAuthenticated(true);
         setPassError('');
         setActiveTab('dashboard');
         addAuditLog('TREASURER', "Treasurer Logged Into Financial System");
-        showToast("💰 శ్రీ రామాలయం కోశాధికారి (Treasurer) పోర్టల్‌లోకి లాగిన్ అయ్యారు!");
+        showToast("💰 శ్రీ రామాలయం కోశాధికారి (Treasurer) లాగిన్ అయ్యారు!");
         return;
       } else {
-        setPassError("తప్పు పిన్! దయచేసి సరైన కోశాధికారి (Treasurer) PIN నమోదు చేయండి (ఉదా: 7777).");
+        setPassError("తప్పు వివరాలు! దయచేసి సరైన కోశాధికారి PIN లేదా Password ఎంటర్ చేయండి (ఉదా: 7777).");
         return;
       }
     }
 
-    // Super Admin Login PINs
-    if (pin === '1252026' || pin === 'admin123' || pin === '9866125609') {
+    // Super Admin Login (Username: Admin, Password: Rajesh@2410)
+    if ((u.toLowerCase() === 'admin' && p === 'Rajesh@2410') || p === '1252026' || p === 'Rajesh@2410') {
       setUserRole('ADMIN / CHIEF EXECUTIVE');
       setIsAuthenticated(true);
       setPassError('');
       addAuditLog('ADMIN', "Super Admin Logged Into ERP System");
-      showToast("👑 శ్రీ రామాలయం అడ్మిన్ (Super Admin) పోర్టల్‌లోకి లాగిన్ అయ్యారు!");
+      showToast("👑 శ్రీ రామాలయం అడ్మిన్ (Super Admin) లాగిన్ అయ్యారు!");
     } else {
-      setPassError("తప్పు పాస్‌కోడ్! దయచేసి సరైన అడ్మిన్ PIN నమోదు చేయండి (ఉదా: 1252026).");
+      setPassError("తప్పు వివరాలు! దయచేసి Username: Admin మరియు Password: Rajesh@2410 ఎంటర్ చేయండి.");
     }
   };
 
@@ -928,24 +932,38 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
                 </button>
               </div>
 
-              {/* Login Form */}
-              <form onSubmit={handleLogin} className="relative z-10 space-y-5 max-w-md mx-auto">
-                <div className="space-y-2">
-                  <label className="block text-xs md:text-sm font-black text-amber-200 uppercase tracking-widest">
-                    {selectedRole === 'treasurer' ? 'కోశాధికారి పిన్ ఎంటర్ చేయండి (Treasurer PIN)' : 'అడ్మిన్ పాస్‌కోడ్ నమోదు చేయండి (Admin PIN)'}
+              {/* Username & Password Login Form */}
+              <form onSubmit={handleLogin} className="relative z-10 space-y-4 max-w-md mx-auto text-left">
+                <div>
+                  <label className="block text-xs md:text-sm font-black text-amber-200 uppercase tracking-widest mb-1.5">
+                    యూజర్‌నేమ్ (Username) *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder={selectedRole === 'treasurer' ? 'Username (ఉదా: Treasurer)' : 'Username (ఉదా: Admin)'}
+                    value={adminUser}
+                    onChange={(e) => setAdminUser(e.target.value)}
+                    className="w-full bg-[#1A0306]/90 border-3 border-[#FFD700] text-amber-300 rounded-2xl p-3.5 px-4 text-base md:text-lg font-mono focus:outline-none focus:ring-4 focus:ring-[#FFD700]/50 shadow-inner placeholder-gray-500 font-bold"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs md:text-sm font-black text-amber-200 uppercase tracking-widest mb-1.5">
+                    పాస్‌వర్డ్ (Password) *
                   </label>
                   <input
                     type="password"
                     required
-                    placeholder={selectedRole === 'treasurer' ? 'ట్రెజరర్ PIN (ఉదా: 7777)' : 'అడ్మిన్ PIN (ఉదా: 1252026)'}
-                    value={passcode}
-                    onChange={(e) => setPasscode(e.target.value)}
-                    className="w-full bg-[#1A0306]/90 border-3 border-[#FFD700] text-amber-300 rounded-2xl p-3.5 text-center text-xl md:text-2xl font-mono focus:outline-none focus:ring-4 focus:ring-[#FFD700]/50 shadow-inner placeholder-gray-500 font-bold"
+                    placeholder={selectedRole === 'treasurer' ? 'Password (ఉదా: 7777)' : 'Password (ఉదా: Rajesh@2410)'}
+                    value={adminPass}
+                    onChange={(e) => setAdminPass(e.target.value)}
+                    className="w-full bg-[#1A0306]/90 border-3 border-[#FFD700] text-amber-300 rounded-2xl p-3.5 px-4 text-base md:text-lg font-mono focus:outline-none focus:ring-4 focus:ring-[#FFD700]/50 shadow-inner placeholder-gray-500 font-bold"
                   />
                 </div>
 
                 {passError && (
-                  <div className="p-3 rounded-xl bg-red-950/90 border border-red-500 text-xs md:text-sm text-red-300 font-bold animate-bounce">
+                  <div className="p-3 rounded-xl bg-red-950/90 border border-red-500 text-xs md:text-sm text-red-300 font-bold animate-bounce text-center">
                     ⚠️ {passError}
                   </div>
                 )}
@@ -954,7 +972,7 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
                   type="submit"
                   className="btn-gold w-full py-3.5 px-4 text-xs sm:text-sm md:text-base font-black shadow-2xl rounded-2xl border-2 border-yellow-200 hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-2 leading-snug"
                 >
-                  <span>{selectedRole === 'treasurer' ? '💰 ట్రెజరర్ ఖాతాలోకి ప్రవేశించండి (Treasurer Login)' : '✨ ERP డేటాబేస్‌లోకి ప్రవేశించండి (Admin Login)'}</span>
+                  <span>{selectedRole === 'treasurer' ? '💰 ట్రెజరర్ ఖాతాలోకి ప్రవేశించండి (Treasurer Login)' : '✨ అడ్మిన్ ఖాతాలోకి ప్రవేశించండి (Admin Login)'}</span>
                 </button>
               </form>
 
@@ -1021,6 +1039,7 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
                     { id: 'media-manager', label: '🏷️ లోగో & QR మేనేజర్', roles: ['admin'] },
                     { id: 'gallery-manager', label: '🖼️ గ్యాలరీ & స్లైడ్‌షో ఫోటోలు', roles: ['admin'] },
                     { id: 'poster-designer', label: '🎨 పోస్టర్లు, పాంప్లెట్లు & రశీదు పుస్తకం', roles: ['admin'] },
+                    { id: 'swagger-api', label: '⚡ Swagger REST API', roles: ['admin'] },
                     { id: 'audit', label: '📋 ఆడిట్ & డేటాబేస్', roles: ['admin'] }
               ].filter(tab => {
                 const isTreasurer = userRole.includes('TREASURER') || userRole.includes('కోశాధికారి');
@@ -3270,6 +3289,13 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
                   </div>
                 </div>
 
+              </div>
+            )}
+
+            {/* TAB 13: SWAGGER REST API DOCUMENTATION & TESTER */}
+            {activeTab === 'swagger-api' && (
+              <div className="bg-white/95 rounded-3xl p-4 sm:p-6 border-4 border-[#FFD700] shadow-2xl animate-fadeIn text-slate-900">
+                <ApiExplorer showToast={showToast} />
               </div>
             )}
 

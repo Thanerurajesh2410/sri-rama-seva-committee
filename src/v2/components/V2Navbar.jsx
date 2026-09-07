@@ -73,21 +73,7 @@ export default function V2Navbar({ activeModule, setActiveModule, lang, setLang,
           {/* Module Navigation */}
           <div className="flex items-center gap-2 md:gap-3 shrink-0">
             
-            {/* 1. Global View (Public Website) */}
-            <button
-              onClick={() => setActiveModule('public-home')}
-              className={`btn-autofit px-3.5 md:px-4 py-2 rounded-xl text-xs md:text-sm font-black transition-all flex items-center gap-1.5 shrink-0 ${
-                activeModule.startsWith('public')
-                  ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white border border-amber-500 shadow-sm scale-105'
-                  : 'text-slate-700 bg-slate-100 border border-slate-200 hover:bg-amber-50 hover:text-amber-800'
-              }`}
-              title="Global Public View - Temple website, donation wall & events"
-            >
-              <Globe className="w-4 h-4 text-amber-600" />
-              <span>🌐 Global View (ప్రజా వెబ్‌సైట్)</span>
-            </button>
-
-            {/* 2. Devotee View (Devotee Portal) */}
+            {/* 1. Devotee View (Devotee Portal) */}
             <button
               onClick={() => setActiveModule('devotee-portal')}
               className={`btn-autofit px-3.5 md:px-4 py-2 rounded-xl text-xs md:text-sm font-black transition-all flex items-center gap-1.5 shrink-0 ${
@@ -98,10 +84,10 @@ export default function V2Navbar({ activeModule, setActiveModule, lang, setLang,
               title="Devotee View - My donations, pooja bookings & receipts"
             >
               <Users className="w-4 h-4 text-amber-600" />
-              <span>🛕 Devotee View (భక్తుల పోర్టల్)</span>
+              <span>🛕 భక్తుల పోర్టల్ (Devotee Portal)</span>
             </button>
 
-            {/* 3. Admin View (Temple ERP Suite) */}
+            {/* 2. Admin View (Temple ERP Suite Login) */}
             <button
               onClick={() => setActiveModule('erp-admin')}
               className={`btn-autofit px-3.5 md:px-4 py-2 rounded-xl text-xs md:text-sm font-black transition-all flex items-center gap-1.5 shrink-0 ${
@@ -112,20 +98,7 @@ export default function V2Navbar({ activeModule, setActiveModule, lang, setLang,
               title="Admin View - Financial management, donor approvals & database"
             >
               <LayoutDashboard className="w-4 h-4 text-amber-600" />
-              <span>⚙️ Admin View (టెంపుల్ ERP అడ్మిన్)</span>
-            </button>
-
-            {/* 4. Swagger API Explorer Button */}
-            <button
-              onClick={() => setActiveModule('api-explorer')}
-              className={`px-3.5 md:px-4.5 py-2 rounded-xl text-sm md:text-base font-black transition-all flex items-center gap-1.5 shrink-0 ${
-                activeModule === 'api-explorer'
-                  ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white border border-amber-500 shadow-sm scale-105'
-                  : 'text-slate-700 bg-slate-100 border border-slate-200 hover:bg-amber-50 hover:text-amber-800'
-              }`}
-            >
-              <FileText className="w-4 h-4 text-amber-600" />
-              <span>Swagger REST API</span>
+              <span>⚙️ అడ్మిన్ లాగిన్ (Admin Login)</span>
             </button>
 
             {/* Donate CTA */}
