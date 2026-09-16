@@ -1,4 +1,6 @@
 // Persistent Database Engine for Version 2 Sri Ramalayam ERP & Devotee Portal
+import { supabase, isSupabaseConfigured } from './supabaseClient';
+
 const DB_STORAGE_KEY = 'sri_rama_erp_database_v2_v3';
 
 // Asset URL Helper for Base URL & Subpath compatibility (GitHub Pages / Vercel / Local)
@@ -192,9 +194,88 @@ export const getDB = () => {
   }
 };
 
+export const syncDatabaseToSupabase = async (db) => {
+  if (!isSupabaseConfigured || !supabase) return;
+  try {
+    if (db.devotees && db.devotees.length > 0) {
+      await supabase.from('devotees').upsert(db.devotees.map(d => ({
+        id: d.id, name: d.name, phone: d.phone, email: d.email, city: d.city, registered_at: d.registeredAt
+      })));
+    }
+    if (db.donations && db.donations.length > 0) {
+      await supabase.from('donations').upsert(db.donations.map(d => ({
+        id: d.id, donor_name: d.donorName, phone: d.phone, email: d.email, amount: d.amount, date: d.date, seva: d.seva, mode: d.mode, city: d.city
+      })));
+    }
+    if (db.sevaBookings && db.sevaBookings.length > 0) {
+      await supabase.from('seva_bookings').upsert(db.sevaBookings.map(s => ({
+        id: s.id, devotee_name: s.devoteeName, phone: s.phone, seva_name: s.sevaName, date: s.date, amount: s.amount, status: s.status
+      })));
+    }
+    if (db.expenses && db.expenses.length > 0) {
+      await supabase.from('expenses').upsert(db.expenses.map(e => ({
+        id: e.id, category: e.category, amount: e.amount, vendor: e.vendor, date: e.date, status: e.status, bill_no: e.billNo, notes: e.notes
+      })));
+    }
+    if (db.auditLogs && db.auditLogs.length > 0) {
+      await supabase.from('audit_logs').upsert(db.auditLogs.map(l => ({
+        id: l.id, timestamp: l.timestamp, user_name: l.user, action: l.action
+      })));
+    }
+  } catch (err) {
+    console.warn("Supabase Sync Notice:", err);
+  }
+};
+
+export const fetchCloudDB = async () => {
+  if (!isSupabaseConfigured || !supabase) return null;
+  try {
+    const [devRes, donRes, sevaRes, expRes, auditRes] = await Promise.all([
+      supabase.from('devotees').select('*'),
+      supabase.from('donations').select('*'),
+      supabase.from('seva_bookings').select('*'),
+      supabase.from('expenses').select('*'),
+      supabase.from('audit_logs').select('*')
+    ]);
+
+    const localDB = getDB();
+    if (devRes.data && devRes.data.length > 0) {
+      localDB.devotees = devRes.data.map(d => ({
+        id: d.id, name: d.name, phone: d.phone, email: d.email, city: d.city, registeredAt: d.registered_at
+      }));
+    }
+    if (donRes.data && donRes.data.length > 0) {
+      localDB.donations = donRes.data.map(d => ({
+        id: d.id, donorName: d.donor_name, phone: d.phone, email: d.email, amount: d.amount, date: d.date, seva: d.seva, mode: d.mode, city: d.city
+      }));
+    }
+    if (sevaRes.data && sevaRes.data.length > 0) {
+      localDB.sevaBookings = sevaRes.data.map(s => ({
+        id: s.id, devoteeName: s.devotee_name, phone: s.phone, sevaName: s.seva_name, date: s.date, amount: s.amount, status: s.status
+      }));
+    }
+    if (expRes.data && expRes.data.length > 0) {
+      localDB.expenses = expRes.data.map(e => ({
+        id: e.id, category: e.category, amount: e.amount, vendor: e.vendor, date: e.date, status: e.status, billNo: e.bill_no, notes: e.notes
+      }));
+    }
+    if (auditRes.data && auditRes.data.length > 0) {
+      localDB.auditLogs = auditRes.data.map(l => ({
+        id: l.id, timestamp: l.timestamp, user: l.user_name, action: l.action
+      }));
+    }
+    localStorage.setItem(DB_STORAGE_KEY, JSON.stringify(localDB));
+    return localDB;
+  } catch (err) {
+    console.warn("Could not fetch cloud database:", err);
+    return getDB();
+  }
+};
+
 export const saveDB = (db) => {
   try {
     localStorage.setItem(DB_STORAGE_KEY, JSON.stringify(db));
+    syncDatabaseToSupabase(db);
   } catch (e) {
     console.error("Failed to save to localStorage", e);
   }
