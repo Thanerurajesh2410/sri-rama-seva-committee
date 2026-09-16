@@ -687,6 +687,124 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
               </div>
             </div>
 
+            {/* 📝 INSTANT SCAN & DONATE RECEIPT GENERATOR FORM CARD */}
+            <div className="max-w-3xl mx-auto mt-8">
+              <form onSubmit={handleCompleteDonationPayment} className="light-card border-3 border-[#FB6C00] bg-white p-6 sm:p-8 rounded-3xl shadow-2xl space-y-6 text-slate-900">
+                
+                <div className="flex items-center gap-3 border-b-2 border-orange-200 pb-3">
+                  <FileCheck className="w-8 h-8 text-[#FB6C00] shrink-0" />
+                  <div>
+                    <h4 className="text-xl sm:text-2xl font-black text-[#FB6C00] heading-telugu leading-tight">
+                      విరాళం రికార్డు నమోదు & డిజిటల్ రశీదు (Record Donation & Generate Receipt)
+                    </h4>
+                    <p className="text-xs sm:text-sm text-slate-600 font-extrabold">
+                      PhonePe / UPI ద్వారా స్కాన్ చేసి విరాళం పంపిన తర్వాత... ఇక్కడ వివరాలు నమోదు చేసి తక్షణ అధికారిక డిజిటల్ రశీదు పొందండి.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+                  <div>
+                    <label className="block font-black text-slate-800 mb-1">
+                      దాత పూర్తి పేరు (Full Name) <span className="text-red-500">*</span>:
+                    </label>
+                    <input
+                      type="text"
+                      value={payName}
+                      onChange={(e) => setPayName(e.target.value)}
+                      placeholder="ఉదా: శ్రీ తనేరు రాజేష్"
+                      required
+                      className="w-full bg-slate-50 border-2 border-slate-300 p-3 rounded-xl text-slate-900 font-bold focus:border-[#FB6C00] outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-black text-slate-800 mb-1">
+                      మొబైల్ ఫోన్ నంబర్ (Phone Number) <span className="text-red-500">*</span>:
+                    </label>
+                    <input
+                      type="tel"
+                      value={payPhone}
+                      onChange={(e) => setPayPhone(e.target.value)}
+                      placeholder="ఉదా: 9866125609"
+                      required
+                      className="w-full bg-slate-50 border-2 border-slate-300 p-3 rounded-xl text-slate-900 font-bold focus:border-[#FB6C00] outline-none font-mono"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-black text-slate-800 mb-1">
+                      గ్రామం / ఊరు (Village / City):
+                    </label>
+                    <input
+                      type="text"
+                      value={payCity}
+                      onChange={(e) => setPayCity(e.target.value)}
+                      placeholder="ఉదా: పామినివాండ్లవూరు"
+                      className="w-full bg-slate-50 border-2 border-slate-300 p-3 rounded-xl text-slate-900 font-bold focus:border-[#FB6C00] outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-black text-slate-800 mb-1">
+                      సమర్పించిన విరాళం మొత్తం (Amount Rs. ₹) <span className="text-red-500">*</span>:
+                    </label>
+                    <input
+                      type="number"
+                      value={payAmount}
+                      onChange={(e) => setPayAmount(e.target.value)}
+                      placeholder="1116"
+                      required
+                      className="w-full bg-slate-50 border-2 border-slate-300 p-3 rounded-xl text-slate-900 font-black text-base focus:border-[#FB6C00] outline-none font-mono"
+                    />
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="block font-black text-slate-800 mb-1">
+                      విరాళం విభాగం / సేవ (Donation Purpose / Seva):
+                    </label>
+                    <select
+                      value={selectedCatId}
+                      onChange={(e) => {
+                        setSelectedCatId(e.target.value);
+                        const cat = v2T.donationCategories.find(c => c.id === e.target.value);
+                        if (cat && cat.subTypes) setSelectedSubCat(cat.subTypes[0]);
+                      }}
+                      className="w-full bg-slate-50 border-2 border-slate-300 p-3 rounded-xl text-slate-900 font-bold focus:border-[#FB6C00] outline-none"
+                    >
+                      {v2T.donationCategories.map(cat => (
+                        <option key={cat.id} value={cat.id}>
+                          {cat.name} ({cat.desc})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="block font-black text-slate-800 mb-1">
+                      చెల్లింపు మార్గం (Payment Mode / UPI Txn Reference):
+                    </label>
+                    <input
+                      type="text"
+                      value={payMode}
+                      onChange={(e) => setPayMode(e.target.value)}
+                      placeholder="ఉదా: PhonePe Standee QR / UPI Direct"
+                      className="w-full bg-slate-50 border-2 border-slate-300 p-3 rounded-xl text-slate-900 font-bold focus:border-[#FB6C00] outline-none"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  className="btn-gold text-base sm:text-lg py-4 px-8 w-full font-black rounded-2xl shadow-2xl flex items-center justify-center gap-3 bg-[#FB6C00] text-white hover:bg-orange-600 transition-all"
+                >
+                  <Sparkles className="w-6 h-6 text-yellow-200" />
+                  <span>విరాళం నమోదు చేసి అధికారిక రశీదు పొందండి (Submit & Download Receipt)</span>
+                </button>
+
+              </form>
+            </div>
+
           </div>
         )}
 
