@@ -3,7 +3,7 @@ import { LayoutDashboard, Users, Heart, DollarSign, Building2, Package, Award, S
 import confetti from 'canvas-confetti';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
-import { getSupabaseCredentials, setSupabaseCredentials, testSupabaseConnection } from '../data/supabaseClient';
+import { getSupabaseCredentials, setSupabaseCredentials, testSupabaseConnection, sanitizeSupabaseUrl } from '../data/supabaseClient';
 import { getDB, saveDB, validateUniqueDevotee, addAuditLog, defaultWebsiteSettings, defaultGalleryImages, generateSqlDump, resetToInitialDB, getAssetUrl, getActiveLogo, getActiveQrCode, updateMediaAsset, resetMediaAsset, fetchCloudDB, syncDatabaseToSupabase } from '../data/v2Database';
 
 export default function TempleErpAdmin({ t, v2T, showToast }) {
@@ -38,7 +38,9 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
 
   const handleTestCloudConn = async () => {
     setIsCloudLoading(true);
-    setSupabaseCredentials(cloudUrl, cloudAnonKey);
+    const cleanUrl = sanitizeSupabaseUrl(cloudUrl);
+    setCloudUrl(cleanUrl);
+    setSupabaseCredentials(cleanUrl, cloudAnonKey);
     const result = await testSupabaseConnection();
     setCloudConnStatus(result);
     setIsCloudLoading(false);
@@ -52,7 +54,9 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
   const handleSaveCloudConn = async (e) => {
     e.preventDefault();
     setIsCloudLoading(true);
-    setSupabaseCredentials(cloudUrl, cloudAnonKey);
+    const cleanUrl = sanitizeSupabaseUrl(cloudUrl);
+    setCloudUrl(cleanUrl);
+    setSupabaseCredentials(cleanUrl, cloudAnonKey);
     const result = await testSupabaseConnection();
     setCloudConnStatus(result);
     if (result.success) {

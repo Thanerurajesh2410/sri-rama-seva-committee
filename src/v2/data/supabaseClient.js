@@ -1,5 +1,25 @@
 import { createClient } from '@supabase/supabase-js';
 
+// Auto-sanitize and extract proper API URL from user input or dashboard URL
+export const sanitizeSupabaseUrl = (url) => {
+  if (!url || typeof url !== 'string') return '';
+  let cleaned = url.trim();
+
+  // If user pasted dashboard URL like https://supabase.com/dashboard/project/pnqxgyssphtwzmuqylhj
+  const dashboardMatch = cleaned.match(/supabase\.com\/dashboard\/project\/([a-zA-Z0-9]+)/i);
+  if (dashboardMatch && dashboardMatch[1]) {
+    return `https://${dashboardMatch[1]}.supabase.co`;
+  }
+
+  // Ensure https:// prefix
+  if (!cleaned.startsWith('http://') && !cleaned.startsWith('https://')) {
+    cleaned = `https://${cleaned}`;
+  }
+
+  // Strip trailing slashes
+  return cleaned.replace(/\/+$/, '');
+};
+
 // Get Supabase credentials from localStorage or Vite environment variables
 export const getSupabaseCredentials = () => {
   try {
@@ -7,14 +27,22 @@ export const getSupabaseCredentials = () => {
     if (saved) {
       const parsed = JSON.parse(saved);
       if (parsed.url && parsed.anonKey) {
-        return { url: parsed.url.trim(), anonKey: parsed.anonKey.trim() };
+        return {
+          url: sanitizeSupabaseUrl(parsed.url),
+          anonKey: parsed.anonKey.trim(),
+          rawUrl: parsed.url
+        };
       }
     }
   } catch (e) {}
 
   const envUrl = import.meta.env.VITE_SUPABASE_URL || '';
   const envKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
-  return { url: envUrl.trim(), anonKey: envKey.trim() };
+  return {
+    url: sanitizeSupabaseUrl(envUrl),
+    anonKey: envKey.trim(),
+    rawUrl: envUrl
+  };
 };
 
 let clientInstance = null;
@@ -48,15 +76,27 @@ export const setSupabaseCredentials = (url, anonKey) => {
     currentClientUrl = '';
     return;
   }
-  localStorage.setItem('sri_rama_supabase_config', JSON.stringify({ url: url.trim(), anonKey: anonKey.trim() }));
-  clientInstance = createClient(url.trim(), anonKey.trim());
-  currentClientUrl = url.trim();
+  const cleanUrl = sanitizeSupabaseUrl(url);
+  localStorage.setItem('sri_rama_supabase_config', JSON.stringify({ url: cleanUrl, anonKey: anonKey.trim() }));
+  clientInstance = createClient(cleanUrl, anonKey.trim());
+  currentClientUrl = cleanUrl;
 };
 
 export const testSupabaseConnection = async () => {
+  const { url, anonKey, rawUrl } = getSupabaseCredentials();
+  if (!url || !anonKey) {
+    return { success: false, message: 'క్లౌడ్ డేటాబేస్ URL మరియు API Key నమోదు కాబడలేదు.' };
+  }
+
+  // Check if raw user input was a dashboard URL
+  let dashboardNotice = '';
+  if (rawUrl && rawUrl.includes('supabase.com/dashboard/project/')) {
+    dashboardNotice = ` (గమనిక: మీరు నమోదు చేసిన డాష్‌బోర్డ్ URL ఆటోమేటిక్‌గా ` + url + ` గా మార్చబడింది)`;
+  }
+
   const client = getSupabaseClient();
   if (!client) {
-    return { success: false, message: 'క్లౌడ్ డేటాబేస్ URL మరియు API Key నమోదు కాబడలేదు.' };
+    return { success: false, message: 'క్లౌడ్ డేటాబేస్ క్లయింట్ ప్రారంభించడంలో లోపం జరిగింది.' };
   }
 
   try {
@@ -66,20 +106,23 @@ export const testSupabaseConnection = async () => {
         return {
           success: false,
           code: 'NO_TABLE',
-          message: "డేటాబేస్ కనెక్ట్ అయ్యింది! కానీ 'devotees' టేబుల్ లభించలేదు. దయచేసి DBeaver SQL Editor లో dbeaver_schema.sql రన్ చేయండి."
+          message: `డేటాబేస్ కనెక్ట్ అయ్యింది!${dashboardNotice} కానీ 'devotees' టేబుల్ లభించలేదు. దయచేసి DBeaver SQL Editor లో dbeaver_schema.sql రన్ చేయండి.`
         };
       }
       if (error.code === '42501') {
         return {
           success: false,
           code: 'RLS_ERROR',
-          message: "డేటాబేస్ కనెక్ట్ అయ్యింది కానీ RLS Permission అనుమతించబడలేదు! దయచేసి DBeaver లో RLS Policies సృష్టించండి."
+          message: `డేటాబేస్ కనెక్ట్ అయ్యింది!${dashboardNotice} కానీ RLS Permission అనుమతించబడలేదు. దయచేసి DBeaver లో RLS Policies సృష్టించండి.`
         };
       }
-      return { success: false, code: error.code, message: `డేటాబెస్ ఎర్రర్: ${error.message}` };
+      return { success: false, code: error.code, message: `డేటాబేస్ ఎర్రర్ (${error.code}): ${error.message}${dashboardNotice}` };
     }
-    return { success: true, message: 'DBeaver / Supabase Cloud డేటాబేస్‌కి విజయవంతంగా కనెక్ట్ కాబడింది!' };
+    return { success: true, message: `DBeaver / Supabase Cloud డేటాబేస్‌కి విజయవంతంగా కనెక్ట్ కాబడింది!${dashboardNotice}` };
   } catch (err) {
-    return { success: false, message: `నెట్‌వర్క్ / కనెక్షన్ ఎర్రర్: ${err.message}` };
+    return {
+      success: false,
+      message: `నెట్‌వర్క్ కనెక్షన్ ఎర్రర్: ${err.message}.${dashboardNotice} దయచేసి API URL (${url}) మరియు Anon Key సరిగ్గా ఉన్నాయో లేదో సరిచూసుకోండి.`
+    };
   }
 };
