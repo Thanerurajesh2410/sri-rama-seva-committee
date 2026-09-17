@@ -249,7 +249,7 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
   const safeSlideIdx = slideIdx % (activeGalleryImages.length || 1);
 
   return (
-    <div className="text-slate-900 min-h-screen sacred-temple-bg-masked">
+    <div className="text-amber-100 min-h-screen sacred-temple-bg-masked">
       
       {/* Sub-Navigation Menu Bar */}
       <div className="bg-white/95 border-b border-slate-200 sticky top-[73px] z-40 backdrop-blur-md overflow-x-auto scrollbar-none py-2.5 px-3 shadow-xs">
@@ -261,7 +261,7 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
               className={`px-4 sm:px-5 py-2 rounded-full transition-all border shrink-0 ${
                 activeTab === tab.id
                   ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white border-amber-500 shadow-sm scale-105 font-black'
-                  : 'bg-slate-100/90 text-slate-700 border-slate-200 hover:bg-amber-50 hover:text-amber-800 font-extrabold'
+                  : 'bg-slate-100/90 text-slate-800 border-slate-300 hover:bg-amber-50 hover:text-amber-900 font-extrabold'
               }`}
             >
               {tab.label}
@@ -277,7 +277,7 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
           <div className="container mx-auto px-4 py-4 relative z-10">
             {/* Hero Header Section with Divine Lord Rama Emblem */}
             <div className="text-center max-w-4xl mx-auto py-2">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs md:text-sm font-black bg-amber-100 text-amber-900 border border-amber-300 shadow-xs mb-4">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs md:text-sm font-black bg-amber-100 text-amber-950 border border-amber-400 shadow-xs mb-4">
                 <span>🚩 {t.hero.badge}</span>
               </div>
 
@@ -301,10 +301,10 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                 </div>
               </div>
 
-              <h1 className="text-3xl md:text-5xl font-black heading-telugu leading-tight mb-2 text-slate-900">
+              <h1 className="text-3xl md:text-5xl font-black heading-telugu leading-tight mb-2 text-white">
                 <span className="heading-gold">{t.hero.title}</span>
               </h1>
-              <p className="text-lg md:text-xl font-extrabold text-amber-800 heading-telugu mb-6">
+              <p className="text-lg md:text-xl font-extrabold text-amber-300 heading-telugu mb-6 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
                 "{t.hero.slogan}"
               </p>
             </div>
@@ -511,12 +511,12 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                     {/* Bank & Branch */}
                     <div className="grid grid-cols-2 gap-3 text-sm">
                       <div className="bg-black/60 p-3.5 rounded-2xl border border-white/15">
-                        <span className="text-gray-400 block text-xs font-bold">బ్యాంక్ పేరు</span>
-                        <span className="font-extrabold text-white text-base">{t.donation.bankName}</span>
+                        <span className="text-amber-300 block text-xs font-extrabold">బ్యాంక్ పేరు</span>
+                        <span className="font-black text-white text-base">{t.donation.bankName}</span>
                       </div>
                       <div className="bg-black/60 p-3.5 rounded-2xl border border-white/15">
-                        <span className="text-gray-400 block text-xs font-bold">బ్రాంచ్</span>
-                        <span className="font-extrabold text-white text-base">{t.donation.branch}</span>
+                        <span className="text-amber-300 block text-xs font-extrabold">బ్రాంచ్</span>
+                        <span className="font-black text-white text-base">{t.donation.branch}</span>
                       </div>
                     </div>
                   </div>
@@ -542,17 +542,17 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white heading-telugu mt-3">శ్రీ రామాలయం పామినివాండ్లవూరు - చరిత్ర & వివరాలు</h2>
             </div>
 
-            <div className="gold-card space-y-6 text-base sm:text-lg leading-relaxed text-gray-100 bg-[#5C121E]/95 border-3 border-amber-400/80 !p-8 rounded-3xl shadow-2xl">
+            <div className="gold-card space-y-6 text-base sm:text-lg leading-relaxed text-amber-100 bg-[#5C121E]/95 border-3 border-amber-400/80 !p-8 rounded-3xl shadow-2xl">
               <h3 className="text-2xl sm:text-3xl font-black text-[#FFD700] heading-telugu">ఆలయ చరిత్ర (History)</h3>
-              <p className="font-bold">
+              <p className="font-extrabold text-white">
                 చిత్తూరు జిల్లా బంగారుపాళెం మండలం మంగళపల్లె పంచాయతీ పరిధిలోని పామినివాండ్లవూరు గ్రామంలో గ్రామస్థులందరి ఏకోపితి సంకల్పంతో ఈ పవిత్ర రాతి గోడల శ్రీ రామాలయ శంకుస్థాపన జరిగింది.
               </p>
 
               <h3 className="text-2xl sm:text-3xl font-black text-[#FFD700] pt-4 border-t border-white/20 heading-telugu">సోసైటీ రిజిస్ట్రేషన్ (Trust Registration)</h3>
               <div className="bg-black/70 p-6 rounded-2xl border-2 border-white/20 text-sm sm:text-base font-mono space-y-2 shadow-inner">
                 <p className="text-amber-300 font-black text-base sm:text-lg">Registration Name: SRI RAMA SEVA COMMITTEE PAMINIVANDLAVOORU</p>
-                <p className="text-gray-200 font-extrabold">Society Act: Andhra Pradesh Societies Registration Act</p>
-                <p className="text-gray-200 font-extrabold">Address: Door No: 5-233, Paminivandlavooru, Mangalapalli, Bangarupalem Mandal, Chittoor Dist - 517416</p>
+                <p className="text-amber-100 font-extrabold">Society Act: Andhra Pradesh Societies Registration Act</p>
+                <p className="text-amber-100 font-extrabold">Address: Door No: 5-233, Paminivandlavooru, Mangalapalli, Bangarupalem Mandal, Chittoor Dist - 517416</p>
               </div>
             </div>
           </div>
@@ -867,9 +867,9 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                         {member.father}
                       </p>
 
-                      <div className="space-y-2 text-xs sm:text-sm text-gray-200 bg-black/60 p-4 rounded-2xl border border-white/15">
-                        <p><span className="text-gray-400 font-bold">వృత్తి:</span> <strong className="text-white font-black">{member.occ}</strong></p>
-                        <p><span className="text-gray-400 font-bold">చిరునామా:</span> <span className="text-gray-200 font-bold">{member.address}</span></p>
+                      <div className="space-y-2 text-xs sm:text-sm text-amber-100 bg-black/70 p-4 rounded-2xl border border-white/20">
+                        <p><span className="text-amber-300 font-extrabold">వృత్తి:</span> <strong className="text-white font-black">{member.occ}</strong></p>
+                        <p><span className="text-amber-300 font-extrabold">చిరునామా:</span> <span className="text-amber-100 font-extrabold">{member.address}</span></p>
                       </div>
                     </div>
 
@@ -905,7 +905,7 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                     <h3 className="text-xl sm:text-2xl font-black text-[#FFD700] heading-telugu mb-2">
                       {term.title}
                     </h3>
-                    <p className="text-base sm:text-lg font-extrabold text-gray-100 leading-relaxed">
+                    <p className="text-base sm:text-lg font-extrabold text-amber-100 leading-relaxed">
                       {term.desc}
                     </p>
                   </div>
@@ -931,7 +931,7 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                       📅 {e.date}
                     </span>
                     <h3 className="text-2xl sm:text-3xl font-black text-white heading-telugu mb-1">{e.title}</h3>
-                    <p className="text-base sm:text-lg font-extrabold text-gray-200 mt-1">{e.desc}</p>
+                    <p className="text-base sm:text-lg font-extrabold text-amber-100 mt-1">{e.desc}</p>
                   </div>
                   <button onClick={() => showToast(`${e.title} ఉత్సవానికి నమోదు చేసుకోబడింది!`)} className="btn-gold text-base font-black whitespace-nowrap !py-3.5 !px-6 rounded-2xl shadow-xl shrink-0">
                     ఉత్సవానికి హాజరు అవ్వండి
@@ -979,7 +979,7 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                 <div key={n.id} className="gold-card bg-[#5C121E]/95 border-3 border-amber-400/80 !p-6 sm:!p-8 rounded-3xl shadow-2xl space-y-2">
                   <span className="text-sm font-mono text-amber-300 font-black bg-black/60 px-3.5 py-1 rounded-lg border border-white/10">{n.date}</span>
                   <h3 className="text-xl sm:text-2xl font-black text-white heading-telugu mt-2 mb-2">{n.title}</h3>
-                  <p className="text-base sm:text-lg font-extrabold text-gray-100 leading-relaxed">{n.snippet}</p>
+                  <p className="text-base sm:text-lg font-extrabold text-amber-100 leading-relaxed">{n.snippet}</p>
                 </div>
               ))}
             </div>
@@ -1000,19 +1000,19 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
             {/* 📊 Summary Financial Metric Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="gold-card bg-[#5C121E]/95 border-3 border-emerald-400 !p-6 rounded-3xl text-center shadow-2xl space-y-2">
-                <span className="text-xs sm:text-sm font-black text-gray-200 uppercase tracking-wider block">మొత్తం సేకరించిన విరాళాలు (Income)</span>
+                <span className="text-xs sm:text-sm font-black text-amber-200 uppercase tracking-wider block">మొత్తం సేకరించిన విరాళాలు (Income)</span>
                 <span className="text-2xl sm:text-3xl lg:text-4xl font-black text-emerald-400 font-mono block">₹ {totalDonationsReceived.toLocaleString()}</span>
                 <span className="text-xs font-bold text-emerald-300 block">({dbDonationsList.length} విరాళాల రికార్డులు)</span>
               </div>
 
               <div className="gold-card bg-[#5C121E]/95 border-3 border-sky-400 !p-6 rounded-3xl text-center shadow-2xl space-y-2">
-                <span className="text-xs sm:text-sm font-black text-gray-200 uppercase tracking-wider block">మొత్తం నిర్మాణ ఖర్చులు (Expenses)</span>
+                <span className="text-xs sm:text-sm font-black text-amber-200 uppercase tracking-wider block">మొత్తం నిర్మాణ ఖర్చులు (Expenses)</span>
                 <span className="text-2xl sm:text-3xl lg:text-4xl font-black text-sky-300 font-mono block">₹ {totalExpensesUtilized.toLocaleString()}</span>
                 <span className="text-xs font-bold text-sky-200 block">({dbExpensesList.length} ఖర్చుల బిల్లులు)</span>
               </div>
 
               <div className="gold-card bg-[#5C121E]/95 border-3 border-[#FFD700] !p-6 rounded-3xl text-center shadow-2xl space-y-2">
-                <span className="text-xs sm:text-sm font-black text-gray-200 uppercase tracking-wider block">నికర ఆలయ నిల్వ నిధి (Net Balance)</span>
+                <span className="text-xs sm:text-sm font-black text-amber-200 uppercase tracking-wider block">నికర ఆలయ నిల్వ నిధి (Net Balance)</span>
                 <span className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#FFD700] font-mono block">₹ {netBalance.toLocaleString()}</span>
                 <span className="text-xs font-bold text-amber-200 block">(నిఖార్సైన ఆలయ ఖాతా నిధి)</span>
               </div>
@@ -1065,7 +1065,7 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
               <div className="overflow-x-auto scrollbar-thin">
                 <table className="w-full text-left border-collapse min-w-[700px]">
                   <thead>
-                    <tr className="bg-black/70 text-[#FFD700] text-sm sm:text-base font-black border-b-2 border-[#FFD700]">
+                    <tr className="bg-black/80 text-[#FFD700] text-sm sm:text-base font-black border-b-2 border-[#FFD700]">
                       <th className="p-3.5">దాత పేరు (Donor Name)</th>
                       <th className="p-3.5">మొత్తం (Amount)</th>
                       <th className="p-3.5">తేదీ (Date)</th>
@@ -1079,10 +1079,10 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                       <tr key={idx} className="hover:bg-white/10 transition-colors">
                         <td className="p-3.5 text-amber-200 font-bold">{d.donorName}</td>
                         <td className="p-3.5 text-emerald-400 font-mono font-black">₹ {(typeof d.amount === 'number' ? d.amount : parseInt(String(d.amount).replace(/\D/g, '')) || 0).toLocaleString()}</td>
-                        <td className="p-3.5 font-mono text-gray-300 text-xs sm:text-sm">{d.date}</td>
-                        <td className="p-3.5 text-xs sm:text-sm text-gray-200">{d.seva}</td>
-                        <td className="p-3.5 text-xs sm:text-sm text-sky-300">{d.mode || 'Direct Transfer'}</td>
-                        <td className="p-3.5 text-xs sm:text-sm text-amber-300">{d.city}</td>
+                        <td className="p-3.5 font-mono text-amber-100 text-xs sm:text-sm font-semibold">{d.date}</td>
+                        <td className="p-3.5 text-xs sm:text-sm text-white font-extrabold">{d.seva}</td>
+                        <td className="p-3.5 text-xs sm:text-sm text-sky-300 font-bold">{d.mode || 'Direct Transfer'}</td>
+                        <td className="p-3.5 text-xs sm:text-sm text-amber-300 font-bold">{d.city}</td>
                       </tr>
                     ))}
                   </tbody>
