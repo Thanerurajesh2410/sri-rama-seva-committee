@@ -26,7 +26,7 @@ import ApiExplorer from './components/ApiExplorer';
 import { getDB } from './v2/data/v2Database';
 import { CheckCircle, Palette, MessageSquare, Layers } from 'lucide-react';
 
-const SITE_BUILD_VERSION = '2026.09.17.v5';
+const SITE_BUILD_VERSION = '2026.09.17.v6';
 
 export default function App() {
   const [lang, setLang] = useState('te');

@@ -42,20 +42,22 @@ body, body.theme-light, body.theme-light-slate, body.theme-cream {
 /* Sacred Temple Masked Background Utility */
 .sacred-temple-bg-masked {
   position: relative;
+  background-color: #2A060B;
   background-image: 
-    radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.96) 60%, rgba(241, 245, 249, 0.98) 100%),
+    radial-gradient(circle at 50% 20%, rgba(74, 14, 23, 0.94) 0%, rgba(42, 6, 11, 0.97) 60%, rgba(26, 3, 6, 0.99) 100%),
     url('/assets/temple_bg.jpg');
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
   background-attachment: fixed;
+  color: #FFFFFF;
 }
 
 body.theme-light .gold-card, body.theme-light-slate .gold-card, body.theme-cream .gold-card {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  color: #0F172A;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  background: linear-gradient(180deg, rgba(74, 14, 23, 0.95) 0%, rgba(45, 8, 14, 0.98) 100%);
+  border: 2px solid #FFD700;
+  color: #FFFFFF;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
 body.theme-light h1, body.theme-light h2, body.theme-light h3, body.theme-light h4,
@@ -166,7 +168,7 @@ body.theme-navy .gold-card {
 }
 
 .heading-gold {
-  background: linear-gradient(135deg, #0F172A 0%, #1E293B 40%, #FB6C00 100%);
+  background: linear-gradient(135deg, #FFD700 0%, #FBBF24 50%, #FB6C00 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

@@ -16,18 +16,18 @@ export default function V2Navbar({ activeModule, setActiveModule, lang, setLang,
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 border-b border-slate-200 text-slate-900 shadow-sm backdrop-blur-md">
+    <header className="sticky top-0 z-50 bg-[#2A060B] border-b-2 border-[#FFD700] text-white shadow-xl backdrop-blur-md">
 
       {/* ⚡ ATTENTION-GRABBING FLASH NEWS SCROLLING TICKER BAR */}
-      <div className="bg-gradient-to-r from-amber-700 via-orange-600 to-amber-700 py-2 px-3 flex items-center justify-between gap-3 text-white overflow-hidden shadow-sm relative z-20">
-        <div className="flex items-center gap-2 bg-white text-slate-900 font-black text-xs md:text-sm px-3.5 py-1 rounded-full shadow shrink-0 animate-pulse border border-amber-300">
-          <span className="w-2.5 h-2.5 rounded-full bg-amber-500 border border-white animate-ping" />
-          <Zap className="w-4 h-4 fill-amber-500 text-amber-600" />
+      <div className="bg-gradient-to-r from-amber-800 via-orange-700 to-amber-800 py-2 px-3 flex items-center justify-between gap-3 text-white overflow-hidden shadow-sm relative z-20 border-b border-amber-500/40">
+        <div className="flex items-center gap-2 bg-[#FFD700] text-black font-black text-xs md:text-sm px-3.5 py-1 rounded-full shadow shrink-0 animate-pulse border border-amber-300">
+          <span className="w-2.5 h-2.5 rounded-full bg-orange-600 border border-white animate-ping" />
+          <Zap className="w-4 h-4 fill-orange-600 text-orange-600" />
           <span>⚡ తాజా ప్రకటన (FLASH NEWS)</span>
         </div>
 
         <div className="overflow-hidden w-full relative">
-          <div className="flash-news-content text-xs sm:text-sm md:text-base font-extrabold text-amber-50 heading-telugu tracking-wide hover:[animation-play-state:paused] cursor-pointer">
+          <div className="flash-news-content text-xs sm:text-sm md:text-base font-extrabold text-amber-100 heading-telugu tracking-wide hover:[animation-play-state:paused] cursor-pointer">
             {lang === 'te' ? (
               <>
                 📢 ముఖ్య గమనిక: ఆలయ వెబ్‌సైట్‌లో ప్రదర్శించబడుతున్న విరాళాల వివరాలు, శ్రీ రామా సేవా కమిటీ పామినివాండ్లవూరు అధికారిక బ్యాంక్ ఖాతా సృష్టించిన తర్వాత NEFT లేదా UPI ద్వారా నేరుగా ఖాతాకు జమ కాబడినవి మాత్రమే ప్రదర్శించబడుతున్నాయి.
@@ -55,16 +55,16 @@ export default function V2Navbar({ activeModule, setActiveModule, lang, setLang,
                   e.currentTarget.onerror = null;
                   e.currentTarget.src = getAssetUrl('assets/logo.jpg');
                 }}
-                className="w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-amber-500 shadow-md object-cover bg-white p-0.5 ring-2 ring-amber-400/30 transform group-hover:scale-105 transition-transform"
+                className="w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-[#FFD700] shadow-md object-cover bg-white p-0.5 ring-2 ring-amber-400/30 transform group-hover:scale-105 transition-transform"
               />
               <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-white shadow" title="Official Verified ERP Active" />
             </div>
 
             <div className="flex flex-col justify-center">
-              <h1 className="text-base md:text-xl font-black text-slate-900 heading-telugu leading-tight group-hover:text-amber-700 transition-colors">
+              <h1 className="text-base md:text-xl font-black text-white heading-telugu leading-tight group-hover:text-[#FFD700] transition-colors">
                 {t.nav.title}
               </h1>
-              <p className="text-[11px] md:text-xs text-amber-700 font-extrabold">
+              <p className="text-[11px] md:text-xs text-amber-300 font-extrabold">
                 {v2T.tagline}
               </p>
             </div>
@@ -78,12 +78,12 @@ export default function V2Navbar({ activeModule, setActiveModule, lang, setLang,
               onClick={() => setActiveModule('public-home')}
               className={`btn-autofit px-3.5 md:px-4 py-2 rounded-xl text-xs md:text-sm font-black transition-all flex items-center gap-1.5 shrink-0 ${
                 activeModule.startsWith('public')
-                  ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white border border-amber-500 shadow-sm scale-105'
-                  : 'text-slate-700 bg-slate-100 border border-slate-200 hover:bg-amber-50 hover:text-amber-800'
+                  ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white border-2 border-[#FFD700] shadow-md scale-105'
+                  : 'text-amber-200 bg-[#5C121E] border border-amber-400/50 hover:bg-amber-600 hover:text-white'
               }`}
               title="Global Public View - Temple website, donation wall & events"
             >
-              <Globe className="w-4 h-4 text-amber-600" />
+              <Globe className="w-4 h-4 text-amber-300" />
               <span>🌐 Global View (ప్రజా వెబ్‌సైట్)</span>
             </button>
 
@@ -92,19 +92,19 @@ export default function V2Navbar({ activeModule, setActiveModule, lang, setLang,
               onClick={() => setActiveModule('devotee-portal')}
               className={`btn-autofit px-3.5 md:px-4 py-2 rounded-xl text-xs md:text-sm font-black transition-all flex items-center gap-1.5 shrink-0 ${
                 activeModule === 'devotee-portal'
-                  ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white border border-amber-500 shadow-sm scale-105'
-                  : 'text-slate-700 bg-slate-100 border border-slate-200 hover:bg-amber-50 hover:text-amber-800'
+                  ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white border-2 border-[#FFD700] shadow-md scale-105'
+                  : 'text-sky-300 bg-[#5C121E] border border-sky-400/50 hover:bg-sky-600 hover:text-white'
               }`}
               title="Devotee View - My donations, pooja bookings & receipts"
             >
-              <Users className="w-4 h-4 text-amber-600" />
+              <Users className="w-4 h-4 text-sky-300" />
               <span>🛕 Devotee View (భక్తుల పోర్టల్)</span>
             </button>
 
             {/* Donate CTA */}
             <button
               onClick={() => setActiveModule('public-donations')}
-              className="btn-primary text-sm md:text-base !py-2 !px-4 md:!px-5 shadow border border-orange-500 font-black shrink-0 rounded-xl"
+              className="btn-primary text-sm md:text-base !py-2 !px-4 md:!px-5 shadow border-2 border-[#FFD700] font-black shrink-0 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-white"
             >
               <Heart className="w-4 h-4 fill-white text-white" />
               <span>ఈ-హుండి విరాళం</span>
@@ -114,7 +114,7 @@ export default function V2Navbar({ activeModule, setActiveModule, lang, setLang,
 
           {/* Mobile Menu Button */}
           <div className="flex items-center gap-2 lg:hidden shrink-0">
-            <button onClick={() => setIsOpen(!isOpen)} className="p-2 rounded-lg text-slate-800 hover:bg-slate-100">
+            <button onClick={() => setIsOpen(!isOpen)} className="p-2 rounded-lg text-white hover:bg-white/10">
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>

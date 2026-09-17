@@ -252,7 +252,7 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
     <div className="text-amber-100 min-h-screen sacred-temple-bg-masked">
       
       {/* Sub-Navigation Menu Bar */}
-      <div className="bg-white/95 border-b border-slate-200 sticky top-[73px] z-40 backdrop-blur-md overflow-x-auto scrollbar-none py-2.5 px-3 shadow-xs">
+      <div className="bg-[#2A060B] border-b-2 border-[#FFD700] sticky top-[73px] z-40 backdrop-blur-md overflow-x-auto scrollbar-none py-2.5 px-3 shadow-md">
         <div className="flex items-center justify-start gap-2.5 md:gap-3 whitespace-nowrap text-sm sm:text-base md:text-lg font-black px-2">
           {navTabs.map(tab => (
             <button
@@ -260,8 +260,8 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
               onClick={() => { setActiveTab(tab.id); if (setSubSection) setSubSection(tab.id); }}
               className={`px-4 sm:px-5 py-2 rounded-full transition-all border shrink-0 ${
                 activeTab === tab.id
-                  ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white border-amber-500 shadow-sm scale-105 font-black'
-                  : 'bg-slate-100/90 text-slate-800 border-slate-300 hover:bg-amber-50 hover:text-amber-900 font-extrabold'
+                  ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white border-2 border-[#FFD700] shadow-md scale-105 font-black'
+                  : 'bg-[#5C121E] text-amber-200 border border-amber-400/50 hover:bg-amber-600 hover:text-white font-black'
               }`}
             >
               {tab.label}
@@ -696,15 +696,15 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
 
             {/* 📝 INSTANT SCAN & DONATE RECEIPT GENERATOR FORM CARD */}
             <div className="max-w-3xl mx-auto mt-8">
-              <form onSubmit={handleCompleteDonationPayment} className="light-card border-3 border-[#FB6C00] bg-white p-6 sm:p-8 rounded-3xl shadow-2xl space-y-6 text-slate-900">
+              <form onSubmit={handleCompleteDonationPayment} className="gold-card border-3 border-[#FFD700] bg-gradient-to-b from-[#5C121E] via-[#3A0A11] to-[#200407] p-6 sm:p-8 rounded-3xl shadow-2xl space-y-6 text-white">
                 
-                <div className="flex items-center gap-3 border-b-2 border-orange-200 pb-3">
-                  <FileCheck className="w-8 h-8 text-[#FB6C00] shrink-0" />
+                <div className="flex items-center gap-3 border-b-2 border-amber-400/40 pb-3">
+                  <FileCheck className="w-8 h-8 text-[#FFD700] shrink-0" />
                   <div>
-                    <h4 className="text-xl sm:text-2xl font-black text-[#FB6C00] heading-telugu leading-tight">
+                    <h4 className="text-xl sm:text-2xl font-black text-[#FFD700] heading-telugu leading-tight">
                       విరాళం రికార్డు నమోదు & డిజిటల్ రశీదు (Record Donation & Generate Receipt)
                     </h4>
-                    <p className="text-xs sm:text-sm text-slate-600 font-extrabold">
+                    <p className="text-xs sm:text-sm text-amber-200 font-extrabold">
                       PhonePe / UPI ద్వారా స్కాన్ చేసి విరాళం పంపిన తర్వాత... ఇక్కడ వివరాలు నమోదు చేసి తక్షణ అధికారిక డిజిటల్ రశీదు పొందండి.
                     </p>
                   </div>
@@ -712,8 +712,8 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
                   <div>
-                    <label className="block font-black text-slate-800 mb-1">
-                      దాత పూర్తి పేరు (Full Name) <span className="text-red-500">*</span>:
+                    <label className="block font-black text-amber-200 mb-1">
+                      దాత పూర్తి పేరు (Full Name) <span className="text-amber-400">*</span>:
                     </label>
                     <input
                       type="text"
@@ -721,13 +721,13 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                       onChange={(e) => setPayName(e.target.value)}
                       placeholder="ఉదా: శ్రీ తనేరు రాజేష్"
                       required
-                      className="w-full bg-slate-50 border-2 border-slate-300 p-3 rounded-xl text-slate-900 font-bold focus:border-[#FB6C00] outline-none"
+                      className="w-full bg-[#1A0306] border-2 border-amber-400/60 p-3.5 rounded-xl text-white font-extrabold placeholder:text-amber-200/50 focus:border-[#FFD700] outline-none"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-black text-slate-800 mb-1">
-                      మొబైల్ ఫోన్ నంబర్ (Phone Number) <span className="text-red-500">*</span>:
+                    <label className="block font-black text-amber-200 mb-1">
+                      మొబైల్ ఫోన్ నంబర్ (Phone Number) <span className="text-amber-400">*</span>:
                     </label>
                     <input
                       type="tel"
@@ -735,12 +735,12 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                       onChange={(e) => setPayPhone(e.target.value)}
                       placeholder="ఉదా: 9866125609"
                       required
-                      className="w-full bg-slate-50 border-2 border-slate-300 p-3 rounded-xl text-slate-900 font-bold focus:border-[#FB6C00] outline-none font-mono"
+                      className="w-full bg-[#1A0306] border-2 border-amber-400/60 p-3.5 rounded-xl text-white font-extrabold placeholder:text-amber-200/50 focus:border-[#FFD700] outline-none font-mono"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-black text-slate-800 mb-1">
+                    <label className="block font-black text-amber-200 mb-1">
                       గ్రామం / ఊరు (Village / City):
                     </label>
                     <input
@@ -748,13 +748,13 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                       value={payCity}
                       onChange={(e) => setPayCity(e.target.value)}
                       placeholder="ఉదా: పామినివాండ్లవూరు"
-                      className="w-full bg-slate-50 border-2 border-slate-300 p-3 rounded-xl text-slate-900 font-bold focus:border-[#FB6C00] outline-none"
+                      className="w-full bg-[#1A0306] border-2 border-amber-400/60 p-3.5 rounded-xl text-white font-extrabold placeholder:text-amber-200/50 focus:border-[#FFD700] outline-none"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-black text-slate-800 mb-1">
-                      సమర్పించిన విరాళం మొత్తం (Amount Rs. ₹) <span className="text-red-500">*</span>:
+                    <label className="block font-black text-amber-200 mb-1">
+                      సమర్పించిన విరాళం మొత్తం (Amount Rs. ₹) <span className="text-amber-400">*</span>:
                     </label>
                     <input
                       type="number"
@@ -762,12 +762,12 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                       onChange={(e) => setPayAmount(e.target.value)}
                       placeholder="1116"
                       required
-                      className="w-full bg-slate-50 border-2 border-slate-300 p-3 rounded-xl text-slate-900 font-black text-base focus:border-[#FB6C00] outline-none font-mono"
+                      className="w-full bg-[#1A0306] border-2 border-amber-400/60 p-3.5 rounded-xl text-white font-black text-base focus:border-[#FFD700] outline-none font-mono"
                     />
                   </div>
 
                   <div className="md:col-span-2">
-                    <label className="block font-black text-slate-800 mb-1">
+                    <label className="block font-black text-amber-200 mb-1">
                       విరాళం విభాగం / సేవ (Donation Purpose / Seva):
                     </label>
                     <select
@@ -777,7 +777,7 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                         const cat = v2T.donationCategories.find(c => c.id === e.target.value);
                         if (cat && cat.subTypes) setSelectedSubCat(cat.subTypes[0]);
                       }}
-                      className="w-full bg-slate-50 border-2 border-slate-300 p-3 rounded-xl text-slate-900 font-bold focus:border-[#FB6C00] outline-none"
+                      className="w-full bg-[#1A0306] border-2 border-amber-400/60 p-3.5 rounded-xl text-white font-extrabold focus:border-[#FFD700] outline-none"
                     >
                       {v2T.donationCategories.map(cat => (
                         <option key={cat.id} value={cat.id}>
@@ -788,7 +788,7 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                   </div>
 
                   <div className="md:col-span-2">
-                    <label className="block font-black text-slate-800 mb-1">
+                    <label className="block font-black text-amber-200 mb-1">
                       చెల్లింపు మార్గం (Payment Mode / UPI Txn Reference):
                     </label>
                     <input
@@ -796,16 +796,16 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                       value={payMode}
                       onChange={(e) => setPayMode(e.target.value)}
                       placeholder="ఉదా: PhonePe Standee QR / UPI Direct"
-                      className="w-full bg-slate-50 border-2 border-slate-300 p-3 rounded-xl text-slate-900 font-bold focus:border-[#FB6C00] outline-none"
+                      className="w-full bg-[#1A0306] border-2 border-amber-400/60 p-3.5 rounded-xl text-white font-extrabold placeholder:text-amber-200/50 focus:border-[#FFD700] outline-none"
                     />
                   </div>
                 </div>
 
                 <button
                   type="submit"
-                  className="btn-gold text-base sm:text-lg py-4 px-8 w-full font-black rounded-2xl shadow-2xl flex items-center justify-center gap-3 bg-[#FB6C00] text-white hover:bg-orange-600 transition-all"
+                  className="btn-gold text-base sm:text-lg py-4 px-8 w-full font-black rounded-2xl shadow-2xl flex items-center justify-center gap-3 bg-gradient-to-r from-amber-500 to-orange-600 text-black hover:scale-105 transition-all border-2 border-[#FFD700]"
                 >
-                  <Sparkles className="w-6 h-6 text-yellow-200" />
+                  <Sparkles className="w-6 h-6 text-black fill-black" />
                   <span>విరాళం నమోదు చేసి అధికారిక రశీదు పొందండి (Submit & Download Receipt)</span>
                 </button>
 
@@ -1481,28 +1481,28 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
       {/* 📷 PHONEPE STANDEE QR CODE FULL SCREEN LARGE POPUP MODAL */}
       {showQrModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md animate-fadeIn" onClick={() => setShowQrModal(false)}>
-          <div className="bg-white border-4 border-[#FB6C00] p-6 sm:p-10 rounded-3xl max-w-2xl w-full shadow-2xl relative text-center text-slate-900 space-y-6" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-gradient-to-b from-[#4A0E17] via-[#2A060B] to-[#1A0306] border-4 border-[#FFD700] p-6 sm:p-10 rounded-3xl max-w-2xl w-full shadow-[0_0_80px_rgba(255,215,0,0.5)] relative text-center text-white space-y-6" onClick={(e) => e.stopPropagation()}>
             <button
               type="button"
               onClick={() => setShowQrModal(false)}
-              className="absolute top-4 right-4 p-2.5 rounded-full bg-slate-100 text-slate-700 hover:bg-red-600 hover:text-white transition-colors"
+              className="absolute top-4 right-4 p-2.5 rounded-full bg-white/10 text-white hover:bg-red-600 transition-colors"
             >
               <X className="w-7 h-7" />
             </button>
 
             <div className="space-y-2">
-              <span className="inline-block px-5 py-1.5 rounded-full text-xs sm:text-sm font-black bg-[#FB6C00] text-white shadow-md">
+              <span className="inline-block px-5 py-1.5 rounded-full text-xs sm:text-sm font-black bg-[#FFD700] text-black shadow-md">
                 🚩 PHONEPE OFFICIAL STANDEE QR SCANNER
               </span>
 
-              <h3 className="text-2xl sm:text-3xl font-black text-slate-900 heading-telugu">
+              <h3 className="text-2xl sm:text-3xl font-black text-white heading-telugu">
                 శ్రీ రామా సేవా కమిటీ పామినివాండ్లవూరు
               </h3>
-              <p className="text-xs sm:text-sm text-[#FB6C00] font-extrabold">100% పారదర్శకత • నేరుగా ఆలయ అధికారిక బ్యాంక్ ఖాతాకు జమ</p>
+              <p className="text-xs sm:text-sm text-amber-300 font-extrabold">100% పారదర్శకత • నేరుగా ఆలయ అధికారిక బ్యాంక్ ఖాతాకు జమ</p>
             </div>
 
             {/* High-Resolution Large QR Code Display Container */}
-            <div className="bg-white p-5 sm:p-6 rounded-3xl border-4 border-[#FB6C00] shadow-xl inline-block my-2">
+            <div className="bg-white p-5 sm:p-6 rounded-3xl border-4 border-[#FFD700] shadow-2xl inline-block my-2">
               <img
                 src={getActiveQrCode()}
                 alt="PhonePe QR Standee Scanner Large View"
@@ -1510,19 +1510,19 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
               />
             </div>
 
-            <div className="bg-orange-50 p-4 rounded-2xl border-2 border-orange-200 max-w-md mx-auto space-y-1">
-              <span className="text-xs text-orange-950 font-bold uppercase block">అధికారిక UPI ID:</span>
-              <span className="text-base sm:text-xl font-mono font-black text-[#FB6C00] block my-0.5">8431806098@ibl</span>
-              <span className="text-xs text-slate-700 font-semibold block">మొబైల్ ఫోన్‌లోని PhonePe, GPay, Paytm లేదా ఏ ఇతర UPI యాప్ ద్వారా స్కాన్ చేయండి</span>
+            <div className="bg-black/70 p-4 rounded-2xl border-2 border-amber-400/60 max-w-md mx-auto space-y-1">
+              <span className="text-xs text-amber-300 font-extrabold uppercase block">అధికారిక UPI ID:</span>
+              <span className="text-base sm:text-xl font-mono font-black text-[#FFD700] block my-0.5">8431806098@ibl</span>
+              <span className="text-xs text-amber-100 font-semibold block">మొబైల్ ఫోన్‌లోని PhonePe, GPay, Paytm లేదా ఏ ఇతర UPI యాప్ ద్వారా స్కాన్ చేయండి</span>
             </div>
 
             <div className="flex gap-4 max-w-md mx-auto">
               <button
                 type="button"
                 onClick={() => copyToClipboard('8431806098@ibl', 'upi')}
-                className="btn-gold text-sm sm:text-base w-full py-3.5 rounded-2xl font-black flex items-center justify-center gap-2 shadow-xl bg-[#FB6C00] text-white"
+                className="btn-gold text-sm sm:text-base w-full py-3.5 rounded-2xl font-black flex items-center justify-center gap-2 shadow-xl bg-gradient-to-r from-amber-500 to-orange-600 text-black border-2 border-[#FFD700]"
               >
-                {copiedUpi ? <CheckCircle2 className="w-5 h-5 text-white" /> : <Copy className="w-5 h-5" />}
+                {copiedUpi ? <CheckCircle2 className="w-5 h-5 text-black" /> : <Copy className="w-5 h-5" />}
                 <span>{copiedUpi ? "UPI ID కాపీ చేయబడింది!" : "UPI ID కాపీ చేయండి"}</span>
               </button>
             </div>
