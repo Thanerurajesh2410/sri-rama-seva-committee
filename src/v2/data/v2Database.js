@@ -200,22 +200,32 @@ export const syncDatabaseToSupabase = async (db) => {
   try {
     if (db.devotees && db.devotees.length > 0) {
       await supabase.from('devotees').upsert(db.devotees.map(d => ({
-        id: d.id, name: d.name, phone: d.phone, email: d.email, city: d.city, registered_at: d.registeredAt
+        id: d.id, name: d.name, phone: d.phone, email: d.email, city: d.city, registered_at: d.registeredAt, is_deleted: Boolean(d.isDeleted)
       })));
     }
     if (db.donations && db.donations.length > 0) {
       await supabase.from('donations').upsert(db.donations.map(d => ({
-        id: d.id, donor_name: d.donorName, phone: d.phone, email: d.email, amount: d.amount, date: d.date, seva: d.seva, mode: d.mode, city: d.city
+        id: d.id, donor_name: d.donorName, phone: d.phone, email: d.email, amount: d.amount, date: d.date, seva: d.seva, mode: d.mode, city: d.city, is_deleted: Boolean(d.isDeleted)
       })));
     }
     if (db.sevaBookings && db.sevaBookings.length > 0) {
       await supabase.from('seva_bookings').upsert(db.sevaBookings.map(s => ({
-        id: s.id, devotee_name: s.devoteeName, phone: s.phone, seva_name: s.sevaName, date: s.date, amount: s.amount, status: s.status
+        id: s.id, devotee_name: s.devoteeName, phone: s.phone, seva_name: s.sevaName, date: s.date, amount: s.amount, status: s.status, is_deleted: Boolean(s.isDeleted)
       })));
     }
     if (db.expenses && db.expenses.length > 0) {
       await supabase.from('expenses').upsert(db.expenses.map(e => ({
-        id: e.id, category: e.category, amount: e.amount, vendor: e.vendor, date: e.date, status: e.status, bill_no: e.billNo, notes: e.notes
+        id: e.id, category: e.category, amount: e.amount, vendor: e.vendor, date: e.date, status: e.status, bill_no: e.billNo, notes: e.notes, is_deleted: Boolean(e.isDeleted)
+      })));
+    }
+    if (db.materials && db.materials.length > 0) {
+      await supabase.from('materials').upsert(db.materials.map(m => ({
+        id: m.id, type: m.type, qty: m.qty, donor: m.donor, is_deleted: Boolean(m.isDeleted)
+      })));
+    }
+    if (db.volunteers && db.volunteers.length > 0) {
+      await supabase.from('volunteers').upsert(db.volunteers.map(v => ({
+        id: v.id, name: v.name, phone: v.phone, email: v.email, task: v.task, status: v.status, is_deleted: Boolean(v.isDeleted)
       })));
     }
     if (db.auditLogs && db.auditLogs.length > 0) {
@@ -225,7 +235,7 @@ export const syncDatabaseToSupabase = async (db) => {
     }
     if (db.galleryImages && db.galleryImages.length > 0) {
       await supabase.from('gallery_images').upsert(db.galleryImages.map(g => ({
-        id: String(g.id), src: g.src, title: g.title, tag: g.tag
+        id: String(g.id), src: g.src, title: g.title, tag: g.tag, is_deleted: Boolean(g.isDeleted)
       })));
     }
     if (db.mediaAssets) {
@@ -261,11 +271,13 @@ export const fetchCloudDB = async () => {
   const supabase = getSupabaseClient();
   if (!supabase) return null;
   try {
-    const [devRes, donRes, sevaRes, expRes, auditRes, galleryRes, mediaRes] = await Promise.all([
+    const [devRes, donRes, sevaRes, expRes, matRes, volRes, auditRes, galleryRes, mediaRes] = await Promise.all([
       supabase.from('devotees').select('*'),
       supabase.from('donations').select('*'),
       supabase.from('seva_bookings').select('*'),
       supabase.from('expenses').select('*'),
+      supabase.from('materials').select('*'),
+      supabase.from('volunteers').select('*'),
       supabase.from('audit_logs').select('*'),
       supabase.from('gallery_images').select('*'),
       supabase.from('media_assets').select('*')
@@ -274,22 +286,32 @@ export const fetchCloudDB = async () => {
     const localDB = getDB();
     if (devRes.data && devRes.data.length > 0) {
       localDB.devotees = devRes.data.map(d => ({
-        id: d.id, name: d.name, phone: d.phone, email: d.email, city: d.city, registeredAt: d.registered_at
+        id: d.id, name: d.name, phone: d.phone, email: d.email, city: d.city, registeredAt: d.registered_at, isDeleted: Boolean(d.is_deleted)
       }));
     }
     if (donRes.data && donRes.data.length > 0) {
       localDB.donations = donRes.data.map(d => ({
-        id: d.id, donorName: d.donor_name, phone: d.phone, email: d.email, amount: d.amount, date: d.date, seva: d.seva, mode: d.mode, city: d.city
+        id: d.id, donorName: d.donor_name, phone: d.phone, email: d.email, amount: d.amount, date: d.date, seva: d.seva, mode: d.mode, city: d.city, isDeleted: Boolean(d.is_deleted)
       }));
     }
     if (sevaRes.data && sevaRes.data.length > 0) {
       localDB.sevaBookings = sevaRes.data.map(s => ({
-        id: s.id, devoteeName: s.devotee_name, phone: s.phone, sevaName: s.seva_name, date: s.date, amount: s.amount, status: s.status
+        id: s.id, devoteeName: s.devotee_name, phone: s.phone, sevaName: s.seva_name, date: s.date, amount: s.amount, status: s.status, isDeleted: Boolean(s.is_deleted)
       }));
     }
     if (expRes.data && expRes.data.length > 0) {
       localDB.expenses = expRes.data.map(e => ({
-        id: e.id, category: e.category, amount: e.amount, vendor: e.vendor, date: e.date, status: e.status, billNo: e.bill_no, notes: e.notes
+        id: e.id, category: e.category, amount: e.amount, vendor: e.vendor, date: e.date, status: e.status, billNo: e.bill_no, notes: e.notes, isDeleted: Boolean(e.is_deleted)
+      }));
+    }
+    if (matRes.data && matRes.data.length > 0) {
+      localDB.materials = matRes.data.map(m => ({
+        id: m.id, type: m.type, qty: m.qty, donor: m.donor, isDeleted: Boolean(m.is_deleted)
+      }));
+    }
+    if (volRes.data && volRes.data.length > 0) {
+      localDB.volunteers = volRes.data.map(v => ({
+        id: v.id, name: v.name, phone: v.phone, email: v.email, task: v.task, status: v.status, isDeleted: Boolean(v.is_deleted)
       }));
     }
     if (auditRes.data && auditRes.data.length > 0) {
@@ -299,7 +321,7 @@ export const fetchCloudDB = async () => {
     }
     if (galleryRes.data && galleryRes.data.length > 0) {
       localDB.galleryImages = galleryRes.data.map(g => ({
-        id: g.id, src: getAssetUrl(g.src), title: g.title, tag: g.tag
+        id: g.id, src: getAssetUrl(g.src), title: g.title, tag: g.tag, isDeleted: Boolean(g.is_deleted)
       }));
     }
     if (mediaRes.data && mediaRes.data.length > 0) {
@@ -318,6 +340,16 @@ export const fetchCloudDB = async () => {
   } catch (err) {
     console.warn("Could not fetch cloud database:", err);
     return getDB();
+  }
+};
+
+export const deleteCloudRecord = async (tableName, id) => {
+  const supabase = getSupabaseClient();
+  if (!supabase) return;
+  try {
+    await supabase.from(tableName).delete().eq('id', id);
+  } catch (err) {
+    console.warn(`Failed to delete record from ${tableName}:`, err);
   }
 };
 

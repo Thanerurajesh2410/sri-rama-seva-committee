@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS devotees (
   phone VARCHAR(20) NOT NULL,
   email VARCHAR(255),
   city VARCHAR(255),
-  registered_at VARCHAR(100)
+  registered_at VARCHAR(100),
+  is_deleted BOOLEAN DEFAULT FALSE
 );
 
 -- 2. Donations & Hundi Table
@@ -24,7 +25,8 @@ CREATE TABLE IF NOT EXISTS donations (
   seva VARCHAR(255),
   mode VARCHAR(100),
   city VARCHAR(255),
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  is_deleted BOOLEAN DEFAULT FALSE
 );
 
 -- 3. Seva Bookings Table
@@ -35,7 +37,8 @@ CREATE TABLE IF NOT EXISTS seva_bookings (
   seva_name VARCHAR(255) NOT NULL,
   date VARCHAR(50),
   amount NUMERIC(12, 2) DEFAULT 0,
-  status VARCHAR(50) DEFAULT 'Confirmed'
+  status VARCHAR(50) DEFAULT 'Confirmed',
+  is_deleted BOOLEAN DEFAULT FALSE
 );
 
 -- 4. Construction Expenses Table
@@ -47,7 +50,8 @@ CREATE TABLE IF NOT EXISTS expenses (
   date VARCHAR(50),
   status VARCHAR(50),
   bill_no VARCHAR(100),
-  notes TEXT
+  notes TEXT,
+  is_deleted BOOLEAN DEFAULT FALSE
 );
 
 -- 5. Audit Logs Table
@@ -63,7 +67,8 @@ CREATE TABLE IF NOT EXISTS materials (
   id VARCHAR(50) PRIMARY KEY,
   type VARCHAR(255) NOT NULL,
   qty VARCHAR(100),
-  donor VARCHAR(255)
+  donor VARCHAR(255),
+  is_deleted BOOLEAN DEFAULT FALSE
 );
 
 -- 7. Temple Volunteers Table
@@ -73,7 +78,8 @@ CREATE TABLE IF NOT EXISTS volunteers (
   phone VARCHAR(20),
   email VARCHAR(255),
   task VARCHAR(255),
-  status VARCHAR(50) DEFAULT 'Active'
+  status VARCHAR(50) DEFAULT 'Active',
+  is_deleted BOOLEAN DEFAULT FALSE
 );
 
 -- 8. Gallery Images Table
@@ -82,7 +88,8 @@ CREATE TABLE IF NOT EXISTS gallery_images (
   src TEXT NOT NULL,
   title VARCHAR(255),
   tag VARCHAR(255),
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  is_deleted BOOLEAN DEFAULT FALSE
 );
 
 -- 9. Fixed Media Assets Table (Logo & PhonePe QR Code Global Sync)

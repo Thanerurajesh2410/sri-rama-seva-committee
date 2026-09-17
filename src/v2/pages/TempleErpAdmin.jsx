@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { LayoutDashboard, Users, Heart, DollarSign, Building2, Package, Award, ShieldCheck, FileText, Share2, Plus, Trash2, CheckCircle2, Lock, Download, Printer, Bell, AlertCircle, Eye, Phone, Mail, MapPin, Database, ChevronDown, Receipt, Sliders, Image as ImageIcon, ToggleLeft, ToggleRight, Camera, Upload, Sparkles, Edit3, QrCode, Palette } from 'lucide-react';
+import { LayoutDashboard, Users, Heart, DollarSign, Building2, Package, Award, ShieldCheck, FileText, Share2, Plus, Trash2, CheckCircle2, Lock, Download, Printer, Bell, AlertCircle, Eye, Phone, Mail, MapPin, Database, ChevronDown, Receipt, Sliders, Image as ImageIcon, ToggleLeft, ToggleRight, Camera, Upload, Sparkles, Edit3, QrCode, Palette, RotateCcw } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import { getSupabaseCredentials, setSupabaseCredentials, testSupabaseConnection, sanitizeSupabaseUrl } from '../data/supabaseClient';
-import { getDB, saveDB, validateUniqueDevotee, addAuditLog, defaultWebsiteSettings, defaultGalleryImages, generateSqlDump, resetToInitialDB, getAssetUrl, getActiveLogo, getActiveQrCode, updateMediaAsset, resetMediaAsset, fetchCloudDB, syncDatabaseToSupabase } from '../data/v2Database';
+import { getDB, saveDB, validateUniqueDevotee, addAuditLog, defaultWebsiteSettings, defaultGalleryImages, generateSqlDump, resetToInitialDB, getAssetUrl, getActiveLogo, getActiveQrCode, updateMediaAsset, resetMediaAsset, fetchCloudDB, syncDatabaseToSupabase, deleteCloudRecord } from '../data/v2Database';
 
 export default function TempleErpAdmin({ t, v2T, showToast }) {
   const [db, setDbState] = useState(getDB());
@@ -1250,13 +1250,70 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
 
 
 
+  // Active Record Filters (Excludes Soft-Deleted Records)
+  const activeDonations = (db.donations || []).filter(d => !d.isDeleted);
+  const activeDevotees = (db.devotees || []).filter(d => !d.isDeleted);
+  const activeExpenses = (db.expenses || []).filter(e => !e.isDeleted);
+  const activeMaterials = (db.materials || []).filter(m => !m.isDeleted);
+  const activeVolunteers = (db.volunteers || []).filter(v => !v.isDeleted);
+  const activeGalleryImages = (db.galleryImages || []).filter(g => !g.isDeleted);
+  const activeSevaBookings = (db.sevaBookings || []).filter(s => !s.isDeleted);
+
+  // Soft-Deleted Collectors for Recycle Bin
+  const deletedDonations = (db.donations || []).filter(d => d.isDeleted);
+  const deletedDevotees = (db.devotees || []).filter(d => d.isDeleted);
+  const deletedExpenses = (db.expenses || []).filter(e => e.isDeleted);
+  const deletedMaterials = (db.materials || []).filter(m => m.isDeleted);
+  const deletedVolunteers = (db.volunteers || []).filter(v => v.isDeleted);
+  const deletedGalleryImages = (db.galleryImages || []).filter(g => g.isDeleted);
+  const deletedSevaBookings = (db.sevaBookings || []).filter(s => s.isDeleted);
+
+  const totalSoftDeletedCount = 
+    deletedDonations.length + 
+    deletedDevotees.length + 
+    deletedExpenses.length + 
+    deletedMaterials.length + 
+    deletedVolunteers.length + 
+    deletedGalleryImages.length + 
+    deletedSevaBookings.length;
+
+  // Restore Soft-Deleted Record Helper
+  const handleRestoreRecord = (collectionKey, recordId, label) => {
+    const currentDB = getDB();
+    if (Array.isArray(currentDB[collectionKey])) {
+      const item = currentDB[collectionKey].find(x => String(x.id) === String(recordId));
+      if (item) {
+        item.isDeleted = false;
+        saveDB(currentDB);
+        setDbState({ ...currentDB });
+        addAuditLog(userRole, `Restored Record (${collectionKey} #${recordId} - ${label})`);
+        showToast(`'${label}' రికార్డు విజయవంతంగా పునరుద్ధరించబడింది!`);
+      }
+    }
+  };
+
+  // Permanent Delete (Purge) Record Helper
+  const handlePermanentPurgeRecord = async (collectionKey, tableName, recordId, label) => {
+    if (window.confirm(`⚠️ మీరు ఖచ్చితంగా '${label}' రికార్డును డేటాబేస్ నుండి శాశ్వతంగా (Permanent Purge) తొలగించాలనుకుంటున్నారా?`)) {
+      const currentDB = getDB();
+      if (Array.isArray(currentDB[collectionKey])) {
+        currentDB[collectionKey] = currentDB[collectionKey].filter(x => String(x.id) !== String(recordId));
+        await deleteCloudRecord(tableName, recordId);
+        saveDB(currentDB);
+        setDbState({ ...currentDB });
+        addAuditLog(userRole, `Permanently Purged Record (${collectionKey} #${recordId} - ${label})`);
+        showToast(`'${label}' రికార్డు డేటాబేస్ నుండి శాశ్వతంగా తొలగించబడింది.`);
+      }
+    }
+  };
+
   // Total Calculations
-  const totalDonationSum = db.donations.reduce((acc, curr) => {
+  const totalDonationSum = activeDonations.reduce((acc, curr) => {
     const num = typeof curr.amount === 'number' ? curr.amount : parseInt(String(curr.amount).replace(/\D/g, '')) || 0;
     return acc + num;
   }, 0);
 
-  const totalExpenseSum = db.expenses.reduce((acc, curr) => {
+  const totalExpenseSum = activeExpenses.reduce((acc, curr) => {
     const num = typeof curr.amount === 'number' ? curr.amount : parseInt(String(curr.amount).replace(/\D/g, '')) || 0;
     return acc + num;
   }, 0);
@@ -1402,6 +1459,7 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
                       { id: 'media-manager', label: '🏷️ లోగో & QR మేనేజర్' },
                       { id: 'gallery-manager', label: '🖼️ గ్యాలరీ & ఫోటోలు' },
                       { id: 'poster-designer', label: '🎨 పోస్టర్లు & పాంప్లెట్లు' },
+                      { id: 'trash', label: `🗑️ రీసైకిల్ బిన్ ${totalSoftDeletedCount > 0 ? `(${totalSoftDeletedCount})` : ''}` },
                       { id: 'audit', label: '📋 ఆడిట్ & DBeaver' }
                     ].map(tab => (
                       <button
@@ -3775,6 +3833,250 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
                   </div>
 
                 </div>
+              </div>
+            )}
+
+            {/* TAB 12: RECYCLE BIN & SOFT-DELETED RECORDS */}
+            {activeTab === 'trash' && (
+              <div className="space-y-6 animate-fadeIn text-white">
+                <div className="gold-card border-3 border-amber-500 p-6 rounded-3xl space-y-2 bg-gradient-to-r from-[#4A0E17] via-[#2D080E] to-[#1A0306] shadow-2xl">
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <h3 className="text-xl sm:text-2xl font-black text-[#FFD700] heading-telugu flex items-center gap-3">
+                      <Trash2 className="w-7 h-7 text-amber-400" />
+                      <span>పునరుద్ధరణ & సాఫ్ట్-డిలీట్ నిర్వహణ (Recycle Bin / Trash Ledger)</span>
+                    </h3>
+                    <span className="text-xs font-mono font-black text-rose-300 bg-rose-950 px-3.5 py-1.5 rounded-full border border-rose-500/50 shrink-0">
+                      {totalSoftDeletedCount} Soft Deleted Records
+                    </span>
+                  </div>
+                  <p className="text-xs sm:text-sm text-gray-200">
+                    ఈ విభాగంలో సాఫ్ట్-డిలీట్ చేయబడిన అన్ని విరాళాలు, భక్తులు, ఖర్చులు, సామగ్రి, వాలంటీర్లు మరియు గ్యాలరీ ఫోటోల వివరాలు ఉంటాయి. మీరు కోరుకున్నప్పుడు రికార్డును తిరిగి <strong className="text-emerald-400">పునరుద్ధరించవచ్చు (Restore)</strong> లేదా <strong className="text-red-400">శాశ్వతంగా తొలగించవచ్చు (Permanent Purge)</strong>.
+                  </p>
+                </div>
+
+                {totalSoftDeletedCount === 0 ? (
+                  <div className="gold-card text-center !p-12 space-y-3 bg-[#1A0306]/80 border-2 border-white/20 rounded-3xl">
+                    <CheckCircle2 className="w-16 h-16 text-emerald-400 mx-auto animate-pulse" />
+                    <h4 className="text-xl font-black text-white heading-telugu">రీసైకిల్ బిన్ ఖాళీగా ఉంది! (Recycle Bin is Empty)</h4>
+                    <p className="text-sm text-amber-200">ప్రస్తుతానికి ఎలాంటి సాఫ్ట్-డిలీట్ చేయబడిన రికార్డులు లేవు.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-6">
+                    
+                    {/* Deleted Donations */}
+                    {deletedDonations.length > 0 && (
+                      <div className="gold-card space-y-4 !p-6 bg-[#2C070D] border-2 border-rose-500/50 rounded-3xl">
+                        <h4 className="text-lg font-black text-amber-300 flex items-center gap-2">
+                          <span>🧾 సాఫ్ట్-డిలీట్ అయిన విరాళాలు ({deletedDonations.length})</span>
+                        </h4>
+                        <div className="space-y-2">
+                          {deletedDonations.map((d, idx) => (
+                            <div key={d.id || idx} className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-3.5 rounded-xl bg-black/60 border border-rose-500/30 gap-3">
+                              <div>
+                                <span className="font-mono font-bold text-rose-300 text-xs mr-2">[{d.id}]</span>
+                                <span className="font-extrabold text-white text-base">{d.donorName}</span>
+                                <span className="text-amber-300 font-mono font-black ml-3">₹ {Number(d.amount).toLocaleString()}</span>
+                                <p className="text-xs text-gray-300 mt-0.5">{d.seva} • {d.phone} • {d.date}</p>
+                              </div>
+                              <div className="flex items-center gap-2 shrink-0">
+                                <button
+                                  onClick={() => handleRestoreRecord('donations', d.id, d.donorName)}
+                                  className="px-3.5 py-2 rounded-xl text-xs font-black bg-emerald-700 text-white hover:bg-emerald-600 transition-all flex items-center gap-1.5 shadow-md"
+                                >
+                                  <RotateCcw className="w-4 h-4" />
+                                  <span>పునరుద్ధరించు (Restore)</span>
+                                </button>
+                                <button
+                                  onClick={() => handlePermanentPurgeRecord('donations', 'donations', d.id, d.donorName)}
+                                  className="px-3.5 py-2 rounded-xl text-xs font-black bg-red-900 text-red-200 hover:bg-red-700 hover:text-white transition-all border border-red-500/40"
+                                >
+                                  🔥 శాశ్వత తొలగింపు
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Deleted Devotees */}
+                    {deletedDevotees.length > 0 && (
+                      <div className="gold-card space-y-4 !p-6 bg-[#2C070D] border-2 border-rose-500/50 rounded-3xl">
+                        <h4 className="text-lg font-black text-amber-300 flex items-center gap-2">
+                          <span>👤 సాఫ్ట్-డిలీట్ అయిన భక్తుల ఖాతాలు ({deletedDevotees.length})</span>
+                        </h4>
+                        <div className="space-y-2">
+                          {deletedDevotees.map((dev, idx) => (
+                            <div key={dev.id || idx} className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-3.5 rounded-xl bg-black/60 border border-rose-500/30 gap-3">
+                              <div>
+                                <span className="font-mono font-bold text-rose-300 text-xs mr-2">[{dev.id}]</span>
+                                <span className="font-extrabold text-white text-base">{dev.name}</span>
+                                <span className="text-gray-300 font-mono text-xs ml-3">{dev.phone}</span>
+                                <p className="text-xs text-gray-300 mt-0.5">{dev.email || 'N/A'} • {dev.city || 'పామినివాండ్లవూరు'}</p>
+                              </div>
+                              <div className="flex items-center gap-2 shrink-0">
+                                <button
+                                  onClick={() => handleRestoreRecord('devotees', dev.id, dev.name)}
+                                  className="px-3.5 py-2 rounded-xl text-xs font-black bg-emerald-700 text-white hover:bg-emerald-600 transition-all flex items-center gap-1.5 shadow-md"
+                                >
+                                  <RotateCcw className="w-4 h-4" />
+                                  <span>పునరుద్ధరించు (Restore)</span>
+                                </button>
+                                <button
+                                  onClick={() => handlePermanentPurgeRecord('devotees', 'devotees', dev.id, dev.name)}
+                                  className="px-3.5 py-2 rounded-xl text-xs font-black bg-red-900 text-red-200 hover:bg-red-700 hover:text-white transition-all border border-red-500/40"
+                                >
+                                  🔥 శాశ్వత తొలగింపు
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Deleted Expenses */}
+                    {deletedExpenses.length > 0 && (
+                      <div className="gold-card space-y-4 !p-6 bg-[#2C070D] border-2 border-rose-500/50 rounded-3xl">
+                        <h4 className="text-lg font-black text-amber-300 flex items-center gap-2">
+                          <span>💸 సాఫ్ట్-డిలీట్ అయిన ఖర్చులు ({deletedExpenses.length})</span>
+                        </h4>
+                        <div className="space-y-2">
+                          {deletedExpenses.map((e, idx) => (
+                            <div key={e.id || idx} className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-3.5 rounded-xl bg-black/60 border border-rose-500/30 gap-3">
+                              <div>
+                                <span className="font-extrabold text-white text-base">{e.category}</span>
+                                <span className="text-sky-300 font-mono font-black ml-3">₹ {Number(e.amount).toLocaleString()}</span>
+                                <p className="text-xs text-gray-300 mt-0.5">Vendor: {e.vendor} • Date: {e.date}</p>
+                              </div>
+                              <div className="flex items-center gap-2 shrink-0">
+                                <button
+                                  onClick={() => handleRestoreRecord('expenses', e.id, e.category)}
+                                  className="px-3.5 py-2 rounded-xl text-xs font-black bg-emerald-700 text-white hover:bg-emerald-600 transition-all flex items-center gap-1.5 shadow-md"
+                                >
+                                  <RotateCcw className="w-4 h-4" />
+                                  <span>పునరుద్ధరించు (Restore)</span>
+                                </button>
+                                <button
+                                  onClick={() => handlePermanentPurgeRecord('expenses', 'expenses', e.id, e.category)}
+                                  className="px-3.5 py-2 rounded-xl text-xs font-black bg-red-900 text-red-200 hover:bg-red-700 hover:text-white transition-all border border-red-500/40"
+                                >
+                                  🔥 శాశ్వత తొలగింపు
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Deleted Materials */}
+                    {deletedMaterials.length > 0 && (
+                      <div className="gold-card space-y-4 !p-6 bg-[#2C070D] border-2 border-rose-500/50 rounded-3xl">
+                        <h4 className="text-lg font-black text-amber-300 flex items-center gap-2">
+                          <span>🏗️ సాఫ్ట్-డిలీట్ అయిన సామగ్రి ({deletedMaterials.length})</span>
+                        </h4>
+                        <div className="space-y-2">
+                          {deletedMaterials.map((m, idx) => (
+                            <div key={m.id || idx} className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-3.5 rounded-xl bg-black/60 border border-rose-500/30 gap-3">
+                              <div>
+                                <span className="font-extrabold text-white text-base">{m.type} ({m.qty})</span>
+                                <p className="text-xs text-gray-300 mt-0.5">Donor: {m.donor}</p>
+                              </div>
+                              <div className="flex items-center gap-2 shrink-0">
+                                <button
+                                  onClick={() => handleRestoreRecord('materials', m.id, m.type)}
+                                  className="px-3.5 py-2 rounded-xl text-xs font-black bg-emerald-700 text-white hover:bg-emerald-600 transition-all flex items-center gap-1.5 shadow-md"
+                                >
+                                  <RotateCcw className="w-4 h-4" />
+                                  <span>పునరుద్ధరించు (Restore)</span>
+                                </button>
+                                <button
+                                  onClick={() => handlePermanentPurgeRecord('materials', 'materials', m.id, m.type)}
+                                  className="px-3.5 py-2 rounded-xl text-xs font-black bg-red-900 text-red-200 hover:bg-red-700 hover:text-white transition-all border border-red-500/40"
+                                >
+                                  🔥 శాశ్వత తొలగింపు
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Deleted Volunteers */}
+                    {deletedVolunteers.length > 0 && (
+                      <div className="gold-card space-y-4 !p-6 bg-[#2C070D] border-2 border-rose-500/50 rounded-3xl">
+                        <h4 className="text-lg font-black text-amber-300 flex items-center gap-2">
+                          <span>🤝 సాఫ్ట్-డిలీట్ అయిన వాలంటీర్లు ({deletedVolunteers.length})</span>
+                        </h4>
+                        <div className="space-y-2">
+                          {deletedVolunteers.map((v, idx) => (
+                            <div key={v.id || idx} className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-3.5 rounded-xl bg-black/60 border border-rose-500/30 gap-3">
+                              <div>
+                                <span className="font-extrabold text-white text-base">{v.name} ({v.phone})</span>
+                                <p className="text-xs text-gray-300 mt-0.5">Task: {v.task}</p>
+                              </div>
+                              <div className="flex items-center gap-2 shrink-0">
+                                <button
+                                  onClick={() => handleRestoreRecord('volunteers', v.id, v.name)}
+                                  className="px-3.5 py-2 rounded-xl text-xs font-black bg-emerald-700 text-white hover:bg-emerald-600 transition-all flex items-center gap-1.5 shadow-md"
+                                >
+                                  <RotateCcw className="w-4 h-4" />
+                                  <span>పునరుద్ధరించు (Restore)</span>
+                                </button>
+                                <button
+                                  onClick={() => handlePermanentPurgeRecord('volunteers', 'volunteers', v.id, v.name)}
+                                  className="px-3.5 py-2 rounded-xl text-xs font-black bg-red-900 text-red-200 hover:bg-red-700 hover:text-white transition-all border border-red-500/40"
+                                >
+                                  🔥 శాశ్వత తొలగింపు
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Deleted Gallery Photos */}
+                    {deletedGalleryImages.length > 0 && (
+                      <div className="gold-card space-y-4 !p-6 bg-[#2C070D] border-2 border-rose-500/50 rounded-3xl">
+                        <h4 className="text-lg font-black text-amber-300 flex items-center gap-2">
+                          <span>🖼️ సాఫ్ట్-డిలీట్ అయిన ఫోటోలు ({deletedGalleryImages.length})</span>
+                        </h4>
+                        <div className="space-y-2">
+                          {deletedGalleryImages.map((g, idx) => (
+                            <div key={g.id || idx} className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-3.5 rounded-xl bg-black/60 border border-rose-500/30 gap-3">
+                              <div className="flex items-center gap-3">
+                                <img src={g.src} alt={g.title} className="w-14 h-10 object-cover rounded border border-white/20" />
+                                <div>
+                                  <span className="font-extrabold text-white text-base block">{g.title}</span>
+                                  <span className="text-xs text-amber-200 font-bold">{g.tag}</span>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-2 shrink-0">
+                                <button
+                                  onClick={() => handleRestoreRecord('galleryImages', g.id, g.title)}
+                                  className="px-3.5 py-2 rounded-xl text-xs font-black bg-emerald-700 text-white hover:bg-emerald-600 transition-all flex items-center gap-1.5 shadow-md"
+                                >
+                                  <RotateCcw className="w-4 h-4" />
+                                  <span>పునరుద్ధరించు (Restore)</span>
+                                </button>
+                                <button
+                                  onClick={() => handlePermanentPurgeRecord('galleryImages', 'gallery_images', g.id, g.title)}
+                                  className="px-3.5 py-2 rounded-xl text-xs font-black bg-red-900 text-red-200 hover:bg-red-700 hover:text-white transition-all border border-red-500/40"
+                                >
+                                  🔥 శాశ్వత తొలగింపు
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                  </div>
+                )}
               </div>
             )}
 
