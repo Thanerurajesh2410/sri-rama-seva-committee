@@ -4,7 +4,7 @@ import confetti from 'canvas-confetti';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import { getSupabaseCredentials, setSupabaseCredentials, testSupabaseConnection, sanitizeSupabaseUrl } from '../data/supabaseClient';
-import { getDB, saveDB, validateUniqueDevotee, addAuditLog, defaultWebsiteSettings, defaultGalleryImages, generateSqlDump, resetToInitialDB, getAssetUrl, getActiveLogo, getActiveQrCode, updateMediaAsset, resetMediaAsset, fetchCloudDB, syncDatabaseToSupabase, deleteCloudRecord } from '../data/v2Database';
+import { getDB, saveDB, validateUniqueDevotee, addAuditLog, defaultWebsiteSettings, defaultGalleryImages, generateSqlDump, resetToInitialDB, getAssetUrl, getActiveLogo, getActiveQrCode, updateMediaAsset, resetMediaAsset, fetchCloudDB, syncDatabaseToSupabase, deleteCloudRecord, trackDeletedId, untrackDeletedId } from '../data/v2Database';
 
 export default function TempleErpAdmin({ t, v2T, showToast }) {
   const [db, setDbState] = useState(getDB());
@@ -163,17 +163,16 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
     }
   };
 
-  const handleDeleteExpense = (expId) => {
+  const handleDeleteExpense = async (expId) => {
     if (window.confirm("మీరు ఖచ్చితంగా ఈ ఖర్చు రికార్డును తొలగించాలనుకుంటున్నారా?")) {
       const currentDB = getDB();
-      const exp = (currentDB.expenses || []).find(x => String(x.id) === String(expId));
-      if (exp) {
-        exp.isDeleted = true;
-        saveDB(currentDB);
-        setDbState({ ...currentDB, expenses: [...currentDB.expenses] });
-        addAuditLog(userRole, `Deleted Expense Record (${expId})`);
-        showToast("ఖర్చు రికార్డు రీసైకిల్ బిన్‌కి తరలించబడింది.");
-      }
+      trackDeletedId(currentDB, expId);
+      currentDB.expenses = (currentDB.expenses || []).filter(x => String(x.id) !== String(expId));
+      await deleteCloudRecord('expenses', expId);
+      saveDB(currentDB);
+      setDbState({ ...currentDB, expenses: [...currentDB.expenses] });
+      addAuditLog(userRole, `Deleted Expense Record (${expId})`);
+      showToast("ఖర్చు రికార్డు విజయవంతంగా తొలగించబడింది.");
     }
   };
 
@@ -210,17 +209,16 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
     }
   };
 
-  const handleDeleteMaterial = (matId) => {
+  const handleDeleteMaterial = async (matId) => {
     if (window.confirm("మీరు ఖచ్చితంగా ఈ సామగ్రి రికార్డును తొలగించాలనుకుంటున్నారా?")) {
       const currentDB = getDB();
-      const mat = (currentDB.materials || []).find(m => String(m.id) === String(matId));
-      if (mat) {
-        mat.isDeleted = true;
-        saveDB(currentDB);
-        setDbState({ ...currentDB, materials: [...currentDB.materials] });
-        addAuditLog(userRole, `Deleted Material Record (${matId})`);
-        showToast("సామగ్రి రికార్డు రీసైకిల్ బిన్‌కి తరలించబడింది.");
-      }
+      trackDeletedId(currentDB, matId);
+      currentDB.materials = (currentDB.materials || []).filter(m => String(m.id) !== String(matId));
+      await deleteCloudRecord('materials', matId);
+      saveDB(currentDB);
+      setDbState({ ...currentDB, materials: [...currentDB.materials] });
+      addAuditLog(userRole, `Deleted Material Record (${matId})`);
+      showToast("సామగ్రి రికార్డు విజయవంతంగా తొలగించబడింది.");
     }
   };
 
@@ -260,17 +258,16 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
     }
   };
 
-  const handleDeleteVolunteer = (volId) => {
+  const handleDeleteVolunteer = async (volId) => {
     if (window.confirm("మీరు ఖచ్చితంగా ఈ వాలంటీర్ రికార్డును తొలగించాలనుకుంటున్నారా?")) {
       const currentDB = getDB();
-      const vol = (currentDB.volunteers || []).find(v => String(v.id) === String(volId));
-      if (vol) {
-        vol.isDeleted = true;
-        saveDB(currentDB);
-        setDbState({ ...currentDB, volunteers: [...currentDB.volunteers] });
-        addAuditLog(userRole, `Deleted Volunteer Record (${volId})`);
-        showToast("వాలంటీర్ రికార్డు రీసైకిల్ బిన్‌కి తరలించబడింది.");
-      }
+      trackDeletedId(currentDB, volId);
+      currentDB.volunteers = (currentDB.volunteers || []).filter(v => String(v.id) !== String(volId));
+      await deleteCloudRecord('volunteers', volId);
+      saveDB(currentDB);
+      setDbState({ ...currentDB, volunteers: [...currentDB.volunteers] });
+      addAuditLog(userRole, `Deleted Volunteer Record (${volId})`);
+      showToast("వాలంటీర్ రికార్డు విజయవంతంగా తొలగించబడింది.");
     }
   };
 
@@ -349,17 +346,16 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
     }
   };
 
-  const handleDeleteSevaBooking = (sevaId) => {
+  const handleDeleteSevaBooking = async (sevaId) => {
     if (window.confirm("మీరు ఖచ్చితంగా ఈ సేవా బుకింగ్ రికార్డును తొలగించాలనుకుంటున్నారా?")) {
       const currentDB = getDB();
-      const seva = (currentDB.sevaBookings || []).find(s => String(s.id) === String(sevaId));
-      if (seva) {
-        seva.isDeleted = true;
-        saveDB(currentDB);
-        setDbState({ ...currentDB, sevaBookings: [...currentDB.sevaBookings] });
-        addAuditLog(userRole, `Deleted Seva Booking Record (${sevaId})`);
-        showToast("సేవా బుకింగ్ రికార్డు రీసైకిల్ బిన్‌కి తరలించబడింది.");
-      }
+      trackDeletedId(currentDB, sevaId);
+      currentDB.sevaBookings = (currentDB.sevaBookings || []).filter(s => String(s.id) !== String(sevaId));
+      await deleteCloudRecord('seva_bookings', sevaId);
+      saveDB(currentDB);
+      setDbState({ ...currentDB, sevaBookings: [...currentDB.sevaBookings] });
+      addAuditLog(userRole, `Deleted Seva Booking Record (${sevaId})`);
+      showToast("సేవా బుకింగ్ రికార్డు విజయవంతంగా తొలగించబడింది.");
     }
   };
 
@@ -780,28 +776,29 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
   };
 
   // Delete Devotee User Account
-  const handleDeleteDevotee = (devoteeId) => {
+  const handleDeleteDevotee = async (devoteeId) => {
     if (window.confirm("మీరు ఖచ్చితంగా ఈ భక్తుడి రికార్డును తొలగించాలనుకుంటున్నారా?")) {
       const currentDB = getDB();
-      const dev = (currentDB.devotees || []).find(d => String(d.id) === String(devoteeId));
-      if (dev) {
-        dev.isDeleted = true;
-        saveDB(currentDB);
-        setDbState({ ...currentDB, devotees: [...currentDB.devotees] });
-        addAuditLog(userRole, `Deleted Devotee User Record (${devoteeId})`);
-        showToast("భక్తుడి ఖాతా రీసైకిల్ బిన్‌కి తరలించబడింది!");
-      }
+      trackDeletedId(currentDB, devoteeId);
+      currentDB.devotees = (currentDB.devotees || []).filter(d => String(d.id) !== String(devoteeId));
+      await deleteCloudRecord('devotees', devoteeId);
+      saveDB(currentDB);
+      setDbState({ ...currentDB, devotees: [...currentDB.devotees] });
+      addAuditLog(userRole, `Deleted Devotee User Record (${devoteeId})`);
+      showToast("భక్తుడి ఖాతా విజయవంతంగా తొలగించబడింది!");
     }
   };
 
   // Delete All Test / Mock Data
-  const handleCleanTestData = () => {
+  const handleCleanTestData = async () => {
     if (window.confirm("మీరు ఖచ్చితంగా అన్ని టెస్ట్ భక్తులు & మాక్ రికార్డులను తొలగించాలనుకుంటున్నారా? (వాస్తవ దాతల వివరాలు మాత్రమే ఉంచబడతాయి)")) {
       const currentDB = getDB();
+      (currentDB.devotees || []).filter(d => d.id.startsWith('DEV-100')).forEach(d => trackDeletedId(currentDB, d.id));
+      (currentDB.expenses || []).filter(e => e.id.startsWith('EXP-10')).forEach(e => trackDeletedId(currentDB, e.id));
       currentDB.devotees = (currentDB.devotees || []).filter(d => !d.id.startsWith('DEV-100'));
       currentDB.expenses = (currentDB.expenses || []).filter(e => !e.id.startsWith('EXP-10'));
       saveDB(currentDB);
-      setDbState({ ...currentDB, devotees: [...currentDB.devotees], expenses: [...currentDB.expenses] });
+      setDbState({ ...currentDB });
       addAuditLog(userRole, "Cleaned Test & Mock User Data");
       showToast("అన్ని టెస్ట్ డేటా రికార్డులు విజయవంతంగా తొలగించబడ్డాయి!");
     }
@@ -880,17 +877,16 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
   };
 
   // Delete Donation Record
-  const handleDeleteDonation = (id) => {
+  const handleDeleteDonation = async (id) => {
     if (window.confirm("మీరు ఖచ్చితంగా ఈ విరాళం రికార్డును తొలగించాలనుకుంటున్నారా?")) {
       const currentDB = getDB();
-      const don = (currentDB.donations || []).find(d => String(d.id) === String(id));
-      if (don) {
-        don.isDeleted = true;
-        saveDB(currentDB);
-        setDbState({ ...currentDB, donations: [...currentDB.donations] });
-        addAuditLog(userRole, `Deleted Donation Record (${id})`);
-        showToast("విరాళం రికార్డు రీసైకిల్ బిన్‌కి తరలించబడింది.");
-      }
+      trackDeletedId(currentDB, id);
+      currentDB.donations = (currentDB.donations || []).filter(d => String(d.id) !== String(id));
+      await deleteCloudRecord('donations', id);
+      saveDB(currentDB);
+      setDbState({ ...currentDB, donations: [...currentDB.donations] });
+      addAuditLog(userRole, `Deleted Donation Record (${id})`);
+      showToast("విరాళం రికార్డు విజయవంతంగా తొలగించబడింది.");
     }
   };
 
@@ -1300,6 +1296,7 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
   // Restore Soft-Deleted Record Helper
   const handleRestoreRecord = (collectionKey, recordId, label) => {
     const currentDB = getDB();
+    untrackDeletedId(currentDB, recordId);
     if (Array.isArray(currentDB[collectionKey])) {
       const item = currentDB[collectionKey].find(x => String(x.id) === String(recordId));
       if (item) {
@@ -1316,6 +1313,7 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
   const handlePermanentPurgeRecord = async (collectionKey, tableName, recordId, label) => {
     if (window.confirm(`⚠️ మీరు ఖచ్చితంగా '${label}' రికార్డును డేటాబేస్ నుండి శాశ్వతంగా (Permanent Purge) తొలగించాలనుకుంటున్నారా?`)) {
       const currentDB = getDB();
+      trackDeletedId(currentDB, recordId);
       if (Array.isArray(currentDB[collectionKey])) {
         currentDB[collectionKey] = currentDB[collectionKey].filter(x => String(x.id) !== String(recordId));
         await deleteCloudRecord(tableName, recordId);

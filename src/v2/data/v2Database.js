@@ -113,9 +113,27 @@ const initialDB = {
   websiteSettings: { ...defaultWebsiteSettings },
   mediaAssets: { ...defaultMediaAssets },
   galleryImages: [...defaultGalleryImages],
+  deletedRecordIds: [],
   auditLogs: [
     { id: 'LOG-1', timestamp: '2026-07-26 09:30:00', user: 'Admin', action: 'System Database Initialized with V1 Classic Donors' }
   ]
+};
+
+export const trackDeletedId = (db, id) => {
+  if (!db || !id) return;
+  if (!Array.isArray(db.deletedRecordIds)) {
+    db.deletedRecordIds = [];
+  }
+  const strId = String(id);
+  if (!db.deletedRecordIds.includes(strId)) {
+    db.deletedRecordIds.push(strId);
+  }
+};
+
+export const untrackDeletedId = (db, id) => {
+  if (!db || !Array.isArray(db.deletedRecordIds) || !id) return;
+  const strId = String(id);
+  db.deletedRecordIds = db.deletedRecordIds.filter(x => x !== strId);
 };
 
 const isValidImageSrc = (src) => {
@@ -136,6 +154,12 @@ export const getDB = () => {
     if (!data) return initialDB;
 
     const parsed = JSON.parse(data);
+    if (!Array.isArray(parsed.deletedRecordIds)) {
+      parsed.deletedRecordIds = [];
+    }
+
+    const isDeletedId = (id) => parsed.deletedRecordIds.includes(String(id));
+
     if (!parsed.mediaAssets) {
       parsed.mediaAssets = { ...defaultMediaAssets };
     } else {
@@ -158,6 +182,26 @@ export const getDB = () => {
     }
     if (!parsed.expenses) parsed.expenses = [];
 
+    // Filter out deleted IDs from all collections
+    if (Array.isArray(parsed.devotees)) {
+      parsed.devotees = parsed.devotees.filter(d => !isDeletedId(d.id));
+    }
+    if (Array.isArray(parsed.donations)) {
+      parsed.donations = parsed.donations.filter(d => !isDeletedId(d.id));
+    }
+    if (Array.isArray(parsed.sevaBookings)) {
+      parsed.sevaBookings = parsed.sevaBookings.filter(s => !isDeletedId(s.id));
+    }
+    if (Array.isArray(parsed.expenses)) {
+      parsed.expenses = parsed.expenses.filter(e => !isDeletedId(e.id));
+    }
+    if (Array.isArray(parsed.materials)) {
+      parsed.materials = parsed.materials.filter(m => !isDeletedId(m.id));
+    }
+    if (Array.isArray(parsed.volunteers)) {
+      parsed.volunteers = parsed.volunteers.filter(v => !isDeletedId(v.id));
+    }
+
     // Ensure websiteSettings and galleryImages exist
     if (!parsed.websiteSettings) {
       parsed.websiteSettings = { ...defaultWebsiteSettings };
@@ -176,7 +220,7 @@ export const getDB = () => {
     
     // Filter out permanently deleted photos
     if (parsed.deletedGalleryImageIds && parsed.deletedGalleryImageIds.length > 0) {
-      parsed.galleryImages = parsed.galleryImages.filter(img => !parsed.deletedGalleryImageIds.includes(String(img.id)));
+      parsed.galleryImages = parsed.galleryImages.filter(img => !parsed.deletedGalleryImageIds.includes(String(img.id)) && !isDeletedId(img.id));
     }
 
     // Ensure donations array exists
@@ -279,35 +323,50 @@ export const fetchCloudDB = async () => {
     ]);
 
     const localDB = getDB();
+    const deletedIds = Array.isArray(localDB.deletedRecordIds) ? localDB.deletedRecordIds : [];
+    const isPurged = (id) => deletedIds.includes(String(id));
+
     if (devRes.data && devRes.data.length > 0) {
-      localDB.devotees = devRes.data.map(d => ({
-        id: d.id, name: d.name, phone: d.phone, email: d.email, city: d.city, registeredAt: d.registered_at, isDeleted: Boolean(d.is_deleted)
-      }));
+      localDB.devotees = devRes.data
+        .filter(d => !isPurged(d.id) && !d.is_deleted)
+        .map(d => ({
+          id: d.id, name: d.name, phone: d.phone, email: d.email, city: d.city, registeredAt: d.registered_at, isDeleted: Boolean(d.is_deleted)
+        }));
     }
     if (donRes.data && donRes.data.length > 0) {
-      localDB.donations = donRes.data.map(d => ({
-        id: d.id, donorName: d.donor_name, phone: d.phone, email: d.email, amount: d.amount, date: d.date, seva: d.seva, mode: d.mode, city: d.city, isDeleted: Boolean(d.is_deleted)
-      }));
+      localDB.donations = donRes.data
+        .filter(d => !isPurged(d.id) && !d.is_deleted)
+        .map(d => ({
+          id: d.id, donorName: d.donor_name, phone: d.phone, email: d.email, amount: d.amount, date: d.date, seva: d.seva, mode: d.mode, city: d.city, isDeleted: Boolean(d.is_deleted)
+        }));
     }
     if (sevaRes.data && sevaRes.data.length > 0) {
-      localDB.sevaBookings = sevaRes.data.map(s => ({
-        id: s.id, devoteeName: s.devotee_name, phone: s.phone, sevaName: s.seva_name, date: s.date, amount: s.amount, status: s.status, isDeleted: Boolean(s.is_deleted)
-      }));
+      localDB.sevaBookings = sevaRes.data
+        .filter(s => !isPurged(s.id) && !s.is_deleted)
+        .map(s => ({
+          id: s.id, devoteeName: s.devotee_name, phone: s.phone, sevaName: s.seva_name, date: s.date, amount: s.amount, status: s.status, isDeleted: Boolean(s.is_deleted)
+        }));
     }
     if (expRes.data && expRes.data.length > 0) {
-      localDB.expenses = expRes.data.map(e => ({
-        id: e.id, category: e.category, amount: e.amount, vendor: e.vendor, date: e.date, status: e.status, billNo: e.bill_no, notes: e.notes, isDeleted: Boolean(e.is_deleted)
-      }));
+      localDB.expenses = expRes.data
+        .filter(e => !isPurged(e.id) && !e.is_deleted)
+        .map(e => ({
+          id: e.id, category: e.category, amount: e.amount, vendor: e.vendor, date: e.date, status: e.status, billNo: e.bill_no, notes: e.notes, isDeleted: Boolean(e.is_deleted)
+        }));
     }
     if (matRes.data && matRes.data.length > 0) {
-      localDB.materials = matRes.data.map(m => ({
-        id: m.id, type: m.type, qty: m.qty, donor: m.donor, isDeleted: Boolean(m.is_deleted)
-      }));
+      localDB.materials = matRes.data
+        .filter(m => !isPurged(m.id) && !m.is_deleted)
+        .map(m => ({
+          id: m.id, type: m.type, qty: m.qty, donor: m.donor, isDeleted: Boolean(m.is_deleted)
+        }));
     }
     if (volRes.data && volRes.data.length > 0) {
-      localDB.volunteers = volRes.data.map(v => ({
-        id: v.id, name: v.name, phone: v.phone, email: v.email, task: v.task, status: v.status, isDeleted: Boolean(v.is_deleted)
-      }));
+      localDB.volunteers = volRes.data
+        .filter(v => !isPurged(v.id) && !v.is_deleted)
+        .map(v => ({
+          id: v.id, name: v.name, phone: v.phone, email: v.email, task: v.task, status: v.status, isDeleted: Boolean(v.is_deleted)
+        }));
     }
     if (auditRes.data && auditRes.data.length > 0) {
       localDB.auditLogs = auditRes.data.map(l => ({
@@ -315,9 +374,11 @@ export const fetchCloudDB = async () => {
       }));
     }
     if (galleryRes.data && galleryRes.data.length > 0) {
-      localDB.galleryImages = galleryRes.data.map(g => ({
-        id: g.id, src: getAssetUrl(g.src), title: g.title, tag: g.tag, isDeleted: Boolean(g.is_deleted)
-      }));
+      localDB.galleryImages = galleryRes.data
+        .filter(g => !isPurged(g.id) && !g.is_deleted)
+        .map(g => ({
+          id: g.id, src: getAssetUrl(g.src), title: g.title, tag: g.tag, isDeleted: Boolean(g.is_deleted)
+        }));
     }
     if (mediaRes.data && mediaRes.data.length > 0) {
       if (!localDB.mediaAssets) localDB.mediaAssets = {};
