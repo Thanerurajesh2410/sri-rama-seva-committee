@@ -428,16 +428,41 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
     setDbState(getDB());
   }, []);
 
-  // Handle Login
+  // Handle Login with Password Rajesh@2410
   const handleLogin = (e) => {
     e.preventDefault();
-    if (passcode === '1252026' || passcode === 'admin123' || passcode === '9866125609') {
+    if (passcode === 'Rajesh@2410' || passcode === 'rajesh@2410') {
       setIsAuthenticated(true);
       setPassError('');
       addAuditLog(userRole, "Admin Logged Into ERP System");
       showToast("శ్రీ రామాలయం ERP కి విజయవంతంగా లాగిన్ అయ్యారు!");
     } else {
-      setPassError("తప్పు పాస్‌కోడ్! దయచేసి సరైన అడ్మిన్ పిన్ ఎంటర్ చేయండి.");
+      setPassError("తప్పు పాస్‌వర్డ్! దయచేసి సరైన అడ్మిన్ పాస్‌వర్డ్ నమోదు చేయండి.");
+    }
+  };
+
+  // Delete Devotee User Account
+  const handleDeleteDevotee = (devoteeId) => {
+    if (window.confirm("మీరు ఖచ్చితంగా ఈ భక్తుడి రికార్డును తొలగించాలనుకుంటున్నారా?")) {
+      const currentDB = getDB();
+      currentDB.devotees = (currentDB.devotees || []).filter(d => String(d.id) !== String(devoteeId));
+      saveDB(currentDB);
+      setDbState({ ...currentDB, devotees: [...currentDB.devotees] });
+      addAuditLog(userRole, `Deleted Devotee User Record (${devoteeId})`);
+      showToast("భక్తుడి ఖాతా విజయవంతంగా తొలగించబడింది!");
+    }
+  };
+
+  // Delete All Test / Mock Data
+  const handleCleanTestData = () => {
+    if (window.confirm("మీరు ఖచ్చితంగా అన్ని టెస్ట్ భక్తులు & మాక్ రికార్డులను తొలగించాలనుకుంటున్నారా? (వాస్తవ దాతల వివరాలు మాత్రమే ఉంచబడతాయి)")) {
+      const currentDB = getDB();
+      currentDB.devotees = (currentDB.devotees || []).filter(d => !d.id.startsWith('DEV-100'));
+      currentDB.expenses = (currentDB.expenses || []).filter(e => !e.id.startsWith('EXP-10'));
+      saveDB(currentDB);
+      setDbState({ ...currentDB, devotees: [...currentDB.devotees], expenses: [...currentDB.expenses] });
+      addAuditLog(userRole, "Cleaned Test & Mock User Data");
+      showToast("అన్ని టెస్ట్ డేటా రికార్డులు విజయవంతంగా తొలగించబడ్డాయి!");
     }
   };
 
@@ -959,12 +984,12 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
               <form onSubmit={handleLogin} className="relative z-10 space-y-6 max-w-md mx-auto">
                 <div className="space-y-2">
                   <label className="block text-xs md:text-sm font-black text-amber-200 uppercase tracking-widest">
-                    అడ్మిన్ పాస్‌కోడ్ నమోదు చేయండి (Enter Admin PIN)
+                    అడ్మిన్ పాస్‌వర్డ్ నమోదు చేయండి (Enter Admin Password)
                   </label>
                   <input
                     type="password"
                     required
-                    placeholder="అడ్మిన్ PIN (ఉదా: 1252026)"
+                    placeholder="అడ్మిన్ పాస్‌వర్డ్ ఎంటర్ చేయండి"
                     value={passcode}
                     onChange={(e) => setPasscode(e.target.value)}
                     className="w-full bg-[#1A0306]/90 border-3 border-[#FFD700] text-amber-300 rounded-2xl p-4 text-center text-xl md:text-2xl font-mono focus:outline-none focus:ring-4 focus:ring-[#FFD700]/50 shadow-inner placeholder-gray-500 font-bold"
@@ -1031,35 +1056,42 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
               </div>
             </div>
 
-                {/* Navigation Tabs Bar - Perfectly Aligned */}
-                <div className="flex flex-wrap items-center justify-start md:justify-center gap-2 md:gap-3 border-b border-white/10 pb-4 text-base md:text-lg xl:text-[19px] font-black">
-                  {[
-                    { id: 'dashboard', label: '📊 డ్యాష్‌బోర్డ్' },
-                    { id: 'donations', label: '🧾 రశీదుల జారీ' },
-                    { id: 'donors', label: '👤 దాతల CRM' },
-                    { id: 'expenses', label: '💸 ఖర్చులు & బిల్లులు' },
-                    { id: 'reports', label: '📥 నివేదికలు & షేరింగ్' },
-                    { id: 'materials', label: '🏗️ సామగ్రి విరాళాలు' },
-                    { id: 'volunteers', label: '🤝 వాలంటీర్లు' },
-                    { id: 'website-settings', label: '⚙️ వెబ్‌సైట్ విభాగాలు' },
-                    { id: 'media-manager', label: '🏷️ లోగో & QR మేనేజర్' },
-                    { id: 'gallery-manager', label: '🖼️ గ్యాలరీ & స్లైడ్‌షో ఫోటోలు' },
-                    { id: 'poster-designer', label: '🎨 పోస్టర్లు, పాంప్లెట్లు & రశీదు పుస్తకం' },
-                    { id: 'audit', label: '📋 ఆడిట్ & డేటాబేస్' }
-              ].map(tab => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`px-4 xl:px-5 py-2.5 xl:py-3 rounded-xl xl:rounded-2xl transition-all shrink-0 ${
-                    activeTab === tab.id
-                      ? 'bg-[#5C121E] text-[#FFD700] border-2 md:border-3 border-[#FFD700] shadow-2xl font-black scale-105'
-                      : 'bg-white/10 text-gray-200 border border-white/20 hover:bg-white/20 hover:text-white'
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
+                {/* Navigation Tabs Bar - Always High Contrast & 100% Visible */}
+                <div className="bg-[#2A060C] border-2 border-amber-500/70 p-3 md:p-4 rounded-3xl shadow-2xl space-y-2">
+                  <div className="text-center md:text-left text-xs font-black text-amber-300 uppercase tracking-wider mb-2 flex items-center justify-between">
+                    <span>🏛️ శ్రీ రామాలయం ERP అడ్మిన్ నిర్వహణ విభాగాలు (Admin Control Suite)</span>
+                    <span className="text-[11px] text-emerald-400 font-mono hidden sm:inline">12 MODULES ACTIVE</span>
+                  </div>
+
+                  <div className="flex flex-wrap items-center justify-start md:justify-center gap-2 md:gap-2.5 text-xs md:text-sm font-black">
+                    {[
+                      { id: 'dashboard', label: '📊 డ్యాష్‌బోర్డ్' },
+                      { id: 'donations', label: '🧾 రశీదుల జారీ' },
+                      { id: 'donors', label: '👤 దాతలు & ఆక్టివ్ భక్తులు' },
+                      { id: 'expenses', label: '💸 ఖర్చులు & బిల్లులు' },
+                      { id: 'reports', label: '📥 నివేదికలు & షేరింగ్' },
+                      { id: 'materials', label: '🏗️ సామగ్రి విరాళాలు' },
+                      { id: 'volunteers', label: '🤝 వాలంటీర్లు' },
+                      { id: 'website-settings', label: '⚙️ వెబ్‌సైట్ విభాగాలు' },
+                      { id: 'media-manager', label: '🏷️ లోగో & QR మేనేజర్' },
+                      { id: 'gallery-manager', label: '🖼️ గ్యాలరీ & ఫోటోలు' },
+                      { id: 'poster-designer', label: '🎨 పోస్టర్లు & పాంప్లెట్లు' },
+                      { id: 'audit', label: '📋 ఆడిట్ & DBeaver' }
+                    ].map(tab => (
+                      <button
+                        key={tab.id}
+                        onClick={() => setActiveTab(tab.id)}
+                        className={`px-3.5 md:px-4 py-2 md:py-2.5 rounded-xl md:rounded-2xl transition-all shrink-0 font-extrabold shadow-md ${
+                          activeTab === tab.id
+                            ? 'bg-gradient-to-r from-amber-500 via-orange-600 to-amber-600 text-white border-2 border-yellow-300 shadow-xl scale-105 ring-2 ring-yellow-400/50 font-black'
+                            : 'bg-[#3A0A11] text-amber-100 border border-amber-500/60 hover:bg-[#5C121E] hover:text-[#FFD700] hover:border-amber-300'
+                        }`}
+                      >
+                        {tab.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
 
             {/* TAB 1: EXECUTIVE DASHBOARD WIDGETS */}
             {activeTab === 'dashboard' && (
@@ -1461,6 +1493,72 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
                     + దాత వివరాలను డేటాబేస్‌లో చేర్చు (Save Donor Record)
                   </button>
                 </form>
+
+                {/* ACTIVE REGISTERED USERS & PORTAL DEVOTEES TABLE (With Delete User & Clean Test Data Buttons) */}
+                <div className="gold-card space-y-4 !p-6 sm:!p-8 bg-[#2C070D] border-2 border-emerald-500/70">
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-white/20 pb-3">
+                    <div>
+                      <h3 className="text-xl sm:text-2xl font-black text-[#FFD700] flex items-center gap-2">
+                        <Users className="w-6 h-6 text-emerald-400" />
+                        <span>🟢 ఆక్టివ్ నమోదు భక్తులు & పోర్టల్ యూజర్లు ({db.devotees?.length || 0})</span>
+                      </h3>
+                      <p className="text-xs text-amber-200 mt-0.5">
+                        వెబ్‌సైట్ ద్వారా మరియు అడ్మిన్ ద్వారా నమోదైన ఆక్టివ్ భక్తుల జాబితా.
+                      </p>
+                    </div>
+
+                    <button
+                      onClick={handleCleanTestData}
+                      className="px-4 py-2 rounded-xl font-black text-xs bg-rose-900/90 text-rose-100 hover:bg-rose-700 border border-rose-400 transition-all shadow-md flex items-center gap-1.5 shrink-0"
+                    >
+                      <Trash2 className="w-4 h-4 text-rose-300" />
+                      <span>🧹 అన్ని టెస్ట్ రికార్డులను తొలగించండి</span>
+                    </button>
+                  </div>
+
+                  <div className="max-h-[350px] overflow-y-auto bg-black/60 rounded-2xl border-2 border-white/20 p-4 text-xs sm:text-sm">
+                    <table className="w-full text-left border-collapse">
+                      <thead className="text-[#FFD700] border-b-2 border-[#FFD700]/50 sticky top-0 bg-[#1A0306] z-10">
+                        <tr>
+                          <th className="p-3 font-black">భక్తుడి ఐడీ</th>
+                          <th className="p-3 font-black">పేరు</th>
+                          <th className="p-3 font-black">ఫోన్ నంబర్</th>
+                          <th className="p-3 font-black">ఇమెయిల్</th>
+                          <th className="p-3 font-black">స్థలం / ఊరు</th>
+                          <th className="p-3 font-black">నమోదు తేదీ</th>
+                          <th className="p-3 font-black text-center">స్థితి</th>
+                          <th className="p-3 text-right font-black">చర్య</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-white/15">
+                        {Array.isArray(db.devotees) && db.devotees.map((dev, idx) => (
+                          <tr key={dev.id || idx} className="hover:bg-white/5 transition-colors">
+                            <td className="p-3 font-mono font-bold text-amber-300">{dev.id}</td>
+                            <td className="p-3 font-extrabold text-white text-sm sm:text-base">{dev.name}</td>
+                            <td className="p-3 font-mono text-gray-200 font-bold">{dev.phone}</td>
+                            <td className="p-3 text-gray-300">{dev.email || 'N/A'}</td>
+                            <td className="p-3 text-amber-100 font-bold">{dev.city || 'పామినివాండ్లవూరు'}</td>
+                            <td className="p-3 font-mono text-gray-400">{dev.registeredAt || '12-05-2026'}</td>
+                            <td className="p-3 text-center">
+                              <span className="bg-emerald-800 text-emerald-100 text-[10px] font-black px-2.5 py-1 rounded-full border border-emerald-400">
+                                🟢 ACTIVE
+                              </span>
+                            </td>
+                            <td className="p-3 text-right">
+                              <button
+                                onClick={() => handleDeleteDevotee(dev.id)}
+                                className="p-1.5 rounded-lg bg-red-600/40 text-red-200 hover:bg-red-600 hover:text-white transition-colors"
+                                title="Delete Devotee User Account"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
 
                 {/* Donors List with Delete Button - Large & Clear Table */}
                 <div className="gold-card space-y-4 !p-6 sm:!p-8">
