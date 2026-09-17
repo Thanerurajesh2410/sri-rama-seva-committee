@@ -101,33 +101,6 @@ export default function V2Navbar({ activeModule, setActiveModule, lang, setLang,
               <span>🛕 Devotee View (భక్తుల పోర్టల్)</span>
             </button>
 
-            {/* 3. Admin View (Temple ERP Suite) */}
-            <button
-              onClick={() => setActiveModule('erp-admin')}
-              className={`btn-autofit px-3.5 md:px-4 py-2 rounded-xl text-xs md:text-sm font-black transition-all flex items-center gap-1.5 shrink-0 ${
-                activeModule === 'erp-admin'
-                  ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white border border-amber-500 shadow-sm scale-105'
-                  : 'text-slate-700 bg-slate-100 border border-slate-200 hover:bg-amber-50 hover:text-amber-800'
-              }`}
-              title="Admin View - Financial management, donor approvals & database"
-            >
-              <LayoutDashboard className="w-4 h-4 text-amber-600" />
-              <span>⚙️ Admin View (టెంపుల్ ERP అడ్మిన్)</span>
-            </button>
-
-            {/* 4. Swagger API Explorer Button */}
-            <button
-              onClick={() => setActiveModule('api-explorer')}
-              className={`px-3.5 md:px-4.5 py-2 rounded-xl text-sm md:text-base font-black transition-all flex items-center gap-1.5 shrink-0 ${
-                activeModule === 'api-explorer'
-                  ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white border border-amber-500 shadow-sm scale-105'
-                  : 'text-slate-700 bg-slate-100 border border-slate-200 hover:bg-amber-50 hover:text-amber-800'
-              }`}
-            >
-              <FileText className="w-4 h-4 text-amber-600" />
-              <span>Swagger REST API</span>
-            </button>
-
             {/* Donate CTA */}
             <button
               onClick={() => setActiveModule('public-donations')}
@@ -135,25 +108,6 @@ export default function V2Navbar({ activeModule, setActiveModule, lang, setLang,
             >
               <Heart className="w-4 h-4 fill-white text-white" />
               <span>ఈ-హుండి విరాళం</span>
-            </button>
-
-            {/* Theme Toggle Button */}
-            <button
-              onClick={toggleTheme}
-              className="px-3.5 py-2 rounded-xl text-xs md:text-sm font-black bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100 transition-all flex items-center gap-1.5 shrink-0 shadow-xs"
-              title="థీమ్ మార్చుకోండి (Light / Dark Theme Toggle)"
-            >
-              {theme === 'theme-light' ? (
-                <>
-                  <Sun className="w-4 h-4 text-amber-600" />
-                  <span>లైట్ థీమ్</span>
-                </>
-              ) : (
-                <>
-                  <Moon className="w-4 h-4 text-amber-600" />
-                  <span>డార్క్ థీమ్</span>
-                </>
-              )}
             </button>
 
           </div>
@@ -185,13 +139,6 @@ export default function V2Navbar({ activeModule, setActiveModule, lang, setLang,
             >
               <Users className="w-5 h-5 text-sky-400" />
               <span>2. భక్తుల పోర్టల్ (Devotee Portal)</span>
-            </button>
-            <button
-              onClick={() => { setActiveModule('erp-admin'); setIsOpen(false); }}
-              className="w-full text-left p-3.5 rounded-xl text-sm sm:text-base font-black bg-[#5C121E] text-[#FFD700] border-2 border-[#FFD700] shadow-lg flex items-center gap-2.5"
-            >
-              <LayoutDashboard className="w-5 h-5 text-[#FFD700]" />
-              <span>3. శ్రీ రామాలయం ERP అడ్మిన్ (Temple ERP Suite)</span>
             </button>
             <button
               onClick={() => { setActiveModule('public-donations'); setIsOpen(false); }}
