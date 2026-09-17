@@ -85,6 +85,272 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
     }
   };
 
+  // Edit Donation State
+  const [editingDonation, setEditingDonation] = useState(null);
+  const [editDonName, setEditDonName] = useState('');
+  const [editDonPhone, setEditDonPhone] = useState('');
+  const [editDonAmount, setEditDonAmount] = useState('');
+  const [editDonSeva, setEditDonSeva] = useState('');
+  const [editDonMode, setEditDonMode] = useState('Cash / Bank Transfer');
+  const [editDonCity, setEditDonCity] = useState('');
+
+  const handleOpenEditDonation = (donation) => {
+    setEditingDonation(donation);
+    setEditDonName(donation.donorName || '');
+    setEditDonPhone(donation.phone || '');
+    setEditDonAmount(donation.amount || '');
+    setEditDonSeva(donation.seva || '');
+    setEditDonMode(donation.mode || 'Cash / Bank Transfer');
+    setEditDonCity(donation.city || 'పామినివాండ్లవూరు');
+  };
+
+  const handleSaveEditDonation = (e) => {
+    e.preventDefault();
+    if (!editingDonation) return;
+    const currentDB = getDB();
+    const donIdx = (currentDB.donations || []).findIndex(d => String(d.id) === String(editingDonation.id));
+    if (donIdx > -1) {
+      currentDB.donations[donIdx] = {
+        ...currentDB.donations[donIdx],
+        donorName: editDonName,
+        phone: editDonPhone,
+        amount: parseInt(editDonAmount) || 0,
+        seva: editDonSeva,
+        mode: editDonMode,
+        city: editDonCity
+      };
+      saveDB(currentDB);
+      setDbState({ ...currentDB, donations: [...currentDB.donations] });
+      addAuditLog(userRole, `Updated Donation Record (${editingDonation.id} - ${editDonName})`);
+      showToast(`'${editDonName}' విరాళం వివరాలు సవరించబడ్డాయి!`);
+      setEditingDonation(null);
+    }
+  };
+
+  // Edit Expense State
+  const [editingExpense, setEditingExpense] = useState(null);
+  const [editExpCat, setEditExpCat] = useState('');
+  const [editExpAmt, setEditExpAmt] = useState('');
+  const [editExpVendor, setEditExpVendor] = useState('');
+  const [editExpDate, setEditExpDate] = useState('');
+
+  const handleOpenEditExpense = (exp) => {
+    setEditingExpense(exp);
+    setEditExpCat(exp.category || '');
+    setEditExpAmt(exp.amount || '');
+    setEditExpVendor(exp.vendor || '');
+    setEditExpDate(exp.date || new Date().toLocaleDateString('te-IN'));
+  };
+
+  const handleSaveEditExpense = (e) => {
+    e.preventDefault();
+    if (!editingExpense) return;
+    const currentDB = getDB();
+    const expIdx = (currentDB.expenses || []).findIndex(x => String(x.id) === String(editingExpense.id));
+    if (expIdx > -1) {
+      currentDB.expenses[expIdx] = {
+        ...currentDB.expenses[expIdx],
+        category: editExpCat,
+        amount: parseInt(editExpAmt) || 0,
+        vendor: editExpVendor,
+        date: editExpDate
+      };
+      saveDB(currentDB);
+      setDbState({ ...currentDB, expenses: [...currentDB.expenses] });
+      addAuditLog(userRole, `Updated Expense Record (${editingExpense.id} - ${editExpCat})`);
+      showToast(`'${editExpCat}' ఖర్చు వివరాలు సవరించబడ్డాయి!`);
+      setEditingExpense(null);
+    }
+  };
+
+  const handleDeleteExpense = (expId) => {
+    if (window.confirm("మీరు ఖచ్చితంగా ఈ ఖర్చు రికార్డును తొలగించాలనుకుంటున్నారా?")) {
+      const currentDB = getDB();
+      currentDB.expenses = (currentDB.expenses || []).filter(x => String(x.id) !== String(expId));
+      saveDB(currentDB);
+      setDbState({ ...currentDB, expenses: [...currentDB.expenses] });
+      addAuditLog(userRole, `Deleted Expense Record (${expId})`);
+      showToast("ఖర్చు రికార్డు తొలిగించబడింది.");
+    }
+  };
+
+  // Edit Material State
+  const [editingMaterial, setEditingMaterial] = useState(null);
+  const [editMatType, setEditMatType] = useState('');
+  const [editMatQty, setEditMatQty] = useState('');
+  const [editMatDonor, setEditMatDonor] = useState('');
+
+  const handleOpenEditMaterial = (mat) => {
+    setEditingMaterial(mat);
+    setEditMatType(mat.type || materialDropdownOptions[0]);
+    setEditMatQty(mat.qty || '');
+    setEditMatDonor(mat.donor || '');
+  };
+
+  const handleSaveEditMaterial = (e) => {
+    e.preventDefault();
+    if (!editingMaterial) return;
+    const currentDB = getDB();
+    const matIdx = (currentDB.materials || []).findIndex(m => String(m.id) === String(editingMaterial.id));
+    if (matIdx > -1) {
+      currentDB.materials[matIdx] = {
+        ...currentDB.materials[matIdx],
+        type: editMatType,
+        qty: editMatQty,
+        donor: editMatDonor
+      };
+      saveDB(currentDB);
+      setDbState({ ...currentDB, materials: [...currentDB.materials] });
+      addAuditLog(userRole, `Updated Material Donation (${editingMaterial.id} - ${editMatType})`);
+      showToast(`'${editMatType}' సామగ్రి వివరాలు సవరించబడ్డాయి!`);
+      setEditingMaterial(null);
+    }
+  };
+
+  const handleDeleteMaterial = (matId) => {
+    if (window.confirm("మీరు ఖచ్చితంగా ఈ సామగ్రి రికార్డును తొలగించాలనుకుంటున్నారా?")) {
+      const currentDB = getDB();
+      currentDB.materials = (currentDB.materials || []).filter(m => String(m.id) !== String(matId));
+      saveDB(currentDB);
+      setDbState({ ...currentDB, materials: [...currentDB.materials] });
+      addAuditLog(userRole, `Deleted Material Record (${matId})`);
+      showToast("సామగ్రి రికార్డు తొలిగించబడింది.");
+    }
+  };
+
+  // Edit Volunteer State
+  const [editingVolunteer, setEditingVolunteer] = useState(null);
+  const [editVolName, setEditVolName] = useState('');
+  const [editVolPhone, setEditVolPhone] = useState('');
+  const [editVolTask, setEditVolTask] = useState('');
+  const [editVolStatus, setEditVolStatus] = useState('Active');
+
+  const handleOpenEditVolunteer = (vol) => {
+    setEditingVolunteer(vol);
+    setEditVolName(vol.name || '');
+    setEditVolPhone(vol.phone || '');
+    setEditVolTask(vol.task || '');
+    setEditVolStatus(vol.status || 'Active');
+  };
+
+  const handleSaveEditVolunteer = (e) => {
+    e.preventDefault();
+    if (!editingVolunteer) return;
+    const currentDB = getDB();
+    const volIdx = (currentDB.volunteers || []).findIndex(v => String(v.id) === String(editingVolunteer.id));
+    if (volIdx > -1) {
+      currentDB.volunteers[volIdx] = {
+        ...currentDB.volunteers[volIdx],
+        name: editVolName,
+        phone: editVolPhone,
+        task: editVolTask,
+        status: editVolStatus
+      };
+      saveDB(currentDB);
+      setDbState({ ...currentDB, volunteers: [...currentDB.volunteers] });
+      addAuditLog(userRole, `Updated Volunteer Record (${editingVolunteer.id} - ${editVolName})`);
+      showToast(`'${editVolName}' వాలంటీర్ వివరాలు సవరించబడ్డాయి!`);
+      setEditingVolunteer(null);
+    }
+  };
+
+  const handleDeleteVolunteer = (volId) => {
+    if (window.confirm("మీరు ఖచ్చితంగా ఈ వాలంటీర్ రికార్డును తొలగించాలనుకుంటున్నారా?")) {
+      const currentDB = getDB();
+      currentDB.volunteers = (currentDB.volunteers || []).filter(v => String(v.id) !== String(volId));
+      saveDB(currentDB);
+      setDbState({ ...currentDB, volunteers: [...currentDB.volunteers] });
+      addAuditLog(userRole, `Deleted Volunteer Record (${volId})`);
+      showToast("వాలంటీర్ రికార్డు తొలిగించబడింది.");
+    }
+  };
+
+  // Edit Gallery Photo State
+  const [editingGalleryPhoto, setEditingGalleryPhoto] = useState(null);
+  const [editImgTitle, setEditImgTitle] = useState('');
+  const [editImgTag, setEditImgTag] = useState('');
+  const [editImgSrc, setEditImgSrc] = useState('');
+
+  const handleOpenEditGalleryImage = (img) => {
+    setEditingGalleryPhoto(img);
+    setEditImgTitle(img.title || '');
+    setEditImgTag(img.tag || '');
+    setEditImgSrc(img.src || '');
+  };
+
+  const handleSaveEditGalleryImage = (e) => {
+    e.preventDefault();
+    if (!editingGalleryPhoto) return;
+    const currentDB = getDB();
+    const imgIdx = (currentDB.galleryImages || []).findIndex(i => String(i.id) === String(editingGalleryPhoto.id));
+    if (imgIdx > -1) {
+      currentDB.galleryImages[imgIdx] = {
+        ...currentDB.galleryImages[imgIdx],
+        title: editImgTitle,
+        tag: editImgTag,
+        src: editImgSrc
+      };
+      saveDB(currentDB);
+      setDbState({ ...currentDB, galleryImages: [...currentDB.galleryImages] });
+      addAuditLog(userRole, `Updated Gallery Image (${editingGalleryPhoto.id} - ${editImgTitle})`);
+      showToast(`'${editImgTitle}' గ్యాలరీ ఫోటో వివరాలు సవరించబడ్డాయి!`);
+      setEditingGalleryPhoto(null);
+    }
+  };
+
+  // Edit Seva Booking State
+  const [editingSevaBooking, setEditingSevaBooking] = useState(null);
+  const [editSevaDevName, setEditSevaDevName] = useState('');
+  const [editSevaPhone, setEditSevaPhone] = useState('');
+  const [editSevaName, setEditSevaName] = useState('');
+  const [editSevaDate, setEditSevaDate] = useState('');
+  const [editSevaAmount, setEditSevaAmount] = useState('');
+  const [editSevaStatus, setEditSevaStatus] = useState('Confirmed');
+
+  const handleOpenEditSevaBooking = (seva) => {
+    setEditingSevaBooking(seva);
+    setEditSevaDevName(seva.devoteeName || '');
+    setEditSevaPhone(seva.phone || '');
+    setEditSevaName(seva.sevaName || '');
+    setEditSevaDate(seva.date || '');
+    setEditSevaAmount(seva.amount || '');
+    setEditSevaStatus(seva.status || 'Confirmed');
+  };
+
+  const handleSaveEditSevaBooking = (e) => {
+    e.preventDefault();
+    if (!editingSevaBooking) return;
+    const currentDB = getDB();
+    const sevaIdx = (currentDB.sevaBookings || []).findIndex(s => String(s.id) === String(editingSevaBooking.id));
+    if (sevaIdx > -1) {
+      currentDB.sevaBookings[sevaIdx] = {
+        ...currentDB.sevaBookings[sevaIdx],
+        devoteeName: editSevaDevName,
+        phone: editSevaPhone,
+        sevaName: editSevaName,
+        date: editSevaDate,
+        amount: parseInt(editSevaAmount) || 0,
+        status: editSevaStatus
+      };
+      saveDB(currentDB);
+      setDbState({ ...currentDB, sevaBookings: [...currentDB.sevaBookings] });
+      addAuditLog(userRole, `Updated Seva Booking (${editingSevaBooking.id} - ${editSevaName})`);
+      showToast(`'${editSevaName}' సేవా బుకింగ్ వివరాలు సవరించబడ్డాయి!`);
+      setEditingSevaBooking(null);
+    }
+  };
+
+  const handleDeleteSevaBooking = (sevaId) => {
+    if (window.confirm("మీరు ఖచ్చితంగా ఈ సేవా బుకింగ్ రికార్డును తొలగించాలనుకుంటున్నారా?")) {
+      const currentDB = getDB();
+      currentDB.sevaBookings = (currentDB.sevaBookings || []).filter(s => String(s.id) !== String(sevaId));
+      saveDB(currentDB);
+      setDbState({ ...currentDB, sevaBookings: [...currentDB.sevaBookings] });
+      addAuditLog(userRole, `Deleted Seva Booking Record (${sevaId})`);
+      showToast("సేవా బుకింగ్ రికార్డు తొలిగించబడింది.");
+    }
+  };
+
   useEffect(() => {
     testSupabaseConnection().then(status => {
       setCloudConnStatus(status);
@@ -1731,13 +1997,22 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
                               <td className="p-3.5 text-amber-100 font-bold">{d.seva}</td>
                               <td className="p-3.5 text-gray-300 font-mono font-bold">{d.date}</td>
                               <td className="p-3.5 text-right">
-                                <button
-                                  onClick={() => handleDeleteDonation(d.id)}
-                                  className="p-2 rounded-xl bg-red-600/30 text-red-300 hover:bg-red-600 hover:text-white transition-colors"
-                                  title="Delete Donor Record"
-                                >
-                                  <Trash2 className="w-5 h-5" />
-                                </button>
+                                <div className="flex items-center justify-end gap-2">
+                                  <button
+                                    onClick={() => handleOpenEditDonation(d)}
+                                    className="p-2 rounded-xl bg-amber-600/40 text-amber-200 hover:bg-amber-500 hover:text-white transition-colors"
+                                    title="Edit Donation Record"
+                                  >
+                                    <Edit3 className="w-5 h-5" />
+                                  </button>
+                                  <button
+                                    onClick={() => handleDeleteDonation(d.id)}
+                                    className="p-2 rounded-xl bg-red-600/30 text-red-300 hover:bg-red-600 hover:text-white transition-colors"
+                                    title="Delete Donor Record"
+                                  >
+                                    <Trash2 className="w-5 h-5" />
+                                  </button>
+                                </div>
                               </td>
                             </tr>
                           );
@@ -1788,12 +2063,28 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
                 <div className="gold-card space-y-4 !p-6 sm:!p-8">
                   <h4 className="text-xl sm:text-2xl font-black text-[#FFD700] mb-4">నమోదైన ఖర్చులు:</h4>
                   {db.expenses.map((e, idx) => (
-                    <div key={idx} className="flex justify-between items-center p-4 rounded-2xl bg-black/60 border border-white/15">
+                    <div key={e.id || idx} className="flex justify-between items-center p-4 rounded-2xl bg-black/60 border border-white/15 hover:border-amber-400/40 transition-all">
                       <div>
                         <span className="font-black text-white text-base sm:text-lg block">{e.category}</span>
                         <span className="text-gray-300 block text-xs sm:text-sm font-bold mt-0.5">{e.date} • Vendor: {e.vendor}</span>
                       </div>
-                      <span className="font-mono text-sky-300 font-black text-lg sm:text-xl">₹ {parseInt(e.amount).toLocaleString()}</span>
+                      <div className="flex items-center gap-3">
+                        <span className="font-mono text-sky-300 font-black text-lg sm:text-xl">₹ {parseInt(e.amount).toLocaleString()}</span>
+                        <button
+                          onClick={() => handleOpenEditExpense(e)}
+                          className="p-2 rounded-xl bg-amber-600/40 text-amber-200 hover:bg-amber-500 hover:text-white transition-colors"
+                          title="Edit Expense Record"
+                        >
+                          <Edit3 className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteExpense(e.id)}
+                          className="p-2 rounded-xl bg-red-600/40 text-red-200 hover:bg-red-600 hover:text-white transition-colors"
+                          title="Delete Expense Record"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -1957,12 +2248,30 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
                   </button>
                 </form>
 
-                <div className="gold-card space-y-2">
-                  <h4 className="text-sm font-bold text-[#FFD700]">సామగ్రి రికార్డులు (Material Ledger):</h4>
+                <div className="gold-card space-y-3 !p-6">
+                  <h4 className="text-lg font-black text-[#FFD700]">సామగ్రి రికార్డులు (Material Ledger):</h4>
                   {db.materials.map((m, idx) => (
-                    <div key={idx} className="flex justify-between p-3 rounded-lg bg-black/40 border border-white/10">
-                      <span className="font-bold text-white text-sm">{m.type} ({m.qty})</span>
-                      <span className="text-amber-300 font-bold">Donor: {m.donor}</span>
+                    <div key={m.id || idx} className="flex justify-between items-center p-3.5 rounded-2xl bg-black/60 border border-white/15 hover:border-amber-400/40 transition-all">
+                      <div>
+                        <span className="font-black text-white text-sm sm:text-base block">{m.type} ({m.qty})</span>
+                        <span className="text-amber-300 font-bold text-xs">దాత: {m.donor}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleOpenEditMaterial(m)}
+                          className="p-2 rounded-xl bg-amber-600/40 text-amber-200 hover:bg-amber-500 hover:text-white transition-colors"
+                          title="Edit Material Record"
+                        >
+                          <Edit3 className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteMaterial(m.id)}
+                          className="p-2 rounded-xl bg-red-600/40 text-red-200 hover:bg-red-600 hover:text-white transition-colors"
+                          title="Delete Material Record"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -1971,32 +2280,50 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
 
             {/* TAB 7: VOLUNTEERS */}
             {activeTab === 'volunteers' && (
-              <div className="gold-card space-y-4 text-xs">
-                <h3 className="text-lg font-bold text-[#FFD700]">వాలంటీర్ల రికార్డులు ({db.volunteers.length})</h3>
-                <form onSubmit={handleAddVolunteer} className="flex gap-2">
+              <div className="gold-card space-y-4 !p-6 sm:!p-8">
+                <h3 className="text-xl sm:text-2xl font-black text-[#FFD700]">వాలంటీర్ల రికార్డులు ({db.volunteers.length})</h3>
+                <form onSubmit={handleAddVolunteer} className="flex flex-col sm:flex-row gap-3">
                   <input
                     type="text"
                     required
                     placeholder="వాలంటీర్ పేరు"
                     value={newVolName}
                     onChange={(e) => setNewVolName(e.target.value)}
-                    className="flex-1 bg-[#1A0306] border border-white/20 rounded-xl p-2 text-xs text-white"
+                    className="flex-1 bg-[#1A0306] border border-white/20 rounded-xl p-3 text-sm text-white font-bold"
                   />
                   <input
                     type="text"
                     placeholder="బాధ్యత"
                     value={newVolTask}
                     onChange={(e) => setNewVolTask(e.target.value)}
-                    className="flex-1 bg-[#1A0306] border border-white/20 rounded-xl p-2 text-xs text-white"
+                    className="flex-1 bg-[#1A0306] border border-white/20 rounded-xl p-3 text-sm text-white font-bold"
                   />
-                  <button type="submit" className="btn-gold text-xs px-4">చేర్చు</button>
+                  <button type="submit" className="btn-gold text-sm py-3 px-6 font-black rounded-xl">చేర్చు</button>
                 </form>
 
-                <div className="space-y-2 pt-2">
+                <div className="space-y-3 pt-2">
                   {db.volunteers.map((v, idx) => (
-                    <div key={idx} className="flex justify-between p-2.5 rounded-lg bg-black/40 border border-white/10">
-                      <span className="font-bold text-white">{v.name} ({v.phone})</span>
-                      <span className="text-amber-300">{v.task}</span>
+                    <div key={v.id || idx} className="flex justify-between items-center p-3.5 rounded-2xl bg-black/60 border border-white/15 hover:border-amber-400/40 transition-all">
+                      <div>
+                        <span className="font-black text-white text-sm sm:text-base block">{v.name} ({v.phone})</span>
+                        <span className="text-amber-300 text-xs font-bold">{v.task} • Status: {v.status || 'Active'}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleOpenEditVolunteer(v)}
+                          className="p-2 rounded-xl bg-amber-600/40 text-amber-200 hover:bg-amber-500 hover:text-white transition-colors"
+                          title="Edit Volunteer Record"
+                        >
+                          <Edit3 className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteVolunteer(v.id)}
+                          className="p-2 rounded-xl bg-red-600/40 text-red-200 hover:bg-red-600 hover:text-white transition-colors"
+                          title="Delete Volunteer Record"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -2211,14 +2538,24 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
                                 <span>⭐ మొదటి ఫోటోగా అమర్చు (Set as 1st)</span>
                               </button>
                             )}
-                            <button
-                              type="button"
-                              onClick={() => handleDeleteGalleryImage(img.id)}
-                              className="btn-outline text-xs !py-2 !px-3 text-red-400 border-red-500/50 hover:bg-red-600 hover:text-white rounded-xl w-full flex items-center justify-center gap-1.5 font-bold"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                              <span>తొలగించండి (Delete)</span>
-                            </button>
+                            <div className="flex gap-2">
+                              <button
+                                type="button"
+                                onClick={() => handleOpenEditGalleryImage(img)}
+                                className="btn-primary text-xs !py-2 !px-3 rounded-xl flex-1 flex items-center justify-center gap-1 font-extrabold shadow-md"
+                              >
+                                <Edit3 className="w-4 h-4" />
+                                <span>సవరించు</span>
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteGalleryImage(img.id)}
+                                className="btn-outline text-xs !py-2 !px-3 text-red-400 border-red-500/50 hover:bg-red-600 hover:text-white rounded-xl flex-1 flex items-center justify-center gap-1 font-bold"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                                <span>తొలగించు</span>
+                              </button>
+                            </div>
                           </div>
                         </div>
                       ))}
@@ -3648,6 +3985,294 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
                   </div>
                 </div>
 
+              </div>
+            )}
+
+            {/* EDIT DONATION MODAL OVERLAY */}
+            {editingDonation && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn" onClick={() => setEditingDonation(null)}>
+                <div className="bg-[#1A0306] border-3 border-[#FFD700] p-6 sm:p-8 rounded-3xl max-w-lg w-full shadow-2xl space-y-5 text-left text-white relative" onClick={(e) => e.stopPropagation()}>
+                  <div className="flex justify-between items-center border-b border-white/20 pb-3">
+                    <h4 className="text-xl font-black text-[#FFD700] flex items-center gap-2 heading-telugu">
+                      <Edit3 className="w-5 h-5 text-amber-400" />
+                      <span>విరాళం రికార్డు సవరించండి ({editingDonation.id})</span>
+                    </h4>
+                    <button onClick={() => setEditingDonation(null)} className="text-gray-400 hover:text-white text-lg font-bold">✕</button>
+                  </div>
+                  <form onSubmit={handleSaveEditDonation} className="space-y-4">
+                    <div>
+                      <label className="text-xs font-extrabold text-amber-200 block mb-1">దాత పేరు (Donor Name) *</label>
+                      <input
+                        type="text"
+                        required
+                        value={editDonName}
+                        onChange={(e) => setEditDonName(e.target.value)}
+                        className="w-full bg-[#3A0A11] border border-white/30 rounded-xl p-3 text-sm text-white font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-extrabold text-amber-200 block mb-1">ఫోన్ నంబర్ (Phone) *</label>
+                      <input
+                        type="tel"
+                        required
+                        value={editDonPhone}
+                        onChange={(e) => setEditDonPhone(e.target.value)}
+                        className="w-full bg-[#3A0A11] border border-white/30 rounded-xl p-3 text-sm text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-extrabold text-amber-200 block mb-1">మొత్తం (Amount ₹) *</label>
+                      <input
+                        type="number"
+                        required
+                        value={editDonAmount}
+                        onChange={(e) => setEditDonAmount(e.target.value)}
+                        className="w-full bg-[#3A0A11] border border-white/30 rounded-xl p-3 text-sm text-[#FFD700] font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-extrabold text-amber-200 block mb-1">వర్గం / సేవ (Seva)</label>
+                      <input
+                        type="text"
+                        value={editDonSeva}
+                        onChange={(e) => setEditDonSeva(e.target.value)}
+                        className="w-full bg-[#3A0A11] border border-white/30 rounded-xl p-3 text-sm text-white font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-extrabold text-amber-200 block mb-1">గ్రామం / ఊరు (City)</label>
+                      <input
+                        type="text"
+                        value={editDonCity}
+                        onChange={(e) => setEditDonCity(e.target.value)}
+                        className="w-full bg-[#3A0A11] border border-white/30 rounded-xl p-3 text-sm text-white font-bold"
+                      />
+                    </div>
+                    <div className="flex justify-end gap-3 pt-2">
+                      <button type="button" onClick={() => setEditingDonation(null)} className="px-4 py-2 rounded-xl bg-gray-800 text-gray-200 text-xs font-bold hover:bg-gray-700">
+                        రద్దు చేయి
+                      </button>
+                      <button type="submit" className="px-5 py-2 rounded-xl bg-emerald-600 text-white text-xs font-black hover:bg-emerald-500 shadow-lg">
+                        ✓ మార్పులు సేవ్ చేయి
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
+
+            {/* EDIT EXPENSE MODAL OVERLAY */}
+            {editingExpense && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn" onClick={() => setEditingExpense(null)}>
+                <div className="bg-[#1A0306] border-3 border-[#FFD700] p-6 sm:p-8 rounded-3xl max-w-lg w-full shadow-2xl space-y-5 text-left text-white relative" onClick={(e) => e.stopPropagation()}>
+                  <div className="flex justify-between items-center border-b border-white/20 pb-3">
+                    <h4 className="text-xl font-black text-[#FFD700] flex items-center gap-2 heading-telugu">
+                      <Edit3 className="w-5 h-5 text-amber-400" />
+                      <span>ఖర్చు రికార్డు సవరించండి ({editingExpense.id})</span>
+                    </h4>
+                    <button onClick={() => setEditingExpense(null)} className="text-gray-400 hover:text-white text-lg font-bold">✕</button>
+                  </div>
+                  <form onSubmit={handleSaveEditExpense} className="space-y-4">
+                    <div>
+                      <label className="text-xs font-extrabold text-amber-200 block mb-1">ఖర్చు విభాగం (Category) *</label>
+                      <input
+                        type="text"
+                        required
+                        value={editExpCat}
+                        onChange={(e) => setEditExpCat(e.target.value)}
+                        className="w-full bg-[#3A0A11] border border-white/30 rounded-xl p-3 text-sm text-white font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-extrabold text-amber-200 block mb-1">మొత్తం (Amount ₹) *</label>
+                      <input
+                        type="number"
+                        required
+                        value={editExpAmt}
+                        onChange={(e) => setEditExpAmt(e.target.value)}
+                        className="w-full bg-[#3A0A11] border border-white/30 rounded-xl p-3 text-sm text-[#FFD700] font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-extrabold text-amber-200 block mb-1">వెండర్ / సంస్థ (Vendor)</label>
+                      <input
+                        type="text"
+                        value={editExpVendor}
+                        onChange={(e) => setEditExpVendor(e.target.value)}
+                        className="w-full bg-[#3A0A11] border border-white/30 rounded-xl p-3 text-sm text-white font-bold"
+                      />
+                    </div>
+                    <div className="flex justify-end gap-3 pt-2">
+                      <button type="button" onClick={() => setEditingExpense(null)} className="px-4 py-2 rounded-xl bg-gray-800 text-gray-200 text-xs font-bold hover:bg-gray-700">
+                        రద్దు చేయి
+                      </button>
+                      <button type="submit" className="px-5 py-2 rounded-xl bg-emerald-600 text-white text-xs font-black hover:bg-emerald-500 shadow-lg">
+                        ✓ మార్పులు సేవ్ చేయి
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
+
+            {/* EDIT MATERIAL MODAL OVERLAY */}
+            {editingMaterial && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn" onClick={() => setEditingMaterial(null)}>
+                <div className="bg-[#1A0306] border-3 border-[#FFD700] p-6 sm:p-8 rounded-3xl max-w-lg w-full shadow-2xl space-y-5 text-left text-white relative" onClick={(e) => e.stopPropagation()}>
+                  <div className="flex justify-between items-center border-b border-white/20 pb-3">
+                    <h4 className="text-xl font-black text-[#FFD700] flex items-center gap-2 heading-telugu">
+                      <Edit3 className="w-5 h-5 text-amber-400" />
+                      <span>సామగ్రి వివరాలు సవరించండి ({editingMaterial.id})</span>
+                    </h4>
+                    <button onClick={() => setEditingMaterial(null)} className="text-gray-400 hover:text-white text-lg font-bold">✕</button>
+                  </div>
+                  <form onSubmit={handleSaveEditMaterial} className="space-y-4">
+                    <div>
+                      <label className="text-xs font-extrabold text-amber-200 block mb-1">సామగ్రి రకం (Material Type) *</label>
+                      <input
+                        type="text"
+                        required
+                        value={editMatType}
+                        onChange={(e) => setEditMatType(e.target.value)}
+                        className="w-full bg-[#3A0A11] border border-white/30 rounded-xl p-3 text-sm text-white font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-extrabold text-amber-200 block mb-1">పరిమాణం (Quantity) *</label>
+                      <input
+                        type="text"
+                        required
+                        value={editMatQty}
+                        onChange={(e) => setEditMatQty(e.target.value)}
+                        className="w-full bg-[#3A0A11] border border-white/30 rounded-xl p-3 text-sm text-white font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-extrabold text-amber-200 block mb-1">దాత పేరు (Donor Name)</label>
+                      <input
+                        type="text"
+                        value={editMatDonor}
+                        onChange={(e) => setEditMatDonor(e.target.value)}
+                        className="w-full bg-[#3A0A11] border border-white/30 rounded-xl p-3 text-sm text-white font-bold"
+                      />
+                    </div>
+                    <div className="flex justify-end gap-3 pt-2">
+                      <button type="button" onClick={() => setEditingMaterial(null)} className="px-4 py-2 rounded-xl bg-gray-800 text-gray-200 text-xs font-bold hover:bg-gray-700">
+                        రద్దు చేయి
+                      </button>
+                      <button type="submit" className="px-5 py-2 rounded-xl bg-emerald-600 text-white text-xs font-black hover:bg-emerald-500 shadow-lg">
+                        ✓ మార్పులు సేవ్ చేయి
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
+
+            {/* EDIT VOLUNTEER MODAL OVERLAY */}
+            {editingVolunteer && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn" onClick={() => setEditingVolunteer(null)}>
+                <div className="bg-[#1A0306] border-3 border-[#FFD700] p-6 sm:p-8 rounded-3xl max-w-lg w-full shadow-2xl space-y-5 text-left text-white relative" onClick={(e) => e.stopPropagation()}>
+                  <div className="flex justify-between items-center border-b border-white/20 pb-3">
+                    <h4 className="text-xl font-black text-[#FFD700] flex items-center gap-2 heading-telugu">
+                      <Edit3 className="w-5 h-5 text-amber-400" />
+                      <span>వాలంటీర్ వివరాలు సవరించండి ({editingVolunteer.id})</span>
+                    </h4>
+                    <button onClick={() => setEditingVolunteer(null)} className="text-gray-400 hover:text-white text-lg font-bold">✕</button>
+                  </div>
+                  <form onSubmit={handleSaveEditVolunteer} className="space-y-4">
+                    <div>
+                      <label className="text-xs font-extrabold text-amber-200 block mb-1">వాలంటీర్ పేరు (Name) *</label>
+                      <input
+                        type="text"
+                        required
+                        value={editVolName}
+                        onChange={(e) => setEditVolName(e.target.value)}
+                        className="w-full bg-[#3A0A11] border border-white/30 rounded-xl p-3 text-sm text-white font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-extrabold text-amber-200 block mb-1">ఫోన్ నంబర్ (Phone) *</label>
+                      <input
+                        type="tel"
+                        required
+                        value={editVolPhone}
+                        onChange={(e) => setEditVolPhone(e.target.value)}
+                        className="w-full bg-[#3A0A11] border border-white/30 rounded-xl p-3 text-sm text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-extrabold text-amber-200 block mb-1">బాధ్యత / సేవ (Task)</label>
+                      <input
+                        type="text"
+                        value={editVolTask}
+                        onChange={(e) => setEditVolTask(e.target.value)}
+                        className="w-full bg-[#3A0A11] border border-white/30 rounded-xl p-3 text-sm text-white font-bold"
+                      />
+                    </div>
+                    <div className="flex justify-end gap-3 pt-2">
+                      <button type="button" onClick={() => setEditingVolunteer(null)} className="px-4 py-2 rounded-xl bg-gray-800 text-gray-200 text-xs font-bold hover:bg-gray-700">
+                        రద్దు చేయి
+                      </button>
+                      <button type="submit" className="px-5 py-2 rounded-xl bg-emerald-600 text-white text-xs font-black hover:bg-emerald-500 shadow-lg">
+                        ✓ మార్పులు సేవ్ చేయి
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
+
+            {/* EDIT GALLERY PHOTO MODAL OVERLAY */}
+            {editingGalleryPhoto && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn" onClick={() => setEditingGalleryPhoto(null)}>
+                <div className="bg-[#1A0306] border-3 border-[#FFD700] p-6 sm:p-8 rounded-3xl max-w-lg w-full shadow-2xl space-y-5 text-left text-white relative" onClick={(e) => e.stopPropagation()}>
+                  <div className="flex justify-between items-center border-b border-white/20 pb-3">
+                    <h4 className="text-xl font-black text-[#FFD700] flex items-center gap-2 heading-telugu">
+                      <Edit3 className="w-5 h-5 text-amber-400" />
+                      <span>గ్యాలరీ ఫోటో వివరాలు సవరించండి ({editingGalleryPhoto.id})</span>
+                    </h4>
+                    <button onClick={() => setEditingGalleryPhoto(null)} className="text-gray-400 hover:text-white text-lg font-bold">✕</button>
+                  </div>
+                  <form onSubmit={handleSaveEditGalleryImage} className="space-y-4">
+                    <div>
+                      <label className="text-xs font-extrabold text-amber-200 block mb-1">ఫోటో శీర్షిక (Title) *</label>
+                      <input
+                        type="text"
+                        required
+                        value={editImgTitle}
+                        onChange={(e) => setEditImgTitle(e.target.value)}
+                        className="w-full bg-[#3A0A11] border border-white/30 rounded-xl p-3 text-sm text-white font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-extrabold text-amber-200 block mb-1">విభాగం టాగ్ (Category Tag)</label>
+                      <input
+                        type="text"
+                        value={editImgTag}
+                        onChange={(e) => setEditImgTag(e.target.value)}
+                        className="w-full bg-[#3A0A11] border border-white/30 rounded-xl p-3 text-sm text-white font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-extrabold text-amber-200 block mb-1">ఫోటో URL (Image URL / Path)</label>
+                      <input
+                        type="text"
+                        value={editImgSrc}
+                        onChange={(e) => setEditImgSrc(e.target.value)}
+                        className="w-full bg-[#3A0A11] border border-white/30 rounded-xl p-3 text-xs text-white font-mono"
+                      />
+                    </div>
+                    <div className="flex justify-end gap-3 pt-2">
+                      <button type="button" onClick={() => setEditingGalleryPhoto(null)} className="px-4 py-2 rounded-xl bg-gray-800 text-gray-200 text-xs font-bold hover:bg-gray-700">
+                        రద్దు చేయి
+                      </button>
+                      <button type="submit" className="px-5 py-2 rounded-xl bg-emerald-600 text-white text-xs font-black hover:bg-emerald-500 shadow-lg">
+                        ✓ మార్పులు సేవ్ చేయి
+                      </button>
+                    </div>
+                  </form>
+                </div>
               </div>
             )}
 

@@ -1,5 +1,5 @@
 -- ============================================================================
--- SRI RAMALAYAM TEMPLE ERP - CBEAVER / POSTGRESQL DATABASE SCHEMA
+-- SRI RAMALAYAM TEMPLE ERP - DBEAVER / POSTGRESQL DATABASE SCHEMA
 -- Execute this SQL file in DBeaver SQL Editor to initialize all tables
 -- ============================================================================
 
@@ -85,6 +85,15 @@ CREATE TABLE IF NOT EXISTS gallery_images (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+-- 9. Fixed Media Assets Table (Logo & PhonePe QR Code Global Sync)
+CREATE TABLE IF NOT EXISTS media_assets (
+  asset_key VARCHAR(50) PRIMARY KEY,
+  type VARCHAR(50),
+  fixed_url TEXT,
+  temp_url TEXT,
+  expires_at BIGINT
+);
+
 -- Row Level Security (RLS) Enablement & Public Access Policy for Supabase
 ALTER TABLE devotees ENABLE ROW LEVEL SECURITY;
 ALTER TABLE donations ENABLE ROW LEVEL SECURITY;
@@ -94,6 +103,7 @@ ALTER TABLE audit_logs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE materials ENABLE ROW LEVEL SECURITY;
 ALTER TABLE volunteers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE gallery_images ENABLE ROW LEVEL SECURITY;
+ALTER TABLE media_assets ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Allow public read/write on devotees" ON devotees FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow public read/write on donations" ON donations FOR ALL USING (true) WITH CHECK (true);
@@ -103,3 +113,4 @@ CREATE POLICY "Allow public read/write on audit_logs" ON audit_logs FOR ALL USIN
 CREATE POLICY "Allow public read/write on materials" ON materials FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow public read/write on volunteers" ON volunteers FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow public read/write on gallery_images" ON gallery_images FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow public read/write on media_assets" ON media_assets FOR ALL USING (true) WITH CHECK (true);

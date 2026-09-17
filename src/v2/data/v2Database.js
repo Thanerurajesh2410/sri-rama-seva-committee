@@ -223,6 +223,35 @@ export const syncDatabaseToSupabase = async (db) => {
         id: l.id, timestamp: l.timestamp, user_name: l.user, action: l.action
       })));
     }
+    if (db.galleryImages && db.galleryImages.length > 0) {
+      await supabase.from('gallery_images').upsert(db.galleryImages.map(g => ({
+        id: String(g.id), src: g.src, title: g.title, tag: g.tag
+      })));
+    }
+    if (db.mediaAssets) {
+      const mediaList = [];
+      if (db.mediaAssets.logo) {
+        mediaList.push({
+          asset_key: 'logo',
+          type: db.mediaAssets.logo.type || 'fixed',
+          fixed_url: db.mediaAssets.logo.fixedUrl || '',
+          temp_url: db.mediaAssets.logo.tempUrl || '',
+          expires_at: db.mediaAssets.logo.expiresAt || null
+        });
+      }
+      if (db.mediaAssets.qrCode) {
+        mediaList.push({
+          asset_key: 'qrCode',
+          type: db.mediaAssets.qrCode.type || 'fixed',
+          fixed_url: db.mediaAssets.qrCode.fixedUrl || '',
+          temp_url: db.mediaAssets.qrCode.tempUrl || '',
+          expires_at: db.mediaAssets.qrCode.expiresAt || null
+        });
+      }
+      if (mediaList.length > 0) {
+        await supabase.from('media_assets').upsert(mediaList);
+      }
+    }
   } catch (err) {
     console.warn("Supabase Sync Notice:", err);
   }
@@ -232,12 +261,14 @@ export const fetchCloudDB = async () => {
   const supabase = getSupabaseClient();
   if (!supabase) return null;
   try {
-    const [devRes, donRes, sevaRes, expRes, auditRes] = await Promise.all([
+    const [devRes, donRes, sevaRes, expRes, auditRes, galleryRes, mediaRes] = await Promise.all([
       supabase.from('devotees').select('*'),
       supabase.from('donations').select('*'),
       supabase.from('seva_bookings').select('*'),
       supabase.from('expenses').select('*'),
-      supabase.from('audit_logs').select('*')
+      supabase.from('audit_logs').select('*'),
+      supabase.from('gallery_images').select('*'),
+      supabase.from('media_assets').select('*')
     ]);
 
     const localDB = getDB();
@@ -265,6 +296,22 @@ export const fetchCloudDB = async () => {
       localDB.auditLogs = auditRes.data.map(l => ({
         id: l.id, timestamp: l.timestamp, user: l.user_name, action: l.action
       }));
+    }
+    if (galleryRes.data && galleryRes.data.length > 0) {
+      localDB.galleryImages = galleryRes.data.map(g => ({
+        id: g.id, src: getAssetUrl(g.src), title: g.title, tag: g.tag
+      }));
+    }
+    if (mediaRes.data && mediaRes.data.length > 0) {
+      if (!localDB.mediaAssets) localDB.mediaAssets = {};
+      mediaRes.data.forEach(m => {
+        localDB.mediaAssets[m.asset_key] = {
+          type: m.type,
+          fixedUrl: m.fixed_url,
+          tempUrl: m.temp_url,
+          expiresAt: m.expires_at
+        };
+      });
     }
     localStorage.setItem(DB_STORAGE_KEY, JSON.stringify(localDB));
     return localDB;

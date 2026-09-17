@@ -26,6 +26,8 @@ import ApiExplorer from './components/ApiExplorer';
 import { getDB } from './v2/data/v2Database';
 import { CheckCircle, Palette, MessageSquare, Layers } from 'lucide-react';
 
+const SITE_BUILD_VERSION = '2026.09.17.v5';
+
 export default function App() {
   const [lang, setLang] = useState('te');
   const [theme, setTheme] = useState(() => {
@@ -50,6 +52,15 @@ export default function App() {
   // Dynamic States for Donors & Committee Members
   const [donorList, setDonorList] = useState(t.donorWall.donors);
   const [committeeList, setCommitteeList] = useState(t.committee.members);
+
+  // Auto Site Build Version Tracking & Cache-Busting
+  useEffect(() => {
+    const savedVer = localStorage.getItem('sri_rama_build_version');
+    if (savedVer !== SITE_BUILD_VERSION) {
+      localStorage.setItem('sri_rama_build_version', SITE_BUILD_VERSION);
+      console.log(`[Cache-Bust] Site automatically updated to build ${SITE_BUILD_VERSION}`);
+    }
+  }, []);
 
   useEffect(() => {
     document.body.className = theme;
