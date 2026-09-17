@@ -25,6 +25,66 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
   const [cloudConnStatus, setCloudConnStatus] = useState(null);
   const [isCloudLoading, setIsCloudLoading] = useState(false);
 
+  // Edit Devotee Profile State
+  const [editingDevotee, setEditingDevotee] = useState(null);
+  const [editDevName, setEditDevName] = useState('');
+  const [editDevPhone, setEditDevPhone] = useState('');
+  const [editDevEmail, setEditDevEmail] = useState('');
+  const [editDevCity, setEditDevCity] = useState('');
+  const [editDevError, setEditDevError] = useState('');
+
+  const handleOpenEditDevotee = (devotee) => {
+    setEditingDevotee(devotee);
+    setEditDevName(devotee.name || '');
+    setEditDevPhone(devotee.phone || '');
+    setEditDevEmail(devotee.email || '');
+    setEditDevCity(devotee.city || 'పామినివాండ్లవూరు');
+    setEditDevError('');
+  };
+
+  const handleSaveEditDevotee = (e) => {
+    e.preventDefault();
+    if (!editingDevotee) return;
+    setEditDevError('');
+
+    if (editDevPhone || editDevEmail) {
+      const check = validateUniqueDevotee(editDevPhone, editDevEmail, editingDevotee.id);
+      if (!check.valid) {
+        setEditDevError(check.message);
+        showToast(check.message);
+        return;
+      }
+    }
+
+    const currentDB = getDB();
+    const devIdx = (currentDB.devotees || []).findIndex(d => String(d.id) === String(editingDevotee.id));
+    if (devIdx > -1) {
+      currentDB.devotees[devIdx] = {
+        ...currentDB.devotees[devIdx],
+        name: editDevName,
+        phone: editDevPhone,
+        email: editDevEmail,
+        city: editDevCity || 'పామినివాండ్లవూరు'
+      };
+
+      // Also update matching donor records if present
+      if (Array.isArray(currentDB.donations)) {
+        currentDB.donations = currentDB.donations.map(d => {
+          if (d.phone === editingDevotee.phone || d.donorName.toLowerCase() === editingDevotee.name.toLowerCase()) {
+            return { ...d, donorName: editDevName, phone: editDevPhone, email: editDevEmail, city: editDevCity };
+          }
+          return d;
+        });
+      }
+
+      saveDB(currentDB);
+      setDbState({ ...currentDB, devotees: [...currentDB.devotees], donations: [...currentDB.donations] });
+      addAuditLog(userRole, `Updated Devotee User Profile (${editingDevotee.id} - ${editDevName})`);
+      showToast(`'${editDevName}' భక్తుడి ప్రొఫైల్ వివరాలు విజయవంతంగా అప్‌డేట్ కాబడ్డాయి!`);
+      setEditingDevotee(null);
+    }
+  };
+
   useEffect(() => {
     testSupabaseConnection().then(status => {
       setCloudConnStatus(status);
@@ -1545,13 +1605,22 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
                               </span>
                             </td>
                             <td className="p-3 text-right">
-                              <button
-                                onClick={() => handleDeleteDevotee(dev.id)}
-                                className="p-1.5 rounded-lg bg-red-600/40 text-red-200 hover:bg-red-600 hover:text-white transition-colors"
-                                title="Delete Devotee User Account"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </button>
+                              <div className="flex items-center justify-end gap-1.5">
+                                <button
+                                  onClick={() => handleOpenEditDevotee(dev)}
+                                  className="p-1.5 rounded-lg bg-amber-600/40 text-amber-200 hover:bg-amber-500 hover:text-white transition-colors"
+                                  title="Edit Devotee User Account"
+                                >
+                                  <Edit3 className="w-4 h-4" />
+                                </button>
+                                <button
+                                  onClick={() => handleDeleteDevotee(dev.id)}
+                                  className="p-1.5 rounded-lg bg-red-600/40 text-red-200 hover:bg-red-600 hover:text-white transition-colors"
+                                  title="Delete Devotee User Account"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         ))}
@@ -1559,6 +1628,80 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
                     </table>
                   </div>
                 </div>
+
+                {/* Edit Devotee Profile Modal Overlay */}
+                {editingDevotee && (
+                  <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn" onClick={() => setEditingDevotee(null)}>
+                    <div className="bg-[#1A0306] border-3 border-[#FFD700] p-6 sm:p-8 rounded-3xl max-w-lg w-full shadow-2xl space-y-5 text-left text-white relative" onClick={(e) => e.stopPropagation()}>
+                      <div className="flex justify-between items-center border-b border-white/20 pb-3">
+                        <h4 className="text-xl font-black text-[#FFD700] flex items-center gap-2 heading-telugu">
+                          <Edit3 className="w-5 h-5 text-amber-400" />
+                          <span>భక్తుడి ప్రొఫైల్ వివరాలు సవరించండి ({editingDevotee.id})</span>
+                        </h4>
+                        <button onClick={() => setEditingDevotee(null)} className="text-gray-400 hover:text-white text-lg font-bold">✕</button>
+                      </div>
+
+                      {editDevError && (
+                        <div className="p-3 rounded-xl bg-red-950 border border-red-500 text-xs font-bold text-red-300">
+                          ⚠️ {editDevError}
+                        </div>
+                      )}
+
+                      <form onSubmit={handleSaveEditDevotee} className="space-y-4">
+                        <div className="space-y-1">
+                          <label className="text-xs font-extrabold text-amber-200 block">భక్తుడి పూర్తి పేరు (Full Name) *</label>
+                          <input
+                            type="text"
+                            required
+                            value={editDevName}
+                            onChange={(e) => setEditDevName(e.target.value)}
+                            className="w-full bg-[#3A0A11] border border-white/30 rounded-xl p-3 text-sm text-white font-bold"
+                          />
+                        </div>
+
+                        <div className="space-y-1">
+                          <label className="text-xs font-extrabold text-amber-200 block">ఫోన్ నంబర్ (Phone Number) *</label>
+                          <input
+                            type="tel"
+                            required
+                            value={editDevPhone}
+                            onChange={(e) => setEditDevPhone(e.target.value)}
+                            className="w-full bg-[#3A0A11] border border-white/30 rounded-xl p-3 text-sm text-white font-mono font-bold"
+                          />
+                        </div>
+
+                        <div className="space-y-1">
+                          <label className="text-xs font-extrabold text-amber-200 block">ఇమెయిల్ ఐడీ (Email Address)</label>
+                          <input
+                            type="email"
+                            value={editDevEmail}
+                            onChange={(e) => setEditDevEmail(e.target.value)}
+                            className="w-full bg-[#3A0A11] border border-white/30 rounded-xl p-3 text-sm text-white font-bold"
+                          />
+                        </div>
+
+                        <div className="space-y-1">
+                          <label className="text-xs font-extrabold text-amber-200 block">స్థలం / గ్రామం (City / Native Place)</label>
+                          <input
+                            type="text"
+                            value={editDevCity}
+                            onChange={(e) => setEditDevCity(e.target.value)}
+                            className="w-full bg-[#3A0A11] border border-white/30 rounded-xl p-3 text-sm text-white font-bold"
+                          />
+                        </div>
+
+                        <div className="flex justify-end gap-3 pt-2">
+                          <button type="button" onClick={() => setEditingDevotee(null)} className="px-4 py-2 rounded-xl bg-gray-800 text-gray-200 text-xs font-bold hover:bg-gray-700">
+                            రద్దు చేయి (Cancel)
+                          </button>
+                          <button type="submit" className="px-5 py-2 rounded-xl bg-emerald-600 text-white text-xs font-black hover:bg-emerald-500 shadow-lg">
+                            ✓ మార్పులు సేవ్ చేయి (Save Updates)
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                )}
 
                 {/* Donors List with Delete Button - Large & Clear Table */}
                 <div className="gold-card space-y-4 !p-6 sm:!p-8">

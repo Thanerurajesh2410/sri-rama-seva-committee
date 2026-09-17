@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { User, LogIn, UserPlus, History, Award, Bell, ShieldCheck, Heart, Download, CheckCircle2, AlertCircle, Calendar, Plus, Mail, Phone, MapPin, X } from 'lucide-react';
+import { User, LogIn, UserPlus, History, Award, Bell, ShieldCheck, Heart, Download, CheckCircle2, AlertCircle, Calendar, Plus, Mail, Phone, MapPin, X, Edit3 } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import { getDB, saveDB, validateUniqueDevotee, addAuditLog, getAssetUrl, getActiveLogo, fetchCloudDB } from '../data/v2Database';
@@ -33,8 +33,57 @@ export default function DevoteePortal({ t, showToast }) {
   const [loginPhone, setLoginPhone] = useState('');
   const [loginPass, setLoginPass] = useState('');
 
-  // Devotee Dashboard Sub-tab State
-  const [activeTab, setActiveTab] = useState('history');
+  // Devotee Profile Edit State
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [myEditName, setMyEditName] = useState('');
+  const [myEditPhone, setMyEditPhone] = useState('');
+  const [myEditEmail, setMyEditEmail] = useState('');
+  const [myEditCity, setMyEditCity] = useState('');
+  const [myEditError, setMyEditError] = useState('');
+
+  const handleOpenMyEditProfile = () => {
+    if (!loggedInDevotee) return;
+    setMyEditName(loggedInDevotee.name || '');
+    setMyEditPhone(loggedInDevotee.phone || '');
+    setMyEditEmail(loggedInDevotee.email || '');
+    setMyEditCity(loggedInDevotee.city || 'పామినివాండ్లవూరు');
+    setMyEditError('');
+    setIsEditingProfile(true);
+  };
+
+  const handleSaveMyProfile = (e) => {
+    e.preventDefault();
+    if (!loggedInDevotee) return;
+    setMyEditError('');
+
+    if (myEditPhone || myEditEmail) {
+      const check = validateUniqueDevotee(myEditPhone, myEditEmail, loggedInDevotee.id);
+      if (!check.valid) {
+        setMyEditError(check.message);
+        showToast(check.message);
+        return;
+      }
+    }
+
+    const currentDB = getDB();
+    const devIdx = (currentDB.devotees || []).findIndex(d => String(d.id) === String(loggedInDevotee.id));
+    if (devIdx > -1) {
+      const updatedDevotee = {
+        ...currentDB.devotees[devIdx],
+        name: myEditName,
+        phone: myEditPhone,
+        email: myEditEmail,
+        city: myEditCity || 'పామినివాండ్లవూరు'
+      };
+      currentDB.devotees[devIdx] = updatedDevotee;
+      saveDB(currentDB);
+      setDbState(currentDB);
+      setLoggedInDevotee(updatedDevotee);
+      addAuditLog(myEditName, `Updated Devotee Profile (${loggedInDevotee.id})`);
+      showToast("మీ ప్రొఫైల్ వివరాలు విజయవంతంగా అప్‌డేట్ కాబడ్డాయి!");
+      setIsEditingProfile(false);
+    }
+  };
 
   // Book Seva Form State
   const [bookSevaName, setBookSevaName] = useState('నిత్య పంచామృత అభిషేకం');
@@ -375,13 +424,97 @@ export default function DevoteePortal({ t, showToast }) {
                 </div>
               </div>
 
-              <button
-                onClick={() => setLoggedInDevotee(null)}
-                className="px-4 py-1.5 rounded-full text-xs font-bold bg-red-600/30 text-red-300 border border-red-500/40 hover:bg-red-600 hover:text-white transition-colors"
-              >
-                లాగౌట్ (Logout)
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleOpenMyEditProfile}
+                  className="px-4 py-1.5 rounded-full text-xs font-bold bg-amber-600/40 text-amber-200 border border-amber-400/50 hover:bg-amber-500 hover:text-white transition-colors flex items-center gap-1"
+                >
+                  <Edit3 className="w-3.5 h-3.5" />
+                  <span>సవరించండి (Edit Profile)</span>
+                </button>
+
+                <button
+                  onClick={() => setLoggedInDevotee(null)}
+                  className="px-4 py-1.5 rounded-full text-xs font-bold bg-red-600/30 text-red-300 border border-red-500/40 hover:bg-red-600 hover:text-white transition-colors"
+                >
+                  లాగౌట్ (Logout)
+                </button>
+              </div>
             </div>
+
+            {/* Devotee Self Profile Edit Modal */}
+            {isEditingProfile && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn" onClick={() => setIsEditingProfile(false)}>
+                <div className="bg-[#1A0306] border-3 border-[#FFD700] p-6 sm:p-8 rounded-3xl max-w-md w-full shadow-2xl space-y-4 text-left text-white relative" onClick={(e) => e.stopPropagation()}>
+                  <div className="flex justify-between items-center border-b border-white/20 pb-3">
+                    <h4 className="text-xl font-black text-[#FFD700] flex items-center gap-2 heading-telugu">
+                      <Edit3 className="w-5 h-5 text-amber-400" />
+                      <span>నా ప్రొఫైల్ వివరాలు సవరించండి</span>
+                    </h4>
+                    <button onClick={() => setIsEditingProfile(false)} className="text-gray-400 hover:text-white text-lg font-bold">✕</button>
+                  </div>
+
+                  {myEditError && (
+                    <div className="p-3 rounded-xl bg-red-950 border border-red-500 text-xs font-bold text-red-300">
+                      ⚠️ {myEditError}
+                    </div>
+                  )}
+
+                  <form onSubmit={handleSaveMyProfile} className="space-y-4">
+                    <div className="space-y-1">
+                      <label className="text-xs font-extrabold text-amber-200 block">పూర్తి పేరు (Full Name) *</label>
+                      <input
+                        type="text"
+                        required
+                        value={myEditName}
+                        onChange={(e) => setMyEditName(e.target.value)}
+                        className="w-full bg-[#3A0A11] border border-white/30 rounded-xl p-3 text-sm text-white font-bold"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-xs font-extrabold text-amber-200 block">ఫోన్ నంబర్ (Phone Number) *</label>
+                      <input
+                        type="tel"
+                        required
+                        value={myEditPhone}
+                        onChange={(e) => setMyEditPhone(e.target.value)}
+                        className="w-full bg-[#3A0A11] border border-white/30 rounded-xl p-3 text-sm text-white font-mono font-bold"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-xs font-extrabold text-amber-200 block">ఇమెయిల్ ఐడీ (Email Address)</label>
+                      <input
+                        type="email"
+                        value={myEditEmail}
+                        onChange={(e) => setMyEditEmail(e.target.value)}
+                        className="w-full bg-[#3A0A11] border border-white/30 rounded-xl p-3 text-sm text-white font-bold"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-xs font-extrabold text-amber-200 block">స్థలం / గ్రామం (City / Native Place)</label>
+                      <input
+                        type="text"
+                        value={myEditCity}
+                        onChange={(e) => setMyEditCity(e.target.value)}
+                        className="w-full bg-[#3A0A11] border border-white/30 rounded-xl p-3 text-sm text-white font-bold"
+                      />
+                    </div>
+
+                    <div className="flex justify-end gap-3 pt-2">
+                      <button type="button" onClick={() => setIsEditingProfile(false)} className="px-4 py-2 rounded-xl bg-gray-800 text-gray-200 text-xs font-bold hover:bg-gray-700">
+                        రద్దు చేయి (Cancel)
+                      </button>
+                      <button type="submit" className="px-5 py-2 rounded-xl bg-emerald-600 text-white text-xs font-black hover:bg-emerald-500 shadow-lg">
+                        ✓ వివరాలు అప్‌డేట్ చేయి (Save)
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
 
             {/* Dashboard Sub-Tabs Bar - Font Size 20px */}
             <div className="flex flex-wrap items-center gap-3 border-b border-white/10 pb-4 text-[20px] font-black">
