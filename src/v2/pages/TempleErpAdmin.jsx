@@ -3,7 +3,8 @@ import { LayoutDashboard, Users, Heart, DollarSign, Building2, Package, Award, S
 import confetti from 'canvas-confetti';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
-import { getDB, saveDB, validateUniqueDevotee, addAuditLog, defaultWebsiteSettings, defaultGalleryImages, generateSqlDump, resetToInitialDB, getAssetUrl, getActiveLogo, getActiveQrCode, updateMediaAsset, resetMediaAsset } from '../data/v2Database';
+import { getSupabaseCredentials, setSupabaseCredentials, testSupabaseConnection } from '../data/supabaseClient';
+import { getDB, saveDB, validateUniqueDevotee, addAuditLog, defaultWebsiteSettings, defaultGalleryImages, generateSqlDump, resetToInitialDB, getAssetUrl, getActiveLogo, getActiveQrCode, updateMediaAsset, resetMediaAsset, fetchCloudDB, syncDatabaseToSupabase } from '../data/v2Database';
 
 export default function TempleErpAdmin({ t, v2T, showToast }) {
   const [db, setDbState] = useState(getDB());
@@ -16,6 +17,73 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
 
   // ERP Role State
   const [userRole, setUserRole] = useState('ADMIN / CHIEF EXECUTIVE');
+
+  // DBeaver / Supabase Cloud DB Connection State
+  const initialCreds = getSupabaseCredentials();
+  const [cloudUrl, setCloudUrl] = useState(initialCreds.url);
+  const [cloudAnonKey, setCloudAnonKey] = useState(initialCreds.anonKey);
+  const [cloudConnStatus, setCloudConnStatus] = useState(null);
+  const [isCloudLoading, setIsCloudLoading] = useState(false);
+
+  useEffect(() => {
+    testSupabaseConnection().then(status => {
+      setCloudConnStatus(status);
+      if (status.success) {
+        fetchCloudDB().then(refreshed => {
+          if (refreshed) setDbState(refreshed);
+        });
+      }
+    });
+  }, []);
+
+  const handleTestCloudConn = async () => {
+    setIsCloudLoading(true);
+    setSupabaseCredentials(cloudUrl, cloudAnonKey);
+    const result = await testSupabaseConnection();
+    setCloudConnStatus(result);
+    setIsCloudLoading(false);
+    if (result.success) {
+      showToast("DBeaver / Supabase క్లౌడ్ డేటాబేస్‌కి విజయవంతంగా కనెక్ట్ కాబడింది!");
+    } else {
+      showToast(`కనెక్షన్ పరిశీలన: ${result.message}`);
+    }
+  };
+
+  const handleSaveCloudConn = async (e) => {
+    e.preventDefault();
+    setIsCloudLoading(true);
+    setSupabaseCredentials(cloudUrl, cloudAnonKey);
+    const result = await testSupabaseConnection();
+    setCloudConnStatus(result);
+    if (result.success) {
+      await syncDatabaseToSupabase(db);
+      addAuditLog(userRole, 'Configured and Connected DBeaver Supabase Cloud Database');
+      showToast("డేటాబేస్ వివరాలు సేవ్ అయ్యాయి & అన్ని రికార్డులు DBeaver క్లౌడ్‌కి సింక్ చేయబడ్డాయి!");
+    } else {
+      showToast(`క్రెడెన్షియల్స్ సేవ్ చేయబడ్డాయి (హెచ్చరిక: ${result.message})`);
+    }
+    setIsCloudLoading(false);
+  };
+
+  const handlePushAllToCloud = async () => {
+    setIsCloudLoading(true);
+    const currentDB = getDB();
+    await syncDatabaseToSupabase(currentDB);
+    setIsCloudLoading(false);
+    showToast("అన్ని రికార్డులు DBeaver క్లౌడ్ డేటాబేస్‌కి పుష్ చేయబడ్డాయి!");
+  };
+
+  const handlePullAllFromCloud = async () => {
+    setIsCloudLoading(true);
+    const cloudDB = await fetchCloudDB();
+    setIsCloudLoading(false);
+    if (cloudDB) {
+      setDbState(cloudDB);
+      showToast("DBeaver క్లౌడ్ నుండి డేటా విజయవంతంగా పుల్ చేయబడింది!");
+    } else {
+      showToast("క్లౌడ్ నుండి డేటా పొందుట విఫలమైంది.");
+    }
+  };
 
   // New Donor Form State (With Unique Phone & Email Validation)
   const [newDonorName, setNewDonorName] = useState('');
@@ -3132,6 +3200,122 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
             {activeTab === 'audit' && (
               <div className="space-y-6 text-xs animate-fadeIn">
                 
+                {/* DBeaver & Supabase Cloud Database Connection Manager Card */}
+                <div className="gold-card bg-[#2C070D] border-2 border-amber-400/80 p-6 rounded-3xl shadow-xl space-y-4">
+                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-white/20 pb-3">
+                    <div>
+                      <h3 className="text-lg font-black text-[#FFD700] flex items-center gap-2 heading-telugu">
+                        <Database className="w-5 h-5 text-emerald-400" />
+                        <span>🔌 DBeaver & Supabase Cloud Database కనెక్షన్ సెట్టింగ్స్</span>
+                      </h3>
+                      <p className="text-xs text-gray-300">
+                        మీ DBeaver డెస్క్‌టాప్‌లో లైవ్ టేబుల్స్ చూడటానికి Supabase URL మరియు API Anon Key ని ఇక్కడ నమోదు చేయండి.
+                      </p>
+                    </div>
+
+                    {/* Connection Status Badge */}
+                    <div className="shrink-0">
+                      {cloudConnStatus?.success ? (
+                        <span className="bg-emerald-700 text-white text-xs font-black px-3.5 py-1.5 rounded-full flex items-center gap-1.5 shadow-md border border-emerald-400">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-200" />
+                          <span>DBeaver Cloud CONNECTED</span>
+                        </span>
+                      ) : (
+                        <span className="bg-rose-900/90 text-rose-200 text-xs font-bold px-3.5 py-1.5 rounded-full flex items-center gap-1.5 border border-rose-500">
+                          <AlertCircle className="w-4 h-4 text-rose-400" />
+                          <span>{cloudConnStatus?.code ? `ERROR: ${cloudConnStatus.code}` : 'Cloud DB Disconnected / Local Mode'}</span>
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Diagnostic Alert Message if error */}
+                  {cloudConnStatus && !cloudConnStatus.success && (
+                    <div className="bg-amber-950/80 border border-amber-500/80 p-3.5 rounded-2xl text-amber-200 text-xs leading-relaxed space-y-1">
+                      <div className="font-black text-amber-300 flex items-center gap-1.5">
+                        <AlertCircle className="w-4 h-4 shrink-0" />
+                        <span>డేటాబేస్ నిర్ధారణ (Diagnostic Alert Notice):</span>
+                      </div>
+                      <p className="font-semibold text-gray-100">{cloudConnStatus.message}</p>
+                    </div>
+                  )}
+
+                  {/* Credentials Form */}
+                  <form onSubmit={handleSaveCloudConn} className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-1">
+                        <label className="text-amber-200 font-bold text-xs block">
+                          Supabase Project URL (e.g. https://xxxx.supabase.co)
+                        </label>
+                        <input
+                          type="url"
+                          required
+                          placeholder="https://your-project.supabase.co"
+                          value={cloudUrl}
+                          onChange={(e) => setCloudUrl(e.target.value)}
+                          className="w-full bg-black/60 border border-amber-500/50 rounded-xl px-3.5 py-2.5 text-white font-mono text-xs focus:ring-2 focus:ring-amber-400 outline-none"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-amber-200 font-bold text-xs block">
+                          Supabase Anon Public API Key (e.g. eyJhbG...)
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="eyJhbGciOiJIUzI1Ni..."
+                          value={cloudAnonKey}
+                          onChange={(e) => setCloudAnonKey(e.target.value)}
+                          className="w-full bg-black/60 border border-amber-500/50 rounded-xl px-3.5 py-2.5 text-white font-mono text-xs focus:ring-2 focus:ring-amber-400 outline-none"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="submit"
+                          disabled={isCloudLoading}
+                          className="px-5 py-2.5 rounded-xl font-black text-xs bg-emerald-600 text-white hover:bg-emerald-500 border border-emerald-300 transition-all shadow-lg flex items-center gap-2"
+                        >
+                          <CheckCircle2 className="w-4 h-4" />
+                          <span>{isCloudLoading ? 'సేవ్ అవుతోంది...' : 'క్రెడెన్షియల్స్ సేవ్ చేయి & కనెక్ట్ చేయి'}</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={handleTestCloudConn}
+                          disabled={isCloudLoading}
+                          className="px-4 py-2.5 rounded-xl font-black text-xs bg-amber-600 text-white hover:bg-amber-500 border border-amber-300 transition-all shadow-md"
+                        >
+                          కనెక్షన్ పరిశీలించు
+                        </button>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={handlePushAllToCloud}
+                          disabled={isCloudLoading || !cloudConnStatus?.success}
+                          className="px-4 py-2 rounded-xl font-extrabold text-xs bg-indigo-700 hover:bg-indigo-600 text-white disabled:opacity-50 transition-all"
+                        >
+                          ⬆️ Local ➔ DBeaver పుష్ చేయి
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={handlePullAllFromCloud}
+                          disabled={isCloudLoading || !cloudConnStatus?.success}
+                          className="px-4 py-2 rounded-xl font-extrabold text-xs bg-cyan-700 hover:bg-cyan-600 text-white disabled:opacity-50 transition-all"
+                        >
+                          ⬇️ DBeaver ➔ వెబ్‌సైట్ పుల్ చేయి
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+
                 {/* Database Metrics Header Card */}
                 <div className="gold-card bg-gradient-to-r from-[#3A0A11] via-[#5C121E] to-[#3A0A11] border-3 border-[#FFD700] p-6 rounded-3xl shadow-2xl space-y-4">
                   <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-white/20 pb-4">

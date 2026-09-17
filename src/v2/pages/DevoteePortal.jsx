@@ -2,10 +2,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import { User, LogIn, UserPlus, History, Award, Bell, ShieldCheck, Heart, Download, CheckCircle2, AlertCircle, Calendar, Plus, Mail, Phone, MapPin, X } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
-import { getDB, saveDB, validateUniqueDevotee, addAuditLog, getAssetUrl, getActiveLogo } from '../data/v2Database';
+import { getDB, saveDB, validateUniqueDevotee, addAuditLog, getAssetUrl, getActiveLogo, fetchCloudDB } from '../data/v2Database';
 
 export default function DevoteePortal({ t, showToast }) {
   const [db, setDbState] = useState(getDB());
+
+  useEffect(() => {
+    fetchCloudDB().then(refreshed => {
+      if (refreshed) setDbState(refreshed);
+    });
+  }, []);
   const [authMode, setAuthMode] = useState('login'); // 'login' or 'register'
 
   // Devotee Authentication State

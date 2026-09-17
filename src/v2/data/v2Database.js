@@ -1,5 +1,5 @@
 // Persistent Database Engine for Version 2 Sri Ramalayam ERP & Devotee Portal
-import { supabase, isSupabaseConfigured } from './supabaseClient';
+import { getSupabaseClient, isSupabaseConfigured } from './supabaseClient';
 
 const DB_STORAGE_KEY = 'sri_rama_erp_database_v2_v3';
 
@@ -195,7 +195,8 @@ export const getDB = () => {
 };
 
 export const syncDatabaseToSupabase = async (db) => {
-  if (!isSupabaseConfigured || !supabase) return;
+  const supabase = getSupabaseClient();
+  if (!supabase) return;
   try {
     if (db.devotees && db.devotees.length > 0) {
       await supabase.from('devotees').upsert(db.devotees.map(d => ({
@@ -228,7 +229,8 @@ export const syncDatabaseToSupabase = async (db) => {
 };
 
 export const fetchCloudDB = async () => {
-  if (!isSupabaseConfigured || !supabase) return null;
+  const supabase = getSupabaseClient();
+  if (!supabase) return null;
   try {
     const [devRes, donRes, sevaRes, expRes, auditRes] = await Promise.all([
       supabase.from('devotees').select('*'),
