@@ -179,14 +179,9 @@ export const getDB = () => {
       parsed.galleryImages = parsed.galleryImages.filter(img => !parsed.deletedGalleryImageIds.includes(String(img.id)));
     }
 
-    // Ensure all V1 classic donors exist in donations list
-    if (!parsed.donations || parsed.donations.length < 16) {
-      if (!parsed.donations) parsed.donations = [];
-      v1ClassicDonors.forEach(donor => {
-        if (!parsed.donations.some(d => d.donorName.toLowerCase() === donor.donorName.toLowerCase())) {
-          parsed.donations.push(donor);
-        }
-      });
+    // Ensure donations array exists
+    if (!parsed.donations) {
+      parsed.donations = [...v1ClassicDonors];
     }
     return parsed;
   } catch (e) {

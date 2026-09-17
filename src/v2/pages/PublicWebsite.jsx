@@ -225,8 +225,8 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
     { id: 'contact', label: 'సంప్రదించండి (Contact)', show: websiteSettings.showContact !== false }
   ].filter(tab => tab.show);
 
-  const dbDonationsList = currentDB.donations || [];
-  const dbExpensesList = currentDB.expenses || [];
+  const dbDonationsList = (currentDB.donations || []).filter(d => !d.isDeleted);
+  const dbExpensesList = (currentDB.expenses || []).filter(e => !e.isDeleted);
 
   const totalDonationsReceived = dbDonationsList.reduce((acc, curr) => {
     const num = typeof curr.amount === 'number' ? curr.amount : parseInt(String(curr.amount).replace(/\D/g, '')) || 0;

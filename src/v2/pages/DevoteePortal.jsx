@@ -217,13 +217,13 @@ export default function DevoteePortal({ t, showToast }) {
   };
 
   // Devotee Specific Donations List
-  const devoteeDonations = db.donations.filter(
-    d => loggedInDevotee && (d.phone.replace(/\D/g, '') === loggedInDevotee.phone.replace(/\D/g, '') || d.donorName.toLowerCase().includes(loggedInDevotee.name.toLowerCase()))
+  const devoteeDonations = (db.donations || []).filter(
+    d => !d.isDeleted && loggedInDevotee && (d.phone.replace(/\D/g, '') === loggedInDevotee.phone.replace(/\D/g, '') || d.donorName.toLowerCase().includes(loggedInDevotee.name.toLowerCase()))
   );
 
   // Devotee Specific Seva Bookings List
-  const devoteeSevas = db.sevaBookings.filter(
-    s => loggedInDevotee && s.phone.replace(/\D/g, '') === loggedInDevotee.phone.replace(/\D/g, '')
+  const devoteeSevas = (db.sevaBookings || []).filter(
+    s => !s.isDeleted && loggedInDevotee && s.phone.replace(/\D/g, '') === loggedInDevotee.phone.replace(/\D/g, '')
   );
 
   return (

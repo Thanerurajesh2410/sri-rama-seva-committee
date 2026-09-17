@@ -166,11 +166,14 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
   const handleDeleteExpense = (expId) => {
     if (window.confirm("మీరు ఖచ్చితంగా ఈ ఖర్చు రికార్డును తొలగించాలనుకుంటున్నారా?")) {
       const currentDB = getDB();
-      currentDB.expenses = (currentDB.expenses || []).filter(x => String(x.id) !== String(expId));
-      saveDB(currentDB);
-      setDbState({ ...currentDB, expenses: [...currentDB.expenses] });
-      addAuditLog(userRole, `Deleted Expense Record (${expId})`);
-      showToast("ఖర్చు రికార్డు తొలిగించబడింది.");
+      const exp = (currentDB.expenses || []).find(x => String(x.id) === String(expId));
+      if (exp) {
+        exp.isDeleted = true;
+        saveDB(currentDB);
+        setDbState({ ...currentDB, expenses: [...currentDB.expenses] });
+        addAuditLog(userRole, `Deleted Expense Record (${expId})`);
+        showToast("ఖర్చు రికార్డు రీసైకిల్ బిన్‌కి తరలించబడింది.");
+      }
     }
   };
 
@@ -210,11 +213,14 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
   const handleDeleteMaterial = (matId) => {
     if (window.confirm("మీరు ఖచ్చితంగా ఈ సామగ్రి రికార్డును తొలగించాలనుకుంటున్నారా?")) {
       const currentDB = getDB();
-      currentDB.materials = (currentDB.materials || []).filter(m => String(m.id) !== String(matId));
-      saveDB(currentDB);
-      setDbState({ ...currentDB, materials: [...currentDB.materials] });
-      addAuditLog(userRole, `Deleted Material Record (${matId})`);
-      showToast("సామగ్రి రికార్డు తొలిగించబడింది.");
+      const mat = (currentDB.materials || []).find(m => String(m.id) === String(matId));
+      if (mat) {
+        mat.isDeleted = true;
+        saveDB(currentDB);
+        setDbState({ ...currentDB, materials: [...currentDB.materials] });
+        addAuditLog(userRole, `Deleted Material Record (${matId})`);
+        showToast("సామగ్రి రికార్డు రీసైకిల్ బిన్‌కి తరలించబడింది.");
+      }
     }
   };
 
@@ -257,11 +263,14 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
   const handleDeleteVolunteer = (volId) => {
     if (window.confirm("మీరు ఖచ్చితంగా ఈ వాలంటీర్ రికార్డును తొలగించాలనుకుంటున్నారా?")) {
       const currentDB = getDB();
-      currentDB.volunteers = (currentDB.volunteers || []).filter(v => String(v.id) !== String(volId));
-      saveDB(currentDB);
-      setDbState({ ...currentDB, volunteers: [...currentDB.volunteers] });
-      addAuditLog(userRole, `Deleted Volunteer Record (${volId})`);
-      showToast("వాలంటీర్ రికార్డు తొలిగించబడింది.");
+      const vol = (currentDB.volunteers || []).find(v => String(v.id) === String(volId));
+      if (vol) {
+        vol.isDeleted = true;
+        saveDB(currentDB);
+        setDbState({ ...currentDB, volunteers: [...currentDB.volunteers] });
+        addAuditLog(userRole, `Deleted Volunteer Record (${volId})`);
+        showToast("వాలంటీర్ రికార్డు రీసైకిల్ బిన్‌కి తరలించబడింది.");
+      }
     }
   };
 
@@ -343,11 +352,14 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
   const handleDeleteSevaBooking = (sevaId) => {
     if (window.confirm("మీరు ఖచ్చితంగా ఈ సేవా బుకింగ్ రికార్డును తొలగించాలనుకుంటున్నారా?")) {
       const currentDB = getDB();
-      currentDB.sevaBookings = (currentDB.sevaBookings || []).filter(s => String(s.id) !== String(sevaId));
-      saveDB(currentDB);
-      setDbState({ ...currentDB, sevaBookings: [...currentDB.sevaBookings] });
-      addAuditLog(userRole, `Deleted Seva Booking Record (${sevaId})`);
-      showToast("సేవా బుకింగ్ రికార్డు తొలిగించబడింది.");
+      const seva = (currentDB.sevaBookings || []).find(s => String(s.id) === String(sevaId));
+      if (seva) {
+        seva.isDeleted = true;
+        saveDB(currentDB);
+        setDbState({ ...currentDB, sevaBookings: [...currentDB.sevaBookings] });
+        addAuditLog(userRole, `Deleted Seva Booking Record (${sevaId})`);
+        showToast("సేవా బుకింగ్ రికార్డు రీసైకిల్ బిన్‌కి తరలించబడింది.");
+      }
     }
   };
 
@@ -771,11 +783,14 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
   const handleDeleteDevotee = (devoteeId) => {
     if (window.confirm("మీరు ఖచ్చితంగా ఈ భక్తుడి రికార్డును తొలగించాలనుకుంటున్నారా?")) {
       const currentDB = getDB();
-      currentDB.devotees = (currentDB.devotees || []).filter(d => String(d.id) !== String(devoteeId));
-      saveDB(currentDB);
-      setDbState({ ...currentDB, devotees: [...currentDB.devotees] });
-      addAuditLog(userRole, `Deleted Devotee User Record (${devoteeId})`);
-      showToast("భక్తుడి ఖాతా విజయవంతంగా తొలగించబడింది!");
+      const dev = (currentDB.devotees || []).find(d => String(d.id) === String(devoteeId));
+      if (dev) {
+        dev.isDeleted = true;
+        saveDB(currentDB);
+        setDbState({ ...currentDB, devotees: [...currentDB.devotees] });
+        addAuditLog(userRole, `Deleted Devotee User Record (${devoteeId})`);
+        showToast("భక్తుడి ఖాతా రీసైకిల్ బిన్‌కి తరలించబడింది!");
+      }
     }
   };
 
@@ -866,12 +881,17 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
 
   // Delete Donation Record
   const handleDeleteDonation = (id) => {
-    const currentDB = getDB();
-    currentDB.donations = currentDB.donations.filter(d => d.id !== id);
-    saveDB(currentDB);
-    setDbState({ ...currentDB, donations: [...currentDB.donations] });
-    addAuditLog(userRole, `Deleted Donation Record (${id})`);
-    showToast("విరాళం రికార్డు తొలిగించబడింది.");
+    if (window.confirm("మీరు ఖచ్చితంగా ఈ విరాళం రికార్డును తొలగించాలనుకుంటున్నారా?")) {
+      const currentDB = getDB();
+      const don = (currentDB.donations || []).find(d => String(d.id) === String(id));
+      if (don) {
+        don.isDeleted = true;
+        saveDB(currentDB);
+        setDbState({ ...currentDB, donations: [...currentDB.donations] });
+        addAuditLog(userRole, `Deleted Donation Record (${id})`);
+        showToast("విరాళం రికార్డు రీసైకిల్ బిన్‌కి తరలించబడింది.");
+      }
+    }
   };
 
   // Admin Portal Receipt Generation with Persistent Save
@@ -1495,11 +1515,11 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
                   </div>
                   <div className="gold-card text-center !p-4 md:!p-5">
                     <span className="text-xs sm:text-sm text-gray-300 font-extrabold uppercase block mb-1">నమోదైన భక్తులు</span>
-                    <span className="text-xl sm:text-2xl lg:text-3xl font-black text-purple-300 font-mono">{db.devotees.length} భక్తులు</span>
+                    <span className="text-xl sm:text-2xl lg:text-3xl font-black text-purple-300 font-mono">{activeDevotees.length} భక్తులు</span>
                   </div>
                   <div className="gold-card text-center !p-4 md:!p-5">
                     <span className="text-xs sm:text-sm text-gray-300 font-extrabold uppercase block mb-1">విరాళాల రికార్డులు</span>
-                    <span className="text-xl sm:text-2xl lg:text-3xl font-black text-[#FFD700] font-mono">{db.donations.length}</span>
+                    <span className="text-xl sm:text-2xl lg:text-3xl font-black text-[#FFD700] font-mono">{activeDonations.length}</span>
                   </div>
                   <div className="gold-card text-center !p-4 md:!p-5">
                     <span className="text-xs sm:text-sm text-gray-300 font-extrabold uppercase block mb-1">ఆడిట్ లాగ్స్</span>
@@ -1544,8 +1564,8 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
                       onChange={handleSelectDonorFromDropdown}
                       className="w-full bg-[#1A0306] border-2 border-[#FFD700] rounded-xl p-3.5 sm:p-4 text-base sm:text-lg text-white font-bold"
                     >
-                      <option value="">-- డేటాబేస్ నుండి దాతను ఎంచుకోండి ({db.donations.length} దాతలు) --</option>
-                      {db.donations.map((d, idx) => {
+                      <option value="">-- డేటాబేస్ నుండి దాతను ఎంచుకోండి ({activeDonations.length} దాతలు) --</option>
+                      {activeDonations.map((d, idx) => {
                         const numAmt = typeof d.amount === 'number' ? d.amount : parseInt(String(d.amount).replace(/\D/g, '')) || 0;
                         return (
                           <option key={d.id || idx} value={d.id}>
@@ -1915,7 +1935,7 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-white/15">
-                        {Array.isArray(db.devotees) && db.devotees.map((dev, idx) => (
+                        {Array.isArray(activeDevotees) && activeDevotees.map((dev, idx) => (
                           <tr key={dev.id || idx} className="hover:bg-white/5 transition-colors">
                             <td className="p-3 font-mono font-bold text-amber-300">{dev.id}</td>
                             <td className="p-3 font-extrabold text-white text-sm sm:text-base">{dev.name}</td>
@@ -2029,7 +2049,7 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
 
                 {/* Donors List with Delete Button - Large & Clear Table */}
                 <div className="gold-card space-y-4 !p-6 sm:!p-8">
-                  <h3 className="text-xl sm:text-2xl font-black text-[#FFD700]">నమోదైన దాతల రికార్డులు ({db.donations.length})</h3>
+                  <h3 className="text-xl sm:text-2xl font-black text-[#FFD700]">నమోదైన దాతల రికార్డులు ({activeDonations.length})</h3>
                   <div className="max-h-[550px] overflow-y-auto bg-black/60 rounded-2xl border-2 border-white/20 p-4 text-sm sm:text-base">
                     <table className="w-full text-left border-collapse">
                       <thead className="text-[#FFD700] border-b-2 border-[#FFD700]/50 sticky top-0 bg-[#2D080E] z-10">
@@ -2044,7 +2064,7 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-white/15">
-                        {db.donations.map((d, idx) => {
+                        {activeDonations.map((d, idx) => {
                           const numAmt = typeof d.amount === 'number' ? d.amount : parseInt(String(d.amount).replace(/\D/g, '')) || 0;
                           return (
                             <tr key={d.id || idx} className="hover:bg-white/5 transition-colors">
@@ -2120,7 +2140,7 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
 
                 <div className="gold-card space-y-4 !p-6 sm:!p-8">
                   <h4 className="text-xl sm:text-2xl font-black text-[#FFD700] mb-4">నమోదైన ఖర్చులు:</h4>
-                  {db.expenses.map((e, idx) => (
+                  {activeExpenses.map((e, idx) => (
                     <div key={e.id || idx} className="flex justify-between items-center p-4 rounded-2xl bg-black/60 border border-white/15 hover:border-amber-400/40 transition-all">
                       <div>
                         <span className="font-black text-white text-base sm:text-lg block">{e.category}</span>
@@ -2226,7 +2246,7 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-amber-200">
-                          {db.donations.map((d, idx) => {
+                          {activeDonations.map((d, idx) => {
                             const numAmt = typeof d.amount === 'number' ? d.amount : parseInt(String(d.amount).replace(/\D/g, '')) || 0;
                             return (
                               <tr key={idx}>
@@ -2308,7 +2328,7 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
 
                 <div className="gold-card space-y-3 !p-6">
                   <h4 className="text-lg font-black text-[#FFD700]">సామగ్రి రికార్డులు (Material Ledger):</h4>
-                  {db.materials.map((m, idx) => (
+                  {activeMaterials.map((m, idx) => (
                     <div key={m.id || idx} className="flex justify-between items-center p-3.5 rounded-2xl bg-black/60 border border-white/15 hover:border-amber-400/40 transition-all">
                       <div>
                         <span className="font-black text-white text-sm sm:text-base block">{m.type} ({m.qty})</span>
@@ -2339,7 +2359,7 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
             {/* TAB 7: VOLUNTEERS */}
             {activeTab === 'volunteers' && (
               <div className="gold-card space-y-4 !p-6 sm:!p-8">
-                <h3 className="text-xl sm:text-2xl font-black text-[#FFD700]">వాలంటీర్ల రికార్డులు ({db.volunteers.length})</h3>
+                <h3 className="text-xl sm:text-2xl font-black text-[#FFD700]">వాలంటీర్ల రికార్డులు ({activeVolunteers.length})</h3>
                 <form onSubmit={handleAddVolunteer} className="flex flex-col sm:flex-row gap-3">
                   <input
                     type="text"
@@ -2360,7 +2380,7 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
                 </form>
 
                 <div className="space-y-3 pt-2">
-                  {db.volunteers.map((v, idx) => (
+                  {activeVolunteers.map((v, idx) => (
                     <div key={v.id || idx} className="flex justify-between items-center p-3.5 rounded-2xl bg-black/60 border border-white/15 hover:border-amber-400/40 transition-all">
                       <div>
                         <span className="font-black text-white text-sm sm:text-base block">{v.name} ({v.phone})</span>
