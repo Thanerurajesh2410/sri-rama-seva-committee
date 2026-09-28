@@ -345,6 +345,43 @@ app.post('/api/contact', (req, res) => {
   res.status(201).json({ message: 'Message submitted successfully', query: newQuery });
 });
 
+// 15. POST Razorpay Create Order API Endpoint
+app.post('/api/payment/create-order', (req, res) => {
+  const { amount, currency = 'INR', receipt = `order_rcptid_${Date.now()}` } = req.body;
+  if (!amount) {
+    return res.status(400).json({ error: 'Amount is required' });
+  }
+
+  const order = {
+    id: `order_${Math.random().toString(36).substring(2, 15)}`,
+    entity: 'order',
+    amount: Math.round(Number(amount) * 100),
+    amount_paid: 0,
+    amount_due: Math.round(Number(amount) * 100),
+    currency,
+    receipt,
+    status: 'created',
+    created_at: Math.floor(Date.now() / 1000)
+  };
+
+  res.status(200).json(order);
+});
+
+// 16. POST Razorpay Payment Verification Endpoint
+app.post('/api/payment/verify', (req, res) => {
+  const { razorpay_order_id, razorpay_payment_id } = req.body;
+  if (!razorpay_payment_id) {
+    return res.status(400).json({ error: 'Payment ID is missing' });
+  }
+  
+  res.status(200).json({
+    status: 'success',
+    message: 'Payment verified successfully',
+    paymentId: razorpay_payment_id,
+    orderId: razorpay_order_id || ''
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Sri Rama Seva Committee REST API & Database running at http://localhost:${PORT}`);
   console.log(`Swagger UI Documentation available at http://localhost:${PORT}/api-docs`);

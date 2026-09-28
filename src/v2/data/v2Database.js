@@ -61,7 +61,9 @@ export const defaultWebsiteSettings = {
   showGallery: true,
   showNews: true,
   showReports: true,
-  showContact: true
+  showContact: true,
+  enableRazorpay: true,
+  razorpayKeyId: ''
 };
 
 export const defaultGalleryImages = [
@@ -205,6 +207,9 @@ export const getDB = () => {
     // Ensure websiteSettings and galleryImages exist
     if (!parsed.websiteSettings) {
       parsed.websiteSettings = { ...defaultWebsiteSettings };
+    } else {
+      if (parsed.websiteSettings.enableRazorpay === undefined) parsed.websiteSettings.enableRazorpay = true;
+      if (parsed.websiteSettings.razorpayKeyId === undefined) parsed.websiteSettings.razorpayKeyId = '';
     }
     if (!parsed.deletedGalleryImageIds) {
       parsed.deletedGalleryImageIds = [];

@@ -4,6 +4,7 @@ import confetti from 'canvas-confetti';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import { getDB, saveDB, addAuditLog, getAssetUrl, getActiveLogo, getActiveQrCode, fetchCloudDB } from '../data/v2Database';
+import { launchRazorpayDonation } from '../services/razorpayService';
 
 const slideshowImages = [
   { id: 1, src: getAssetUrl('assets/construction_1.jpg'), title: 'శ్రీ రామాలయ శంకుస్థాపన పవిత్ర రాతి స్తంభాల పూజ', tag: 'పామినివాండ్లవూరు శంకుస్థాపన' },
@@ -70,10 +71,87 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
   const [payCity, setPayCity] = useState('');
   const [payAmount, setPayAmount] = useState('1116');
   const [payMode, setPayMode] = useState('PhonePe / UPI Direct');
+  const [payEmail, setPayEmail] = useState('');
+  const [payPanNumber, setPayPanNumber] = useState('');
   const [digitalReceipt, setDigitalReceipt] = useState(null);
   const receiptModalRef = useRef(null);
 
   const bankSectionRef = useRef(null);
+
+  // Trigger Razorpay Online Payment Gateway (UPI/Card/Netbanking)
+  const handleTriggerRazorpayOnline = (e) => {
+    if (e) e.preventDefault();
+    if (!payName || !payAmount) {
+      showToast("దయచేసి మీ పేరు మరియు విరాళం మొత్తం నమోదు చేయండి.");
+      return;
+    }
+
+    const numAmount = parseInt(String(payAmount).replace(/\D/g, '')) || 0;
+    if (numAmount <= 0) {
+      showToast("దయచేసి చెల్లుబాటు అయ్యే విరాళం మొత్తం నమోదు చేయండి.");
+      return;
+    }
+
+    const catObj = v2T.donationCategories.find(c => c.id === selectedCatId) || v2T.donationCategories[0];
+    const subCatName = selectedSubCat || (availableSubTypes[0] || 'సాధారణ విరాళం');
+    const sevaTitle = `${catObj.name} > ${subCatName}`;
+
+    showToast("Razorpay పేమెంట్ గేట్‌వే తెరవబడుతోంది...");
+
+    const keyId = websiteSettings.razorpayKeyId || 'rzp_test_SRSC1008Temple';
+
+    launchRazorpayDonation({
+      amount: numAmount,
+      donorName: payName,
+      phone: payPhone || '',
+      email: payEmail || 'sriramasevacommitteepvv@gmail.com',
+      city: payCity || 'పామినివాండ్లవూరు',
+      seva: sevaTitle,
+      panNumber: payPanNumber || '',
+      keyId: keyId,
+      onSuccess: (paymentData) => {
+        const currentDB = getDB();
+        if (!currentDB.donations) currentDB.donations = [];
+        if (!currentDB.auditLogs) currentDB.auditLogs = [];
+
+        const newDonation = {
+          id: 'SRS-2026-' + String(currentDB.donations.length + 1).padStart(3, '0'),
+          donorName: paymentData.donorName,
+          phone: paymentData.phone || '9866125609',
+          email: paymentData.email || 'sriramasevacommitteepvv@gmail.com',
+          amount: paymentData.amount,
+          date: new Date().toLocaleDateString('en-GB').replace(/\//g, '-'),
+          seva: paymentData.seva,
+          category: catObj.name,
+          subcategory: subCatName,
+          mode: `Razorpay Online (${paymentData.paymentId})`,
+          paymentId: paymentData.paymentId,
+          panNumber: paymentData.panNumber || '',
+          city: paymentData.city
+        };
+
+        currentDB.donations.unshift(newDonation);
+        currentDB.auditLogs.unshift({
+          id: 'LOG-' + (currentDB.auditLogs.length + 1),
+          timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
+          user: 'Razorpay Online Gateway',
+          action: `Razorpay Online Donation Received: ₹${paymentData.amount} (Txn: ${paymentData.paymentId}) by ${paymentData.donorName}`
+        });
+
+        saveDB(currentDB);
+        try {
+          confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+        } catch (err) {}
+
+        setDigitalReceipt(newDonation);
+        setShowPaymentGatewayModal(false);
+        showToast(`ధన్యవాదాలు శ్రీ ${paymentData.donorName} గారూ! మీ ₹ ${paymentData.amount.toLocaleString()} ఆన్‌లైన్ చెల్లింపు విజయవంతమైంది.`);
+      },
+      onFailure: (errMsg) => {
+        showToast(`పేమెంట్ చెల్లింపు విఫలమైంది/రద్దయింది: ${errMsg}`);
+      }
+    });
+  };
 
   // Complete Payment & Save Donation for Audit & Receipt
   const handleCompleteDonationPayment = (e) => {
@@ -95,13 +173,14 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
       id: 'SRS-2026-' + String(currentDB.donations.length + 1).padStart(3, '0'),
       donorName: payName,
       phone: payPhone || '9866125609',
-      email: 'sriramasevacommitteepvv@gmail.com',
+      email: payEmail || 'sriramasevacommitteepvv@gmail.com',
       amount: numAmount,
       date: new Date().toLocaleDateString('en-GB').replace(/\//g, '-'),
       seva: `${catObj.name} > ${subCatName}`,
       category: catObj.name,
       subcategory: subCatName,
       mode: payMode || 'PhonePe / UPI Online',
+      panNumber: payPanNumber || '',
       city: payCity || 'పామినివాండ్లవూరు'
     };
 
@@ -787,6 +866,26 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                     </select>
                   </div>
 
+                  <div className="md:col-span-2 bg-black/40 p-3.5 rounded-2xl border border-amber-400/30">
+                    <label className="block font-black text-amber-200 mb-1">
+                      PAN కార్డ్ నంబర్ (PAN Card Number) <span className="text-amber-400 font-normal">(Optional / ఐచ్ఛికం)</span>:
+                    </label>
+                    <input
+                      type="text"
+                      value={payPanNumber}
+                      onChange={(e) => setPayPanNumber(e.target.value.toUpperCase())}
+                      maxLength={10}
+                      placeholder="ఉదా: ABCDE1234F"
+                      className="w-full bg-[#1A0306] border-2 border-amber-400/60 p-3 rounded-xl text-white font-mono font-black uppercase placeholder:text-amber-200/40 focus:border-[#FFD700] outline-none"
+                    />
+                    <p className="text-[11px] text-amber-300 font-bold mt-1.5 flex items-center gap-1.5">
+                      <Info className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                      <span>
+                        <strong>PAN నంబర్ ఎందుకు?:</strong> ఆదాయ పన్ను చట్టం 80G ప్రకారం పన్ను మినహాయింపు రశీదు (80G Tax Exemption Receipt) మరియు ప్రభుత్వ పారదర్శకత రికార్డు నమోదు కొరకు PAN వివరాలు సేకరిస్తారు.
+                      </span>
+                    </p>
+                  </div>
+
                   <div className="md:col-span-2">
                     <label className="block font-black text-amber-200 mb-1">
                       చెల్లింపు మార్గం (Payment Mode / UPI Txn Reference):
@@ -801,13 +900,24 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                   </div>
                 </div>
 
-                <button
-                  type="submit"
-                  className="btn-gold text-base sm:text-lg py-4 px-8 w-full font-black rounded-2xl shadow-2xl flex items-center justify-center gap-3 bg-gradient-to-r from-amber-500 to-orange-600 text-black hover:scale-105 transition-all border-2 border-[#FFD700]"
-                >
-                  <Sparkles className="w-6 h-6 text-black fill-black" />
-                  <span>విరాళం నమోదు చేసి అధికారిక రశీదు పొందండి (Submit & Download Receipt)</span>
-                </button>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                  <button
+                    type="button"
+                    onClick={handleTriggerRazorpayOnline}
+                    className="py-4 px-6 rounded-2xl font-black text-sm sm:text-base text-black bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 hover:brightness-110 shadow-[0_0_25px_rgba(245,158,11,0.5)] border-2 border-[#FFD700] flex items-center justify-center gap-2.5 transition-all transform hover:scale-105"
+                  >
+                    <CreditCard className="w-5 h-5 text-black" />
+                    <span>💳 ఆన్‌లైన్ పేమెంట్ ద్వారా విరాళం (Pay via Razorpay)</span>
+                  </button>
+
+                  <button
+                    type="submit"
+                    className="py-4 px-6 rounded-2xl font-black text-sm sm:text-base text-white bg-gradient-to-r from-emerald-600 to-teal-700 hover:brightness-110 shadow-xl border-2 border-emerald-400 flex items-center justify-center gap-2.5 transition-all"
+                  >
+                    <FileCheck className="w-5 h-5 text-emerald-300" />
+                    <span>తక్షణ రశీదు పొందండి (Submit & Download Receipt)</span>
+                  </button>
+                </div>
 
               </form>
             </div>
@@ -1440,6 +1550,13 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                   <div className="p-2.5 font-bold bg-gray-100 border-r border-gray-400">విరాళం విభాగం & సేవ (Category & Seva):</div>
                   <div className="p-2.5 font-bold col-span-2 text-[#C25200]">{digitalReceipt.seva}</div>
                 </div>
+
+                {digitalReceipt.panNumber && (
+                  <div className="grid grid-cols-3 border-b border-gray-400 bg-amber-50">
+                    <div className="p-2.5 font-bold bg-amber-100 border-r border-gray-400 text-[#C25200]">PAN సంఖ్య (PAN No - 80G):</div>
+                    <div className="p-2.5 font-mono font-black col-span-2 text-gray-900 uppercase">{digitalReceipt.panNumber}</div>
+                  </div>
+                )}
 
                 <div className="grid grid-cols-3">
                   <div className="p-2.5 font-bold bg-gray-100 border-r border-gray-400">చెల్లింపు మార్గం (Payment Mode):</div>

@@ -3,6 +3,7 @@ import { User, LogIn, UserPlus, History, Award, Bell, ShieldCheck, Heart, Downlo
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import { getDB, saveDB, validateUniqueDevotee, addAuditLog, getAssetUrl, getActiveLogo, fetchCloudDB } from '../data/v2Database';
+import { launchRazorpayDonation } from '../services/razorpayService';
 
 export default function DevoteePortal({ t, showToast }) {
   const [db, setDbState] = useState(getDB());

@@ -2420,7 +2420,8 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
                 { key: 'showGallery', label: 'ఫోటో గ్యాలరీ (Photo Gallery)', desc: 'శ్రీ రామాలయ నిర్మాణ ప్రగతి ఫోటోలు' },
                 { key: 'showNews', label: 'వార్తలు & ప్రకటనలు (News & Press Releases)', desc: 'తాజా పత్రికా ప్రకటనలు' },
                 { key: 'showReports', label: 'పారదర్శకత నివేదికలు (Financial Audit Reports)', desc: 'డబ్బుల జమ ఖర్చులు & లేడ్జర్' },
-                { key: 'showContact', label: 'అధికారిక చిరునామా & WhatsApp ఫారం (Contact & WhatsApp Form)', desc: 'చిరునామా, ఇమెయిల్ & WhatsApp డైరెక్ట్ మెసేజ్ ఫారం' }
+                { key: 'showContact', label: 'అధికారిక చిరునామా & WhatsApp ఫారం (Contact & WhatsApp Form)', desc: 'చిరునామా, ఇమెయిల్ & WhatsApp డైరెక్ట్ మెసేజ్ ఫారం' },
+                { key: 'enableRazorpay', label: '💳 Razorpay ఆన్‌లైన్ పేమెంట్ గేట్‌వే (Online Payment Gateway)', desc: 'UPI, Credit/Debit Cards & Net Banking ద్వారా ఆన్‌లైన్ విరాళాలు సేకరించడం' }
               ];
 
               return (
@@ -2429,12 +2430,47 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
                     <div className="flex items-center gap-3 mb-2">
                       <Sliders className="w-8 h-8 text-amber-300" />
                       <h3 className="text-xl sm:text-2xl font-black text-amber-300 heading-telugu">
-                        పబ్లిక్ వెబ్‌సైట్ డిస్‌ప్లే కంట్రోలర్ (Public Website Visibility Manager)
+                        పబ్లిక్ వెబ్‌సైట్ డిస్‌ప్లే కంట్రోలర్ & పేమెంట్ గేట్‌వే (Public Visibility & Gateway Manager)
                       </h3>
                     </div>
                     <p className="text-xs sm:text-sm text-gray-200 font-bold">
-                      ఇక్కడి టోగుల్ (Switch) ద్వారా పబ్లిక్ వెబ్‌సైట్‌లో ఏయే విభాగాలు లేదా పేజీలు కనిపించాలో అడ్మిన్ నేరుగా నియంత్రించవచ్చు.
+                      ఇక్కడి టోగుల్ (Switch) ద్వారా పబ్లిక్ వెబ్‌సైట్‌లో ఏయే విభాగాలు మరియు ఆన్‌లైన్ చెల్లింపు గేట్‌వే కనిపించాలో అడ్మిన్ నేరుగా నియంత్రించవచ్చు.
                     </p>
+                  </div>
+
+                  {/* 💳 Razorpay Merchant Key ID Configuration Card */}
+                  <div className="gold-card border-2 border-amber-400 bg-gradient-to-r from-[#5C121E] to-[#2D080E] p-6 rounded-3xl text-white shadow-xl space-y-4">
+                    <div className="flex items-center gap-3 border-b border-amber-400/40 pb-3">
+                      <CreditCard className="w-7 h-7 text-[#FFD700]" />
+                      <div>
+                        <h4 className="text-lg font-black text-[#FFD700] heading-telugu">Razorpay Merchant API Key సెట్టింగ్‌లు (Merchant Configuration)</h4>
+                        <p className="text-xs text-amber-200">మీ Razorpay మర్చంట్ డాష్‌బోర్డ్ నుండి పొందిన Key IDని ఇక్కడ పొందుపరచవచ్చు (ఖాళీగా ఉంచితే Test Mode లో రన్ అవుతుంది).</p>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
+                      <div className="sm:col-span-2">
+                        <label className="block text-xs font-black text-amber-300 mb-1">Razorpay Live / Test Key ID (e.g. rzp_live_xxxxxxxxxxxx):</label>
+                        <input
+                          type="text"
+                          value={settings.razorpayKeyId || ''}
+                          onChange={(e) => {
+                            const currentDB = getDB();
+                            if (!currentDB.websiteSettings) currentDB.websiteSettings = { ...defaultWebsiteSettings };
+                            currentDB.websiteSettings.razorpayKeyId = e.target.value;
+                            saveDB(currentDB);
+                            setDbState({ ...currentDB });
+                          }}
+                          placeholder="rzp_live_xxxxxxxxxxxx (లేదా టెస్టింగ్ కోసం rzp_test_SRSC1008Temple)"
+                          className="w-full bg-[#1A0306] border-2 border-amber-400/60 p-3 rounded-xl text-white font-mono text-xs sm:text-sm focus:border-[#FFD700] outline-none"
+                        />
+                      </div>
+                      <div className="bg-black/60 p-3 rounded-xl border border-white/10 text-xs space-y-1">
+                        <span className="font-black text-emerald-400 block">✓ Status: Active Gateway</span>
+                        <span className="text-gray-300 block">UPI, Cards, Netbanking</span>
+                        <span className="text-amber-300 font-bold block">80G Tax Receipt Ready</span>
+                      </div>
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
