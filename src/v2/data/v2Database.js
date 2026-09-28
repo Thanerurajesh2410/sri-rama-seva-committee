@@ -65,16 +65,16 @@ export const defaultWebsiteSettings = {
 };
 
 export const defaultGalleryImages = [
-  { id: 'IMG-1', src: getAssetUrl('assets/temple_photo_1.png'), title: 'శ్రీ రామాలయ శంకుస్థాపన పవిత్ర రాతి స్తంభాల పూజ', tag: 'పామినివాండ్లవూరు శంకుస్థాపన' },
-  { id: 'IMG-2', src: getAssetUrl('assets/temple_photo_2.png'), title: 'గ్రామస్థులు & భక్తుల సమక్షంలో ఆలయ పునాది పూజా మహోత్సవం', tag: 'పవిత్ర శంకుస్థాపన మహోత్సవం' },
-  { id: 'IMG-3', src: getAssetUrl('assets/temple_photo_3.png'), title: 'రాతి గోడల ఆలయ శంకుస్థాపన పునాది నిర్మాణం', tag: 'ఆలయ పునాది ప్రగతి' },
-  { id: 'IMG-4', src: getAssetUrl('assets/temple_photo_4.png'), title: 'అలంకరించిన టేకు కలప ప్రధాన ద్వారబంధం', tag: 'ఆలయ ద్వారబంధం' },
-  { id: 'IMG-5', src: getAssetUrl('assets/temple_photo_5.png'), title: 'పునాది గుంటలో పవిత్ర రాతి రాళ్ళ ప్రతిష్ఠాపన పూజ', tag: 'గర్భగుడి శంకుస్థాపన' },
-  { id: 'IMG-6', src: getAssetUrl('assets/temple_photo_6.png'), title: 'ఆలయ పెద్దలు & భక్తుల పవిత్ర దర్శన దృశ్యం', tag: 'పామినివాండ్లవూరు గ్రామస్థులు' },
-  { id: 'IMG-7', src: getAssetUrl('assets/temple_photo_7.png'), title: 'శ్రీ రామాలయ ప్రాంగణం & చెక్కిన రాతి నిర్మాణం', tag: 'ఆలయ ప్రాంగణ ప్రగతి' },
-  { id: 'IMG-8', src: getAssetUrl('assets/temple_photo_8.png'), title: 'శ్రీ రామాలయ రాతి గోడలు & ద్వార బంధాల అమరిక', tag: 'రాతి గోడల నిర్మాణం' },
-  { id: 'IMG-9', src: getAssetUrl('assets/temple_photo_9.png'), title: 'గర్భగుడి అంతర్భాగం & చెక్కిన రాతి గోడలు', tag: 'గర్భగుడి నిర్మాణం' },
-  { id: 'IMG-10', src: getAssetUrl('assets/temple_photo_10.png'), title: 'శ్రీ రామాలయ పవిత్ర రాతి నిర్మాణం పూర్తయిన దృశ్యం', tag: 'ఆలయ రాతి నిర్మాణం' }
+  { id: 'IMG-1', src: getAssetUrl('assets/construction_1.jpg'), title: 'శ్రీ రామాలయ శంకుస్థాపన పవిత్ర రాతి స్తంభాల పూజ', tag: 'పామినివాండ్లవూరు శంకుస్థాపన' },
+  { id: 'IMG-2', src: getAssetUrl('assets/construction_2.jpg'), title: 'గ్రామస్థులు & భక్తుల సమక్షంలో ఆలయ పునాది పూజా మహోత్సవం', tag: 'పవిత్ర శంకుస్థాపన మహోత్సవం' },
+  { id: 'IMG-3', src: getAssetUrl('assets/construction_3.jpg'), title: 'రాతి గోడల ఆలయ శంకుస్థాపన పునాది నిర్మాణం', tag: 'ఆలయ పునాది ప్రగతి' },
+  { id: 'IMG-4', src: getAssetUrl('assets/construction_4.jpg'), title: 'అలంకరించిన టేకు కలప ప్రధాన ద్వారబంధం', tag: 'ఆలయ ద్వారబంధం' },
+  { id: 'IMG-5', src: getAssetUrl('assets/banner.jpg'), title: 'శ్రీ సీతారాములవారి ఆలయ నిర్మణ ప్రాంగణ దృశ్యం', tag: 'ఆలయ బ్యానర్' },
+  { id: 'IMG-6', src: getAssetUrl('assets/lord_rama_bg.jpg'), title: 'శ్రీ సీతారామ స్వామివారి పవిత్ర రూపం', tag: 'స్వామివారి ప్రతిష్ఠ' },
+  { id: 'IMG-7', src: getAssetUrl('assets/temple_bg.jpg'), title: 'శ్రీ రామాలయ ప్రాంగణం & చెక్కిన రాతి నిర్మాణం', tag: 'ఆలయ ప్రాంగణ ప్రగతి' },
+  { id: 'IMG-8', src: getAssetUrl('assets/construction_1.jpg'), title: 'శ్రీ రామాలయ రాతి గోడలు & ద్వార బంధాల అమరిక', tag: 'రాతి గోడల నిర్మాణం' },
+  { id: 'IMG-9', src: getAssetUrl('assets/construction_2.jpg'), title: 'గర్భగుడి అంతర్భాగం & చెక్కిన రాతి గోడలు', tag: 'గర్భగుడి నిర్మాణం' },
+  { id: 'IMG-10', src: getAssetUrl('assets/construction_4.jpg'), title: 'శ్రీ రామాలయ పవిత్ర రాతి నిర్మాణం పూర్తయిన దృశ్యం', tag: 'ఆలయ రాతి నిర్మాణం' }
 ];
 
 const defaultMediaAssets = {
@@ -212,10 +212,16 @@ export const getDB = () => {
     if (!Array.isArray(parsed.galleryImages)) {
       parsed.galleryImages = [...defaultGalleryImages];
     } else {
-      parsed.galleryImages = parsed.galleryImages.map(img => ({
-        ...img,
-        src: getAssetUrl(img.src)
-      }));
+      parsed.galleryImages = parsed.galleryImages.map((img, idx) => {
+        let cleanSrc = getAssetUrl(img.src);
+        if (cleanSrc.includes('temple_photo_') && defaultGalleryImages[idx]) {
+          cleanSrc = defaultGalleryImages[idx].src;
+        }
+        return {
+          ...img,
+          src: cleanSrc
+        };
+      });
     }
     
     // Filter out permanently deleted photos

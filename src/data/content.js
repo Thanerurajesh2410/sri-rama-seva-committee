@@ -84,11 +84,11 @@ export const content = {
       statusTitle: "ప్రస్తుత నిర్మాణ దశ: శంకుస్థాపన & రాతి గోడల నిర్మాణం పూర్తవుతోంది",
       viewOriginalBanner: "అధికారిక ఫ్లెక్సి బ్యానర్ చూడండి",
       photos: [
-        { id: 1, title: "శ్రీ రామాలయం పామినివాండ్లవూరు - అధికారిక బ్యానర్", src: "/assets/banner.jpg", tag: "Regd Sri Ramalayam Banner" },
-        { id: 2, title: "ఆలయ ఆవరణ మరియు చుట్టుపక్కల దృశ్యం", src: "/assets/construction_1.jpg", tag: "Phase 1 - Ground View" },
-        { id: 3, title: "శ్రీ రామాలయం రాతి గోడల నిర్మాణం", src: "/assets/construction_2.jpg", tag: "Phase 2 - Stone Walls" },
-        { id: 4, title: "ఆలయ ద్వార బంధాలు మరియు కిటికీల అమరిక", src: "/assets/construction_3.jpg", tag: "Phase 3 - Window Frames" },
-        { id: 5, title: "గర్భగుడి ద్వార ద్వార బంధం మరియు అంతర్భాగం", src: "/assets/construction_4.jpg", tag: "Phase 4 - Sanctum Door" }
+        { id: 1, title: "శ్రీ రామాలయం పామినివాండ్లవూరు - అధికారిక బ్యానర్", src: "assets/banner.jpg", tag: "Regd Sri Ramalayam Banner" },
+        { id: 2, title: "ఆలయ ఆవరణ మరియు చుట్టుపక్కల దృశ్యం", src: "assets/construction_1.jpg", tag: "Phase 1 - Ground View" },
+        { id: 3, title: "శ్రీ రామాలయం రాతి గోడల నిర్మాణం", src: "assets/construction_2.jpg", tag: "Phase 2 - Stone Walls" },
+        { id: 4, title: "ఆలయ ద్వార బంధాలు మరియు కిటికీల అమరిక", src: "assets/construction_3.jpg", tag: "Phase 3 - Window Frames" },
+        { id: 5, title: "గర్భగుడి ద్వార ద్వార బంధం మరియు అంతర్భాగం", src: "assets/construction_4.jpg", tag: "Phase 4 - Sanctum Door" }
       ]
     },
     committee: {
@@ -335,11 +335,11 @@ export const content = {
       statusTitle: "Current Phase: Foundation & Stone Walls Outer Structure Construction",
       viewOriginalBanner: "View Official Flexi Banner",
       photos: [
-        { id: 1, title: "Sri Ramalayam Paminivandla Vooru Banner", src: "/assets/banner.jpg", tag: "Regd Sri Ramalayam Banner" },
-        { id: 2, title: "Temple Grounds & Foundation Site", src: "/assets/construction_1.jpg", tag: "Phase 1 - Ground View" },
-        { id: 3, title: "Sri Ramalayam Stone Walls Construction", src: "/assets/construction_2.jpg", tag: "Phase 2 - Stone Walls" },
-        { id: 4, title: "Temple Window Frames & Carvings", src: "/assets/construction_3.jpg", tag: "Phase 3 - Window Frames" },
-        { id: 5, title: "Sanctum Sanctorum (Garbhagudi) Entrance", src: "/assets/construction_4.jpg", tag: "Phase 4 - Sanctum Door" }
+        { id: 1, title: "Sri Ramalayam Paminivandla Vooru Banner", src: "assets/banner.jpg", tag: "Regd Sri Ramalayam Banner" },
+        { id: 2, title: "Temple Grounds & Foundation Site", src: "assets/construction_1.jpg", tag: "Phase 1 - Ground View" },
+        { id: 3, title: "Sri Ramalayam Stone Walls Construction", src: "assets/construction_2.jpg", tag: "Phase 2 - Stone Walls" },
+        { id: 4, title: "Temple Window Frames & Carvings", src: "assets/construction_3.jpg", tag: "Phase 3 - Window Frames" },
+        { id: 5, title: "Sanctum Sanctorum (Garbhagudi) Entrance", src: "assets/construction_4.jpg", tag: "Phase 4 - Sanctum Door" }
       ]
     },
     committee: {

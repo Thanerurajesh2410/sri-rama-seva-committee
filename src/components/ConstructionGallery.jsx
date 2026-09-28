@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Camera, Maximize2, X, ChevronLeft, ChevronRight, CheckCircle2, Hammer, Building2, Image as ImageIcon } from 'lucide-react';
+import { getAssetUrl } from '../v2/data/v2Database';
 
 export default function ConstructionGallery({ t }) {
   const [activePhoto, setActivePhoto] = useState(null);
@@ -91,7 +92,7 @@ export default function ConstructionGallery({ t }) {
             >
               <div className="relative aspect-[16/10] rounded-xl overflow-hidden bg-black/60">
                 <img
-                  src={photo.src}
+                  src={getAssetUrl(photo.src)}
                   alt={photo.title}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
@@ -146,7 +147,7 @@ export default function ConstructionGallery({ t }) {
 
             <div className="rounded-xl overflow-hidden border-2 border-[var(--border-gold)] bg-black">
               <img
-                src={activePhoto.src}
+                src={getAssetUrl(activePhoto.src)}
                 alt={activePhoto.title}
                 className="w-full max-h-[78vh] object-contain mx-auto"
               />
