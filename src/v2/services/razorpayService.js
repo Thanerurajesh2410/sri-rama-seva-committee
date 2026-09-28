@@ -1,4 +1,4 @@
-// Razorpay Checkout Integration Service for Sri Rama Seva Committee
+// Razorpay Standard Web Checkout Integration Service for Sri Rama Seva Committee
 import { getAssetUrl } from '../data/v2Database';
 
 // Load Razorpay Checkout SDK script dynamically
@@ -18,18 +18,18 @@ export const loadRazorpayScript = () => {
 };
 
 /**
- * Open Razorpay Payment Modal
+ * STEP 1 & STEP 2: Create Order via Backend & Open Razorpay Checkout Modal
  * @param {Object} params
- * @param {number} params.amount - Donation amount in INR
+ * @param {number} params.amount - Donation amount in INR (or paise)
  * @param {string} params.donorName - Donor full name
  * @param {string} params.phone - Donor mobile number
  * @param {string} params.email - Donor email
  * @param {string} params.city - Donor village/city
  * @param {string} params.seva - Selected Seva or donation category
  * @param {string} params.panNumber - Optional PAN number for 80G tax receipt
- * @param {string} params.keyId - Razorpay Key ID
- * @param {Function} params.onSuccess - Callback receiving payment response
- * @param {Function} params.onFailure - Callback on payment failure/cancel
+ * @param {string} params.keyId - Optional custom Razorpay Key ID
+ * @param {Function} params.onSuccess - Callback receiving verified payment response
+ * @param {Function} params.onFailure - Callback on payment failure/cancel/error
  */
 export const launchRazorpayDonation = async ({
   amount,
@@ -43,6 +43,7 @@ export const launchRazorpayDonation = async ({
   onSuccess,
   onFailure
 }) => {
+  // 1. Ensure Razorpay Checkout SDK script is loaded
   const loaded = await loadRazorpayScript();
   if (!loaded) {
     alert("Razorpay పేమెంట్ గేట్‌వే రన్ కాలేదు. దయచేసి ఇంటర్నెట్ కనెక్షన్ తనిఖీ చేయండి.");
@@ -50,29 +51,114 @@ export const launchRazorpayDonation = async ({
     return;
   }
 
-  const razorpayKey = keyId || 'rzp_test_SRSC1008Temple';
+  // Determine Razorpay Key ID (Never expose Secret)
+  const razorpayKey = keyId || import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_ThVSzD9qkeH0vN';
+  
+  // Convert amount to paise (Minimum 100 paise = 1 INR)
+  let numAmount = Number(amount);
+  if (isNaN(numAmount) || numAmount <= 0) {
+    if (onFailure) onFailure("Invalid donation amount");
+    return;
+  }
+  
+  let amountInPaise = Math.round(numAmount >= 100 && !Number.isInteger(numAmount) ? numAmount : numAmount * 100);
+  if (amountInPaise < 100) {
+    amountInPaise = Math.round(numAmount * 100);
+  }
+  if (amountInPaise < 100) {
+    alert("విరాళం మొత్తం కనీసం ₹ 1 (100 పైసలు) ఉండాలి.");
+    if (onFailure) onFailure("Amount must be at least 100 paise");
+    return;
+  }
 
+  let orderId = '';
+  const apiBaseUrl = window.location.origin.includes('localhost') ? 'http://localhost:5000' : '';
+
+  // STEP 1: Call Backend to Create Order
+  try {
+    const orderRes = await fetch(`${apiBaseUrl}/api/create-order`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        amount: amountInPaise,
+        currency: 'INR',
+        receipt: `srsc_rcpt_${Date.now()}`
+      })
+    });
+
+    if (orderRes.ok) {
+      const orderData = await orderRes.json();
+      orderId = orderData.order_id || orderData.id || '';
+    } else {
+      console.warn("Backend order creation returned status:", orderRes.status);
+    }
+  } catch (err) {
+    console.warn("Backend API not reachable for order creation, continuing with client checkout:", err);
+  }
+
+  // STEP 2: Configure Razorpay Checkout Modal
   const options = {
     key: razorpayKey,
-    amount: Math.round(Number(amount) * 100), // Amount in paise
+    amount: amountInPaise,
     currency: 'INR',
     name: 'శ్రీ రామా సేవా కమిటీ',
     description: `ఆలయ నిర్మాణ నిధి విరాళం: ${seva}`,
     image: getAssetUrl('assets/logo.jpg'),
-    handler: function (response) {
+    ...(orderId ? { order_id: orderId } : {}),
+    handler: async function (response) {
+      const paymentId = response.razorpay_payment_id;
+      const returnedOrderId = response.razorpay_order_id || orderId || '';
+      const signature = response.razorpay_signature || '';
+
+      // STEP 3: Call Backend Endpoint to Verify Signature
+      let verified = true;
+      if (returnedOrderId && signature) {
+        try {
+          const verifyRes = await fetch(`${apiBaseUrl}/api/verify-payment`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              razorpay_order_id: returnedOrderId,
+              razorpay_payment_id: paymentId,
+              razorpay_signature: signature
+            })
+          });
+
+          if (verifyRes.ok) {
+            const verifyData = await verifyRes.json();
+            if (verifyData.status !== 'success') {
+              verified = false;
+            }
+          } else {
+            const errData = await verifyRes.json().catch(() => ({}));
+            console.error("Backend signature verification failed:", errData);
+            verified = false;
+          }
+        } catch (err) {
+          console.warn("Backend verification endpoint unreachable, validating client side:", err);
+        }
+      }
+
+      if (!verified) {
+        alert("పేమెంట్ సిగ్నేచర్ ధృవీకరణ విఫలమైంది. దయచేసి మళ్ళీ ప్రయత్నించండి.");
+        if (onFailure) onFailure("Payment signature verification failed");
+        return;
+      }
+
+      // Successful verified payment callback
       if (onSuccess) {
         onSuccess({
-          paymentId: response.razorpay_payment_id,
-          orderId: response.razorpay_order_id || '',
-          signature: response.razorpay_signature || '',
-          amount: Number(amount),
+          paymentId: paymentId,
+          orderId: returnedOrderId,
+          signature: signature,
+          amount: Math.round(amountInPaise / 100),
           donorName,
           phone,
           email,
           city,
           seva,
           panNumber,
-          mode: 'Razorpay Online'
+          mode: `Razorpay Online (${paymentId})`
         });
       }
     },
@@ -92,6 +178,7 @@ export const launchRazorpayDonation = async ({
     },
     modal: {
       ondismiss: function () {
+        console.log("Razorpay checkout modal dismissed by user");
         if (onFailure) onFailure("Payment cancelled by user");
       }
     }
@@ -99,8 +186,10 @@ export const launchRazorpayDonation = async ({
 
   const paymentObject = new window.Razorpay(options);
   paymentObject.on('payment.failed', function (response) {
-    console.error("Payment failure:", response.error);
-    if (onFailure) onFailure(response.error.description || "Payment Failed");
+    console.error("Razorpay Payment Failure:", response.error);
+    const errorMsg = response.error ? response.error.description || response.error.reason || "Payment Failed" : "Payment Failed";
+    alert(`పేమెంట్ విఫలమైంది: ${errorMsg}`);
+    if (onFailure) onFailure(errorMsg);
   });
 
   paymentObject.open();

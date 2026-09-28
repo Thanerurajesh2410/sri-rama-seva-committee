@@ -4,6 +4,11 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import swaggerUi from 'swagger-ui-express';
+import crypto from 'crypto';
+import dotenv from 'dotenv';
+import Razorpay from 'razorpay';
+
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -345,42 +350,105 @@ app.post('/api/contact', (req, res) => {
   res.status(201).json({ message: 'Message submitted successfully', query: newQuery });
 });
 
-// 15. POST Razorpay Create Order API Endpoint
-app.post('/api/payment/create-order', (req, res) => {
-  const { amount, currency = 'INR', receipt = `order_rcptid_${Date.now()}` } = req.body;
-  if (!amount) {
-    return res.status(400).json({ error: 'Amount is required' });
+// Initialize Razorpay Instance from Environment Variables
+const getRazorpayInstance = () => {
+  const key_id = process.env.RAZORPAY_KEY_ID || 'rzp_test_ThVSzD9qkeH0vN';
+  const key_secret = process.env.RAZORPAY_KEY_SECRET || 'yxS5RhCR5U4wMFiOtoJSdmMO';
+  return new Razorpay({ key_id, key_secret });
+};
+
+// STEP 1: BACKEND - Create Order API Endpoints (/api/create-order & /api/payment/create-order)
+const handleCreateOrder = async (req, res) => {
+  try {
+    const rawAmount = req.body.amount;
+    const currency = req.body.currency || 'INR';
+    const receipt = req.body.receipt || `rcptid_${Date.now()}`;
+
+    if (!rawAmount || isNaN(Number(rawAmount))) {
+      return res.status(400).json({ error: 'Valid amount is required' });
+    }
+
+    // Convert amount to paise if passed in Rupees (e.g. 100 Rs = 10000 paise).
+    // If rawAmount is already >= 100 and passed as paise, use it directly.
+    let amountInPaise = Math.round(Number(rawAmount));
+    if (amountInPaise < 100) {
+      amountInPaise = amountInPaise * 100;
+    }
+
+    if (amountInPaise < 100) {
+      return res.status(400).json({ error: 'Amount must be at least 100 paise (Rs. 1)' });
+    }
+
+    const razorpay = getRazorpayInstance();
+    const orderOptions = {
+      amount: amountInPaise,
+      currency,
+      receipt
+    };
+
+    const order = await razorpay.orders.create(orderOptions);
+
+    return res.status(200).json({
+      order_id: order.id,
+      id: order.id,
+      amount: order.amount,
+      currency: order.currency,
+      status: order.status,
+      receipt: order.receipt
+    });
+  } catch (error) {
+    console.error('Error creating Razorpay order:', error);
+    if (error.statusCode === 401 || (error.error && error.error.code === 'BAD_REQUEST_ERROR')) {
+      return res.status(401).json({ error: 'Razorpay API Authentication Failed', details: error.message });
+    }
+    return res.status(500).json({ error: 'Failed to create Razorpay order', details: error.message || error });
   }
+};
 
-  const order = {
-    id: `order_${Math.random().toString(36).substring(2, 15)}`,
-    entity: 'order',
-    amount: Math.round(Number(amount) * 100),
-    amount_paid: 0,
-    amount_due: Math.round(Number(amount) * 100),
-    currency,
-    receipt,
-    status: 'created',
-    created_at: Math.floor(Date.now() / 1000)
-  };
+app.post('/api/create-order', handleCreateOrder);
+app.post('/api/payment/create-order', handleCreateOrder);
 
-  res.status(200).json(order);
-});
+// STEP 3: BACKEND - Verify Payment Signature API Endpoints (/api/verify-payment & /api/payment/verify)
+const handleVerifyPayment = (req, res) => {
+  try {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
-// 16. POST Razorpay Payment Verification Endpoint
-app.post('/api/payment/verify', (req, res) => {
-  const { razorpay_order_id, razorpay_payment_id } = req.body;
-  if (!razorpay_payment_id) {
-    return res.status(400).json({ error: 'Payment ID is missing' });
+    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+      return res.status(400).json({
+        error: 'Missing required payment verification fields: razorpay_order_id, razorpay_payment_id, and razorpay_signature are required'
+      });
+    }
+
+    const keySecret = process.env.RAZORPAY_KEY_SECRET || 'yxS5RhCR5U4wMFiOtoJSdmMO';
+    const bodyData = razorpay_order_id + '|' + razorpay_payment_id;
+    
+    const generatedSignature = crypto
+      .createHmac('sha256', keySecret)
+      .update(bodyData)
+      .digest('hex');
+
+    if (generatedSignature === razorpay_signature) {
+      return res.status(200).json({
+        status: 'success',
+        message: 'Payment verified successfully',
+        paymentId: razorpay_payment_id,
+        orderId: razorpay_order_id
+      });
+    } else {
+      console.warn(`Payment signature mismatch! Received: ${razorpay_signature}, Expected: ${generatedSignature}`);
+      return res.status(400).json({
+        status: 'failure',
+        error: 'Invalid payment signature. Payment verification failed.'
+      });
+    }
+  } catch (error) {
+    console.error('Error verifying Razorpay signature:', error);
+    return res.status(500).json({ error: 'Internal server error during verification', details: error.message });
   }
-  
-  res.status(200).json({
-    status: 'success',
-    message: 'Payment verified successfully',
-    paymentId: razorpay_payment_id,
-    orderId: razorpay_order_id || ''
-  });
-});
+};
+
+app.post('/api/verify-payment', handleVerifyPayment);
+app.post('/api/payment/verify', handleVerifyPayment);
 
 app.listen(PORT, () => {
   console.log(`Sri Rama Seva Committee REST API & Database running at http://localhost:${PORT}`);
