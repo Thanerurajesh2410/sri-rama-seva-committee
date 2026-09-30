@@ -1,0 +1,94 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database Service
+  postgres:
+    image: postgres:16-alpine
+    container_name: srirama-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: srirama_admin
+      POSTGRES_PASSWORD: Srirama_Secure_Password_2026!
+      POSTGRES_DB: srirama_temple_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U srirama_admin -d srirama_temple_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache Service for Webhooks & Sessions
+  redis:
+    image: redis:7-alpine
+    container_name: srirama-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # NestJS Enterprise API Backend
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: srirama-api
+    restart: always
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      DATABASE_URL: postgresql://srirama_admin:Srirama_Secure_Password_2026!@postgres:5432/srirama_temple_db?schema=public
+      REDIS_URL: redis://redis:6379
+      RAZORPAY_KEY_ID: rzp_live_srirama_key
+      RAZORPAY_KEY_SECRET: rzp_live_srirama_secret
+    ports:
+      - "4000:4000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # Next.js Devotee Website
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    container_name: srirama-web
+    restart: always
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      NEXT_PUBLIC_API_URL: http://api:4000/api/v1
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+  # Next.js Temple Administration ERP Portal
+  admin:
+    build:
+      context: .
+      dockerfile: Dockerfile.admin
+    container_name: srirama-admin
+    restart: always
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      NEXT_PUBLIC_API_URL: http://api:4000/api/v1
+    ports:
+      - "3001:3001"
+    depends_on:
+      - api
+
+volumes:
+  postgres_data:
+  redis_data:

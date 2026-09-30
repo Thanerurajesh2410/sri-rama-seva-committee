@@ -1,0 +1,23 @@
+# Stage 1: Build Next.js Admin Application
+FROM node:20-alpine AS builder
+WORKDIR /app
+
+COPY package.json turbo.json ./
+COPY packages/ ./packages/
+COPY apps/admin/ ./apps/admin/
+
+RUN npm install --legacy-peer-deps
+
+# Stage 2: Runner Image
+FROM node:20-alpine AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV PORT=3001
+
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/apps/admin ./apps/admin
+
+EXPOSE 3001
+CMD ["npm", "start", "--prefix", "apps/admin"]
