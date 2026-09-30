@@ -1,0 +1,179 @@
+// Enterprise Digital Temple Platform - Relational Database Schema
+// Datasource supports PostgreSQL for production & SQLite for zero-dependency local dev
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum RoleName {
+  SUPER_ADMIN
+  TEMPLE_ADMIN
+  TREASURER
+  CONTENT_ADMIN
+  AUDITOR
+  DEVOTEE
+}
+
+enum PaymentStatus {
+  CREATED
+  PENDING
+  AUTHORIZED
+  CAPTURED
+  FAILED
+  REFUNDED
+  CANCELLED
+}
+
+enum PaymentGateway {
+  RAZORPAY
+  PHONEPE
+  PAYTM
+  CASH_DEPOSIT
+  BANK_TRANSFER
+}
+
+model Devotee {
+  id           String        @id @default(uuid())
+  name         String
+  phone        String        @unique
+  email        String?
+  city         String        @default("పామినివాండ్లవూరు")
+  address      String?
+  panNumber    String?       // Optional for 80G Tax Exemption receipts
+  passwordHash String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  donations    Donation[]
+  sevaBookings SevaBooking[]
+
+  @@map("devotees")
+}
+
+model User {
+  id               String     @id @default(uuid())
+  username         String     @unique
+  email            String     @unique
+  passwordHash     String
+  role             RoleName   @default(TEMPLE_ADMIN)
+  isActive         Boolean    @default(true)
+  twoFactorEnabled Boolean    @default(false)
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  lastLoginAt      DateTime?
+  auditLogs        AuditLog[]
+
+  @@map("users")
+}
+
+model Donation {
+  id            String             @id @default(uuid())
+  receiptNumber String             @unique // e.g. SRS-2026-0001008
+  donorId       String?
+  donor         Devotee?           @relation(fields: [donorId], references: [id])
+  donorName     String
+  phone         String
+  email         String?
+  city          String             @default("పామినివాండ్లవూరు")
+  category      String
+  subcategory   String?
+  amount        Float
+  panNumber     String?
+  is80gEligible Boolean            @default(true)
+  paymentId     String?            @unique
+  payment       PaymentTransaction? @relation(fields: [paymentId], references: [id])
+  receipt       Receipt?
+  createdAt     DateTime           @default(now())
+
+  @@map("donations")
+}
+
+model PaymentTransaction {
+  id               String         @id @default(uuid())
+  orderId          String         @unique
+  gatewayPaymentId String?        @unique
+  gatewaySignature String?
+  gateway          PaymentGateway @default(RAZORPAY)
+  amount           Float
+  currency         String         @default("INR")
+  status           PaymentStatus  @default(CREATED)
+  rawWebhookData   String?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  donation         Donation?
+
+  @@map("payment_transactions")
+}
+
+model Receipt {
+  id            String   @id @default(uuid())
+  receiptNumber String   @unique
+  donationId    String   @unique
+  donation      Donation @relation(fields: [donationId], references: [id])
+  pdfUrl        String?
+  issuedAt      DateTime @default(now())
+  issuedBy      String   @default("SYSTEM_AUTOMATED")
+
+  @@map("receipts")
+}
+
+model Seva {
+  id          String        @id @default(uuid())
+  title       String
+  description String
+  price       Float
+  isActive    Boolean       @default(true)
+  bookings    SevaBooking[]
+
+  @@map("sevas")
+}
+
+model SevaBooking {
+  id          String   @id @default(uuid())
+  sevaId      String
+  seva        Seva     @relation(fields: [sevaId], references: [id])
+  devoteeId   String?
+  devotee     Devotee? @relation(fields: [devoteeId], references: [id])
+  devoteeName String
+  phone       String
+  bookingDate DateTime
+  amount      Float
+  status      String   @default("CONFIRMED")
+  createdAt   DateTime @default(now())
+
+  @@map("seva_bookings")
+}
+
+model Expense {
+  id         String   @id @default(uuid())
+  title      String
+  category   String
+  amount     Float
+  date       DateTime
+  voucherNo  String   @unique
+  paidTo     String
+  approvedBy String
+  createdAt  DateTime @default(now())
+
+  @@map("expenses")
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id])
+  userRole   String
+  action     String
+  entityName String
+  entityId   String?
+  oldValue   String?
+  newValue   String?
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+
+  @@map("audit_logs")
+}

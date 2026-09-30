@@ -13,6 +13,10 @@ dist-ssr
 *.local
 .env
 .env.*
+.turbo
+enterprise-platform/**/node_modules
+enterprise-platform/**/.next
+enterprise-platform/**/dist
 
 # Editor directories and files
 .vscode/*

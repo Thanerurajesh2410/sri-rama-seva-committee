@@ -1,0 +1,23 @@
+{
+  "name": "enterprise-temple-platform",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Enterprise Digital Temple Platform Monorepo for Sri Rama Seva Committee",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "db:generate": "turbo run db:generate",
+    "db:migrate": "turbo run db:migrate"
+  },
+  "devDependencies": {
+    "turbo": "^1.13.0",
+    "typescript": "^5.3.3"
+  },
+  "packageManager": "npm@10.2.4"
+}
