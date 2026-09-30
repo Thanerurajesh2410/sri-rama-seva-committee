@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.sacred-temple-bg {
+  background-color: #2A060B;
+  background-image: radial-gradient(#5C121E 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.heading-telugu {
+  font-family: 'Ramabhadra', 'Noto Sans Telugu', sans-serif;
+}
