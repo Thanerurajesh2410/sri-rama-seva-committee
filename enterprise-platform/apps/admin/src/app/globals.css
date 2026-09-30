@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.admin-dark-bg {
+  background-color: #1A0306;
+  background-image: radial-gradient(#4A0E17 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.heading-telugu {
+  font-family: 'Ramabhadra', 'Noto Sans Telugu', sans-serif;
+}
