@@ -27,6 +27,22 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
   // Dynamic Database Settings & Images from Admin
   const [currentDB, setLocalDB] = useState(getDB());
 
+  // Keep activeTab synchronized with subSection prop navigation (e.g. E-Hundi Viralam button clicks)
+  useEffect(() => {
+    if (subSection) {
+      setActiveTab(subSection);
+      if (subSection === 'donations' || subSection === 'hundi') {
+        setTimeout(() => {
+          if (bankSectionRef.current) {
+            bankSectionRef.current.scrollIntoView({ behavior: 'smooth' });
+          } else {
+            window.scrollTo({ top: 400, behavior: 'smooth' });
+          }
+        }, 150);
+      }
+    }
+  }, [subSection]);
+
   useEffect(() => {
     fetchCloudDB().then(refreshed => {
       if (refreshed) setLocalDB(refreshed);
@@ -459,11 +475,23 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
           <div className="container mx-auto px-4 pb-8 relative z-10">
             {/* Quick Action Navigation Buttons */}
             <div className="flex flex-wrap justify-center gap-4 mb-8">
-              <button onClick={() => { setActiveTab('donations'); setShowPaymentGatewayModal(true); }} className="btn-primary px-7 py-4 text-lg font-black shadow-[0_0_35px_rgba(230,81,0,0.8)] border-2 border-amber-300 rounded-2xl">
+              <button
+                onClick={() => {
+                  setActiveTab('donations');
+                  if (setSubSection) setSubSection('donations');
+                  setTimeout(() => {
+                    if (bankSectionRef.current) {
+                      bankSectionRef.current.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }, 100);
+                  setShowPaymentGatewayModal(true);
+                }}
+                className="btn-primary px-7 py-4 text-lg font-black shadow-[0_0_35px_rgba(230,81,0,0.8)] border-2 border-amber-300 rounded-2xl"
+              >
                 <Wallet className="w-6 h-6 text-yellow-300" />
                 <span>ఈ-హుండి ద్వారా విరాళం సమర్పించండి</span>
               </button>
-              <button onClick={() => setActiveTab('committee')} className="btn-outline px-7 py-4 text-lg font-black rounded-2xl">
+              <button onClick={() => { setActiveTab('committee'); if (setSubSection) setSubSection('committee'); }} className="btn-outline px-7 py-4 text-lg font-black rounded-2xl">
                 <Users className="w-6 h-6 text-amber-300" />
                 <span>కమిటీ సభ్యుల వివరాలు</span>
               </button>

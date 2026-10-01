@@ -54,20 +54,45 @@ body, body.theme-light, body.theme-light-slate, body.theme-cream {
 }
 
 body.theme-light .gold-card, body.theme-light-slate .gold-card, body.theme-cream .gold-card {
-  background: linear-gradient(180deg, rgba(74, 14, 23, 0.95) 0%, rgba(45, 8, 14, 0.98) 100%);
+  background: linear-gradient(180deg, rgba(74, 14, 23, 0.96) 0%, rgba(45, 8, 14, 0.98) 100%);
   border: 2px solid #FFD700;
   color: #FFFFFF;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
-body.theme-light h1, body.theme-light h2, body.theme-light h3, body.theme-light h4,
-body.theme-light-slate h1, body.theme-light-slate h2, body.theme-light-slate h3, body.theme-light-slate h4 {
+/* Ensure headings inside dark theme containers and gold cards are always high contrast white/gold */
+.sacred-temple-bg-masked h1, 
+.sacred-temple-bg-masked h2, 
+.sacred-temple-bg-masked h3, 
+.sacred-temple-bg-masked h4,
+.gold-card h1, 
+.gold-card h2, 
+.gold-card h3, 
+.gold-card h4,
+header h1, header h2, header h3,
+footer h1, footer h2, footer h3 {
+  color: #FFFFFF !important;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+}
+
+.sacred-temple-bg-masked p,
+.gold-card p {
+  color: #FFEDD5 !important;
+}
+
+body.theme-light main h1, body.theme-light main h2, body.theme-light main h3, body.theme-light main h4,
+body.theme-light-slate main h1, body.theme-light-slate main h2, body.theme-light-slate main h3, body.theme-light-slate main h4 {
   color: #0F172A;
 }
 
-body.theme-light header, body.theme-light-slate header {
-  background: #FFFFFF;
-  color: #0F172A;
+body.theme-light .gold-card h1, body.theme-light .gold-card h2, body.theme-light .gold-card h3, body.theme-light .gold-card h4,
+body.theme-light .sacred-temple-bg-masked h1, body.theme-light .sacred-temple-bg-masked h2, body.theme-light .sacred-temple-bg-masked h3, body.theme-light .sacred-temple-bg-masked h4 {
+  color: #FFFFFF !important;
+}
+
+body.theme-dark-maroon header, body.theme-cream header {
+  background: #2A060B;
+  color: #FFFFFF;
 }
 
 body.theme-cream header h1, body.theme-cream header a, body.theme-cream header p, body.theme-cream header span,
