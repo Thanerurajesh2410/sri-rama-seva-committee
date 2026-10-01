@@ -1468,22 +1468,26 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
               </div>
 
               {/* Dual Action Buttons Side-by-Side with Perfect Responsive Text Fitting */}
-              <div className="flex flex-col sm:flex-row gap-3 w-full mt-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full mt-4">
                 <button
                   type="button"
                   onClick={handleTriggerRazorpayOnline}
-                  className="w-full sm:w-1/2 btn-gold py-3.5 px-3 text-xs sm:text-sm font-black rounded-2xl shadow-xl flex items-center justify-center gap-2 border-2 border-[#FFD700] text-center whitespace-normal break-words leading-tight"
+                  className="w-full btn-gold py-3 px-2.5 text-xs sm:text-sm font-black rounded-2xl shadow-xl flex items-center justify-center gap-1.5 border-2 border-[#FFD700] text-center overflow-hidden"
                 >
-                  <CreditCard className="w-5 h-5 text-black shrink-0" />
-                  <span className="whitespace-normal leading-tight">ఆన్‌లైన్ పేమెంట్ ద్వారా విరాళం (Pay via Razorpay)</span>
+                  <CreditCard className="w-4 h-4 text-black shrink-0" />
+                  <span className="block min-w-0 w-full whitespace-normal break-words leading-tight text-center font-black">
+                    ఆన్‌లైన్ చెల్లింపు (Pay via Razorpay)
+                  </span>
                 </button>
 
                 <button
                   type="submit"
-                  className="w-full sm:w-1/2 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white py-3.5 px-3 text-xs sm:text-sm font-black rounded-2xl shadow-xl flex items-center justify-center gap-2 border-2 border-emerald-300 text-center whitespace-normal break-words leading-tight"
+                  className="w-full bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white py-3 px-2.5 text-xs sm:text-sm font-black rounded-2xl shadow-xl flex items-center justify-center gap-1.5 border-2 border-emerald-300 text-center overflow-hidden"
                 >
-                  <CheckCircle2 className="w-5 h-5 text-emerald-200 shrink-0" />
-                  <span className="whitespace-normal leading-tight">రశీదు పొందండి (Submit & Download Receipt)</span>
+                  <CheckCircle2 className="w-4 h-4 text-emerald-200 shrink-0" />
+                  <span className="block min-w-0 w-full whitespace-normal break-words leading-tight text-center font-black">
+                    రశీదు పొందండి (Submit & Download Receipt)
+                  </span>
                 </button>
               </div>
             </form>

@@ -102,11 +102,22 @@ body.theme-light-cream header h1, body.theme-light-cream header a, body.theme-li
 
 /* Auto-fitting responsive button rule allowing text to fit properly without overflow */
 .btn-autofit, button, a.btn-primary, a.btn-gold, a.btn-outline {
-  max-width: 100%;
-  box-sizing: border-box;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
   text-align: center;
   word-break: break-word;
   overflow-wrap: break-word;
+  overflow: hidden;
+}
+
+button span, .btn-primary span, .btn-gold span, .btn-outline span, a.btn-primary span, a.btn-gold span {
+  max-width: 100% !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  text-align: center;
+  min-width: 0;
+  display: inline-block;
 }
 
 .btn-autofit {
