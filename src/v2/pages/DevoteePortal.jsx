@@ -18,6 +18,9 @@ export default function DevoteePortal({ t, showToast }) {
   // Devotee Authentication State
   const [loggedInDevotee, setLoggedInDevotee] = useState(null);
   
+  // Devotee Dashboard Tab State
+  const [activeTab, setActiveTab] = useState('history');
+  
   // Devotee Selected Receipt State for Modal View & Download
   const [selectedReceipt, setSelectedReceipt] = useState(null);
   const receiptModalRef = useRef(null);
