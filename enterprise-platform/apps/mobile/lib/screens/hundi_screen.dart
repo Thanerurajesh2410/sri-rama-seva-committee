@@ -12,7 +12,7 @@ class _HundiScreenState extends State<HundiScreen> {
   final TextEditingController _customAmountController = TextEditingController();
   final TextEditingController _nameController = TextEditingController(text: 'Sri Devotee');
   final TextEditingController _panController = TextEditingController();
-  bool _is80GRequested = true;
+  bool _isReceiptRequested = true;
 
   final List<int> _quickAmounts = [501, 1008, 2500, 5000, 10000];
 
@@ -60,7 +60,7 @@ class _HundiScreenState extends State<HundiScreen> {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          '100% Tax Exempted under Section 80G of IT Act',
+                          '100% Verified Temple Construction Fund',
                           style: TextStyle(
                             fontSize: 11,
                             color: Color(0xFFD97706),
@@ -165,23 +165,23 @@ class _HundiScreenState extends State<HundiScreen> {
             ),
             const SizedBox(height: 12),
 
-            // 80G Tax Checkbox
+            // Digital Receipt Checkbox
             CheckboxListTile(
-              value: _is80GRequested,
+              value: _isReceiptRequested,
               onChanged: (val) {
                 setState(() {
-                  _is80GRequested = val ?? true;
+                  _isReceiptRequested = val ?? true;
                 });
               },
               title: const Text(
-                'I require an 80G Tax Exemption Certificate',
+                'I require an official digital temple receipt',
                 style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
               ),
               activeColor: const Color(0xFF8B0000),
               contentPadding: EdgeInsets.zero,
             ),
 
-            if (_is80GRequested) ...[
+            if (_isReceiptRequested) ...[
               const SizedBox(height: 4),
               TextField(
                 controller: _panController,

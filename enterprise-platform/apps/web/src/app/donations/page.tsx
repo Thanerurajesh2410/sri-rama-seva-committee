@@ -79,7 +79,7 @@ export default function EDonationsPage() {
               className="w-full bg-[#1A0306] border-2 border-amber-400/60 p-3 rounded-xl text-white font-mono font-black uppercase outline-none"
             />
             <p className="text-[11px] text-amber-300 font-bold mt-2">
-              💡 <strong>PAN నంబర్ ఎందుకు?:</strong> 80G ఆదాయ పన్ను మినహాయింపు రశీదు మరియు ప్రభుత్వ పారదర్శకత రికార్డు కొరకు PAN వివరాలు సేకరిస్తారు.
+              💡 <strong>PAN నంబర్ ఎందుకు?:</strong> అధికారిక ఆలయ రశీదు మరియు ప్రభుత్వ పారదర్శకత రికార్డు కొరకు PAN వివరాలు సేకరిస్తారు.
             </p>
           </div>
         </div>

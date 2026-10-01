@@ -26,7 +26,7 @@ export const loadRazorpayScript = () => {
  * @param {string} params.email - Donor email
  * @param {string} params.city - Donor village/city
  * @param {string} params.seva - Selected Seva or donation category
- * @param {string} params.panNumber - Optional PAN number for 80G tax receipt
+ * @param {string} params.panNumber - Optional PAN number for official temple receipt
  * @param {string} params.keyId - Optional custom Razorpay Key ID
  * @param {Function} params.onSuccess - Callback receiving verified payment response
  * @param {Function} params.onFailure - Callback on payment failure/cancel/error

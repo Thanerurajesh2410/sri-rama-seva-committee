@@ -42,7 +42,7 @@ export default function AdminDashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
         <a href="/donations" className="bg-[#2A060B] border-2 border-amber-400/60 p-6 rounded-3xl hover:border-[#FFD700] transition space-y-3">
           <h3 className="text-lg font-black text-[#FFD700] heading-telugu">🧾 రశీదుల జారీ & దాతల శోధన</h3>
-          <p className="text-xs text-gray-300 font-bold">దాతల పేరు లేదా PAN నంబర్ ద్వారా శోధించి 80G పన్ను మినహాయింపు రశీదు PDF జారీ చేయండి.</p>
+          <p className="text-xs text-gray-300 font-bold">దాతల పేరు లేదా PAN నంబర్ ద్వారా శోధించి అధికారిక ఆలయ రశీదు PDF జారీ చేయండి.</p>
         </a>
 
         <a href="/reconciliation" className="bg-[#2A060B] border-2 border-amber-400/60 p-6 rounded-3xl hover:border-[#FFD700] transition space-y-3">

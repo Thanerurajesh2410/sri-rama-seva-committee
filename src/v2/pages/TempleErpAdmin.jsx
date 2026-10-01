@@ -2468,7 +2468,7 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
                       <div className="bg-black/60 p-3 rounded-xl border border-white/10 text-xs space-y-1">
                         <span className="font-black text-emerald-400 block">✓ Status: Active Gateway</span>
                         <span className="text-gray-300 block">UPI, Cards, Netbanking</span>
-                        <span className="text-amber-300 font-bold block">80G Tax Receipt Ready</span>
+                        <span className="text-amber-300 font-bold block">Official Digital Receipt Ready</span>
                       </div>
                     </div>
                   </div>

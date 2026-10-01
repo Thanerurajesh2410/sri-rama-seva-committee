@@ -909,7 +909,7 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                     <p className="text-[11px] text-amber-300 font-bold mt-1.5 flex items-center gap-1.5">
                       <Info className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                       <span>
-                        <strong>PAN నంబర్ ఎందుకు?:</strong> ఆదాయ పన్ను చట్టం 80G ప్రకారం పన్ను మినహాయింపు రశీదు (80G Tax Exemption Receipt) మరియు ప్రభుత్వ పారదర్శకత రికార్డు నమోదు కొరకు PAN వివరాలు సేకరిస్తారు.
+                        <strong>PAN నంబర్ ఎందుకు?:</strong> అధికారిక ఆలయ డిజిటల్ రశీదు (Official Temple Digital Receipt) మరియు పారదర్శకత రికార్డు నమోదు కొరకు PAN వివరాలు సేకరిస్తారు.
                       </span>
                     </p>
                   </div>
@@ -1595,7 +1595,7 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
 
                 {digitalReceipt.panNumber && (
                   <div className="grid grid-cols-3 border-b border-gray-400 bg-amber-50">
-                    <div className="p-2.5 font-bold bg-amber-100 border-r border-gray-400 text-[#C25200]">PAN సంఖ్య (PAN No - 80G):</div>
+                    <div className="p-2.5 font-bold bg-amber-100 border-r border-gray-400 text-[#C25200]">PAN సంఖ్య (PAN Card No):</div>
                     <div className="p-2.5 font-mono font-black col-span-2 text-gray-900 uppercase">{digitalReceipt.panNumber}</div>
                   </div>
                 )}

@@ -13,7 +13,7 @@ export const v2Content = {
       { id: 6, title: "6. పారదర్శకత (Transparency)", desc: "ట్రస్ట్/కమిటీ అన్ని విరాళాలు మరియు వ్యయాలకు సంబంధించి సరైన రికార్డులను నిర్వహిస్తుంది. భక్తులు మరియు గ్రామీణుల అభ్యర్థన మేరకు ఆర్థిక వివరాలు పంచుకోబడతాయి." },
       { id: 7, title: "7. బ్యాంక్ & ఆన్‌లైన్ బదిలీలు (Bank & Online Transfers)", desc: "ఆన్‌లైన్ విరాళం ఇచ్చే ముందు దయచేసి అధికారిక బ్యాంక్ ఖాతా లేదా UPI QR కోడ్‌ను సరిచూసుకోండి. అనధికారిక ఖాతాలకు పంపే నిధులకు కమిటీ బాధ్యత వహించదు." },
       { id: 8, title: "8. రశీదు భద్రపరచుట (Receipt Verification)", desc: "భవిష్యత్తు సంప్రదింపులు మరియు ధృవీకరణ కొరకు దయచేసి మీ విరాళాల రశీదు నంబర్‌ను భద్రపరుచుకోవలెను." },
-      { id: 9, title: "9. పన్ను మినహాయింపు (Tax Benefits)", desc: "ఆదాయపు పన్ను చట్టం యొక్క వర్తించే నిబంధనల ప్రకారం ట్రస్ట్ రిజిస్ట్రేషన్ మరియు అర్హతను బట్టి మాత్రమే పన్ను మినహాయింపు ప్రయోజనాలు అందించబడతాయి." },
+      { id: 9, title: "9. ఆలయ నిధి నిర్వహణ (Temple Fund Governance)", desc: "భక్తుల కానుకలు మరియు విరాళాలు ఆలయ నియమావళి మరియు కమిటీ నిర్వహణ నిబంధనలకు అనుగుణంగా నిర్వహించబడతాయి." },
       { id: 10, title: "10. కమిటీ నిర్ణయమే అంతిమం (Committee Decision)", desc: "విరాళాలు లేదా సేవల విషయమై ఏవైనా అభిప్రాయ భేదాలు తలెత్తితే, ఆలయ సేవా కమిటీ యొక్క నిర్ణయమే అంతిమమైనది." }
     ],
 
@@ -170,7 +170,7 @@ export const v2Content = {
       { id: 6, title: "6. Transparency", desc: "The Trust/Committee will maintain proper records of donations and expenditures, and financial details may be shared with devotees whenever appropriate." },
       { id: 7, title: "7. Bank & Online Transfers", desc: "Kindly verify the official bank account or QR code before making any online donation. The committee is not responsible for donations made to unauthorized accounts." },
       { id: 8, title: "8. Receipt verification", desc: "Please preserve your donation receipt for future reference and verification." },
-      { id: 9, title: "9. Tax Benefits (if applicable)", desc: "Tax exemption benefits will be provided only if the Trust is registered under the applicable provisions of the Income Tax Act." },
+      { id: 9, title: "9. Temple Fund Governance", desc: "All contributions and donations are managed in strict compliance with temple guidelines and committee regulations." },
       { id: 10, title: "10. Committee decision", desc: "In case of any dispute regarding donations, the decision of the Temple Committee shall be final." }
     ],
     donationCategories: [

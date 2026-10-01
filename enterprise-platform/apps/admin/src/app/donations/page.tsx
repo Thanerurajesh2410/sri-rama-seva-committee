@@ -22,7 +22,7 @@ export default function DonationsLedgerPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/20">
         <div>
           <h1 className="text-2xl sm:text-3xl font-black text-white heading-telugu">
-            🧾 విరాళాలు & రశీదుల లేడ్జర్ (Donations & 80G Receipts)
+            🧾 విరాళాలు & రశీదుల లేడ్జర్ (Donations & Official Receipts)
           </h1>
           <p className="text-xs sm:text-sm text-amber-300 font-bold">
             అధికారిక రశీదు నంబర్ లేదా PAN నంబర్ ద్వారా దాతల సమాచారం శోధించండి.
@@ -48,7 +48,7 @@ export default function DonationsLedgerPage() {
                 <th className="p-4">రశీదు సంఖ్య</th>
                 <th className="p-4">దాత పేరు</th>
                 <th className="p-4">విరాళం మొత్తం</th>
-                <th className="p-4">PAN నంబర్ (80G)</th>
+                <th className="p-4">PAN నంబర్ (PAN Card No)</th>
                 <th className="p-4">చెల్లింపు మార్గం</th>
                 <th className="p-4">తేదీ</th>
               </tr>

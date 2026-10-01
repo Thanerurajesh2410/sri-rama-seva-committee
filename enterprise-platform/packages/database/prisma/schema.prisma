@@ -44,7 +44,7 @@ model Devotee {
   email        String?
   city         String        @default("పామినివాండ్లవూరు")
   address      String?
-  panNumber    String?       // Optional for 80G Tax Exemption receipts
+  panNumber    String?       // Optional for Official Temple receipts
   passwordHash String?
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt

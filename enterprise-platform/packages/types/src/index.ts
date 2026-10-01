@@ -13,7 +13,7 @@ export interface IDevotee {
   email?: string;
   city: string;
   address?: string;
-  panNumber?: string; // Optional for 80G tax exemption receipts
+  panNumber?: string; // Optional for official temple receipts
   registeredAt: Date;
   updatedAt: Date;
 }

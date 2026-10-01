@@ -30,7 +30,7 @@ async function bootstrap() {
     .setVersion('1.0.0')
     .addBearerAuth()
     .addTag('Payments', 'Razorpay order creation, webhooks, and HMAC-SHA256 signature verification')
-    .addTag('Donations', 'E-Hundi donation records, category schemes, and 80G tax receipt issuance')
+    .addTag('Donations', 'E-Hundi donation records, category schemes, and official temple receipt issuance')
     .addTag('Devotees', 'Devotee profiles, phone verification, and PAN card registration')
     .build();
 

@@ -27,7 +27,7 @@ const mockAuditLogs: AuditLog[] = [
     ipAddress: '49.207.214.11',
     hash: '0x8f3a92b...e41c',
     status: 'SUCCESS',
-    details: 'Issued 80G tax exemption receipt #RSK-2026-881 for ₹25,000'
+    details: 'Issued official temple receipt #RSK-2026-881 for ₹25,000'
   },
   {
     id: 'LOG-884909',

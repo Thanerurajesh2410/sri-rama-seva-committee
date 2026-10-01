@@ -107,11 +107,11 @@ class ProfileScreen extends StatelessWidget {
             ),
             const SizedBox(height: 24),
 
-            // Past Donations & 80G Certificates List
+            // Past Donations & Official Receipts List
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Donation History & 80G Tax Certificates',
+                'Donation History & Official Digital Receipts',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 15,
@@ -144,11 +144,11 @@ class ProfileScreen extends StatelessWidget {
                       '₹25,000 • Mandir Construction',
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                     ),
-                    subtitle: const Text('30 Sep 2026 • 80G Receipt #RSK-2026-881'),
+                    subtitle: const Text('30 Sep 2026 • Receipt #RSK-2026-881'),
                     trailing: TextButton.icon(
                       onPressed: () {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Downloading 80G Tax Receipt PDF...')),
+                          const SnackBar(content: Text('Downloading Official Temple Receipt PDF...')),
                         );
                       },
                       icon: const Icon(Icons.download, size: 16, color: Color(0xFF8B0000)),
@@ -169,11 +169,11 @@ class ProfileScreen extends StatelessWidget {
                       '₹5,001 • E-Hundi Contribution',
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                     ),
-                    subtitle: const Text('15 Aug 2026 • 80G Receipt #RSK-2026-442'),
+                    subtitle: const Text('15 Aug 2026 • Receipt #RSK-2026-442'),
                     trailing: TextButton.icon(
                       onPressed: () {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Downloading 80G Tax Receipt PDF...')),
+                          const SnackBar(content: Text('Downloading Official Temple Receipt PDF...')),
                         );
                       },
                       icon: const Icon(Icons.download, size: 16, color: Color(0xFF8B0000)),
