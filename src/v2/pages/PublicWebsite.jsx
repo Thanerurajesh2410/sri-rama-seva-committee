@@ -1456,26 +1456,36 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                 />
               </div>
 
-              {/* Payment Option Selector - QR Code Standee Only */}
+              {/* Payment Option Selector & Dual Action Buttons */}
               <div>
-                <label className="block text-xs sm:text-sm font-black text-amber-200 mb-2">5. చెల్లింపు మార్గం (Payment Option)</label>
-                <button
-                  type="button"
-                  onClick={() => setShowQrModal(true)}
-                  className="btn-gold w-full p-4 rounded-2xl text-sm sm:text-base font-black flex items-center justify-center gap-3 shadow-xl"
-                >
-                  <QrCode className="w-6 h-6 text-black" />
-                  <span>PhonePe Standee QR స్కాన్ & E-HUNDI</span>
-                </button>
+                <label className="block text-xs sm:text-sm font-black text-amber-200 mb-1">5. చెల్లింపు మార్గం (Payment Mode / UPI Txn Reference):</label>
+                <input
+                  type="text"
+                  readOnly
+                  value="PhonePe / UPI Direct"
+                  className="w-full bg-[#1A0306] border-2 border-amber-400/40 rounded-xl p-3.5 text-sm sm:text-base text-white font-mono font-bold"
+                />
               </div>
 
-              <button
-                type="submit"
-                className="btn-gold w-full py-4 text-lg font-black rounded-2xl shadow-2xl flex items-center justify-center gap-2 mt-4"
-              >
-                <CheckCircle2 className="w-6 h-6 text-emerald-950" />
-                <span>విరాళం సమర్పించి రశీదు పొందండి (Submit & Get Official Receipt)</span>
-              </button>
+              {/* Dual Action Buttons Side-by-Side with Perfect Responsive Text Fitting */}
+              <div className="flex flex-col sm:flex-row gap-3 w-full mt-4">
+                <button
+                  type="button"
+                  onClick={handleTriggerRazorpayOnline}
+                  className="w-full sm:w-1/2 btn-gold py-3.5 px-3 text-xs sm:text-sm font-black rounded-2xl shadow-xl flex items-center justify-center gap-2 border-2 border-[#FFD700] text-center whitespace-normal break-words leading-tight"
+                >
+                  <CreditCard className="w-5 h-5 text-black shrink-0" />
+                  <span className="whitespace-normal leading-tight">ఆన్‌లైన్ పేమెంట్ ద్వారా విరాళం (Pay via Razorpay)</span>
+                </button>
+
+                <button
+                  type="submit"
+                  className="w-full sm:w-1/2 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white py-3.5 px-3 text-xs sm:text-sm font-black rounded-2xl shadow-xl flex items-center justify-center gap-2 border-2 border-emerald-300 text-center whitespace-normal break-words leading-tight"
+                >
+                  <CheckCircle2 className="w-5 h-5 text-emerald-200 shrink-0" />
+                  <span className="whitespace-normal leading-tight">రశీదు పొందండి (Submit & Download Receipt)</span>
+                </button>
+              </div>
             </form>
           </div>
         </div>

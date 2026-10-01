@@ -100,12 +100,21 @@ body.theme-light-cream header h1, body.theme-light-cream header a, body.theme-li
   color: #FFFFFF;
 }
 
-/* Auto-fitting responsive button rule preventing text overflow and awkward line breaks */
+/* Auto-fitting responsive button rule allowing text to fit properly without overflow */
 .btn-autofit, button, a.btn-primary, a.btn-gold, a.btn-outline {
   max-width: 100%;
-  white-space: nowrap !important;
-  flex-shrink: 0 !important;
   box-sizing: border-box;
+  text-align: center;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.btn-autofit {
+  white-space: nowrap;
+}
+
+button.whitespace-normal, .whitespace-normal {
+  white-space: normal !important;
 }
 
 /* =========================================================
