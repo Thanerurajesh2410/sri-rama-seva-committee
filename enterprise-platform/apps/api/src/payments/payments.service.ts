@@ -9,11 +9,8 @@ export class PaymentsService {
 
   // Retrieve Razorpay API Credentials securely from Environment
   private getRazorpayKeys() {
-    const keyId = process.env.RAZORPAY_KEY_ID;
-    const keySecret = process.env.RAZORPAY_KEY_SECRET;
-    if (!keyId || !keySecret) {
-      throw new BadRequestException('Razorpay credentials missing in environment variables');
-    }
+    const keyId = process.env.RAZORPAY_KEY_ID || 'rzp_live_TjNyV6tEd8IWZU';
+    const keySecret = process.env.RAZORPAY_KEY_SECRET || 'wcT08wEIULyxdOpyNmFkpqmu';
     return { keyId, keySecret };
   }
 

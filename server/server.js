@@ -355,8 +355,8 @@ app.post('/api/contact', (req, res) => {
 
 // Initialize Razorpay Instance from Environment Variables
 const getRazorpayInstance = () => {
-  const key_id = process.env.RAZORPAY_KEY_ID || 'rzp_test_TjMCDt71OV3ikR';
-  const key_secret = process.env.RAZORPAY_KEY_SECRET || 'cLTqU3NGyzjG5XKsMM6TgZ0g';
+  const key_id = process.env.RAZORPAY_KEY_ID || 'rzp_live_TjNyV6tEd8IWZU';
+  const key_secret = process.env.RAZORPAY_KEY_SECRET || 'wcT08wEIULyxdOpyNmFkpqmu';
   return new Razorpay({ key_id, key_secret });
 };
 
@@ -422,7 +422,7 @@ const handleVerifyPayment = (req, res) => {
       });
     }
 
-    const keySecret = process.env.RAZORPAY_KEY_SECRET || 'cLTqU3NGyzjG5XKsMM6TgZ0g';
+    const keySecret = process.env.RAZORPAY_KEY_SECRET || 'wcT08wEIULyxdOpyNmFkpqmu';
     const bodyData = razorpay_order_id + '|' + razorpay_payment_id;
     
     const generatedSignature = crypto

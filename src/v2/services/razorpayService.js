@@ -52,7 +52,7 @@ export const launchRazorpayDonation = async ({
   }
 
   // Determine Razorpay Key ID (Never expose Secret)
-  const razorpayKey = keyId || import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_TjMCDt71OV3ikR';
+  const razorpayKey = keyId || import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_TjNyV6tEd8IWZU';
   
   // Convert amount to paise (Minimum 100 paise = 1 INR)
   let numAmount = Number(amount);

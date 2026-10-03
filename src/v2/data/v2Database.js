@@ -63,7 +63,7 @@ export const defaultWebsiteSettings = {
   showReports: true,
   showContact: true,
   enableRazorpay: true,
-  razorpayKeyId: 'rzp_test_TjMCDt71OV3ikR'
+  razorpayKeyId: 'rzp_live_TjNyV6tEd8IWZU'
 };
 
 export const defaultGalleryImages = [
