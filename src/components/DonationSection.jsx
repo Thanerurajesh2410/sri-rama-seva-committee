@@ -62,71 +62,9 @@ export default function DonationSection({ t, showToast }) {
           </div>
         </div>
 
-        {/* 🚩 Highlighted E-Hundi Card & Bank Account Card */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto mb-8">
+        {/* 🚩 Direct SBI Bank Account Card */}
+        <div className="max-w-3xl mx-auto mb-8">
           
-          {/* E-Hundi & QR Scanner Card */}
-          <div className="gold-card border-3 border-[#FFD700] shadow-[0_0_50px_rgba(255,215,0,0.45)] bg-gradient-to-b from-[#5C121E] via-[#3A0A11] to-[#200407] flex flex-col justify-between !p-6 sm:!p-8">
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-xs sm:text-sm font-black uppercase tracking-wider text-black bg-[#FFD700] px-3.5 py-1.5 rounded-full shadow-md flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 fill-black" />
-                  ఈ-హుండి (E-HUNDI)
-                </span>
-                <span className="text-xs sm:text-sm font-black text-amber-300">100% SECURE & DIRECT</span>
-              </div>
-
-              <h3 className="text-2xl sm:text-3xl font-black text-white heading-telugu mb-3">
-                PhonePe & UPI E-Hundi Scanner
-              </h3>
-
-              <p className="text-sm sm:text-base text-gray-100 mb-6 leading-relaxed font-semibold">
-                {t.donation.scanQr}
-              </p>
-
-              {/* PhonePe Standee Scanner Trigger Card */}
-              <div className="bg-black/70 p-5 rounded-2xl border-2 border-dashed border-[#FFD700] flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left shadow-2xl">
-                <img
-                  src={getActiveQrCode()}
-                  alt="Sri Rama Seva Committee PhonePe Standee QR Scanner"
-                  onError={(e) => {
-                    e.currentTarget.onerror = null;
-                    e.currentTarget.src = getAssetUrl('assets/phonepe_qr.png');
-                  }}
-                  className="w-36 h-36 rounded-xl object-contain bg-white p-1.5 border-2 border-amber-400 shadow-2xl cursor-pointer hover:scale-105 transition-transform"
-                  onClick={() => setShowQrModal(true)}
-                />
-
-                <div>
-                  <h4 className="text-base sm:text-lg font-black text-white mb-1.5 leading-snug">
-                    SRI RAMA SEVA COMMITTEE PAMINIVANDLAVOORU
-                  </h4>
-                  <p className="text-sm sm:text-base font-mono text-amber-300 font-black mb-3">
-                    UPI ID: {t.donation.upiId}
-                  </p>
-
-                  <button
-                    onClick={() => copyToClipboard(t.donation.upiId, 'upi')}
-                    className="btn-gold text-xs sm:text-sm !py-2 !px-4 rounded-xl font-bold"
-                  >
-                    {copiedUpi ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                    <span>{copiedUpi ? t.donation.copiedMsg : "UPI ID కాపీ చేయి"}</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-8 pt-5 border-t border-white/15 flex justify-center">
-              <button
-                onClick={() => setShowQrModal(true)}
-                className="btn-primary text-sm sm:text-base w-full py-4 shadow-2xl flex items-center justify-center gap-2.5 font-black rounded-2xl"
-              >
-                <QrCode className="w-5 h-5" />
-                <span>QR కోడ్ జూమ్ చేసి స్కాన్ చేయండి (Open Scanner)</span>
-              </button>
-            </div>
-          </div>
-
           {/* Direct SBI Bank Account Transfer Card */}
           <div className="gold-card border-3 border-amber-400 bg-gradient-to-b from-[#4A0E17] via-[#2A060B] to-[#1A0306] flex flex-col justify-between !p-6 sm:!p-8 shadow-2xl">
             <div>
