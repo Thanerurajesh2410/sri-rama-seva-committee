@@ -686,7 +686,7 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
 
             {/* 📝 INSTANT SCAN & DONATE RECEIPT GENERATOR FORM CARD */}
             <div className="max-w-3xl mx-auto mt-8">
-              <form onSubmit={handleCompleteDonationPayment} className="gold-card border-3 border-[#FFD700] bg-gradient-to-b from-[#5C121E] via-[#3A0A11] to-[#200407] p-6 sm:p-8 rounded-3xl shadow-2xl space-y-6 text-white">
+              <form onSubmit={handleTriggerRazorpayOnline} className="gold-card border-3 border-[#FFD700] bg-gradient-to-b from-[#5C121E] via-[#3A0A11] to-[#200407] p-6 sm:p-8 rounded-3xl shadow-2xl space-y-6 text-white">
                 
                 <div className="flex items-center gap-3 border-b-2 border-amber-400/40 pb-3">
                   <FileCheck className="w-8 h-8 text-[#FFD700] shrink-0" />
@@ -811,22 +811,14 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                  <button
-                    type="button"
-                    onClick={handleTriggerRazorpayOnline}
-                    className="py-4 px-6 rounded-2xl font-black text-sm sm:text-base text-black bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 hover:brightness-110 shadow-[0_0_25px_rgba(245,158,11,0.5)] border-2 border-[#FFD700] flex items-center justify-center gap-2.5 transition-all transform hover:scale-105"
-                  >
-                    <CreditCard className="w-5 h-5 text-black" />
-                    <span>💳 ఆన్‌లైన్ పేమెంట్ ద్వారా విరాళం (Pay via Razorpay)</span>
-                  </button>
-
+                <div className="pt-2">
                   <button
                     type="submit"
-                    className="py-4 px-6 rounded-2xl font-black text-sm sm:text-base text-white bg-gradient-to-r from-emerald-600 to-teal-700 hover:brightness-110 shadow-xl border-2 border-emerald-400 flex items-center justify-center gap-2.5 transition-all"
+                    onClick={handleTriggerRazorpayOnline}
+                    className="w-full py-4 px-6 rounded-2xl font-black text-base sm:text-lg text-black bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 hover:brightness-110 shadow-[0_0_25px_rgba(245,158,11,0.5)] border-2 border-[#FFD700] flex items-center justify-center gap-2.5 transition-all transform hover:scale-[1.02]"
                   >
-                    <FileCheck className="w-5 h-5 text-emerald-300" />
-                    <span>తక్షణ రశీదు పొందండి (Submit & Download Receipt)</span>
+                    <CreditCard className="w-6 h-6 text-black" />
+                    <span>💳 ఆన్‌లైన్ పేమెంట్ ద్వారా విరాళం (Pay via Razorpay)</span>
                   </button>
                 </div>
 
@@ -1273,7 +1265,7 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
               </div>
             </div>
 
-            <form onSubmit={handleCompleteDonationPayment} className="space-y-5">
+            <form onSubmit={handleTriggerRazorpayOnline} className="space-y-5">
               <div>
                 <label className="block text-xs sm:text-sm font-black text-amber-200 mb-1">1. భక్తుని పూర్తి పేరు (Devotee Name) *</label>
                 <input
@@ -1350,26 +1342,16 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
                 />
               </div>
 
-              {/* Dual Action Buttons Side-by-Side with Perfect Responsive Text Fitting */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full mt-4">
-                <button
-                  type="button"
-                  onClick={handleTriggerRazorpayOnline}
-                  className="w-full btn-gold py-3 px-2.5 text-xs sm:text-sm font-black rounded-2xl shadow-xl flex items-center justify-center gap-1.5 border-2 border-[#FFD700] text-center overflow-hidden"
-                >
-                  <CreditCard className="w-4 h-4 text-black shrink-0" />
-                  <span className="block min-w-0 w-full whitespace-normal break-words leading-tight text-center font-black">
-                    ఆన్‌లైన్ చెల్లింపు (Pay via Razorpay)
-                  </span>
-                </button>
-
+              {/* Razorpay Online Payment Action Button */}
+              <div className="w-full mt-4">
                 <button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white py-3 px-2.5 text-xs sm:text-sm font-black rounded-2xl shadow-xl flex items-center justify-center gap-1.5 border-2 border-emerald-300 text-center overflow-hidden"
+                  onClick={handleTriggerRazorpayOnline}
+                  className="w-full btn-gold py-4 px-6 text-sm sm:text-base font-black rounded-2xl shadow-xl flex items-center justify-center gap-2 border-2 border-[#FFD700] text-center"
                 >
-                  <CheckCircle2 className="w-4 h-4 text-emerald-200 shrink-0" />
-                  <span className="block min-w-0 w-full whitespace-normal break-words leading-tight text-center font-black">
-                    రశీదు పొందండి (Submit & Download Receipt)
+                  <CreditCard className="w-5 h-5 text-black shrink-0" />
+                  <span className="block font-black">
+                    💳 ఆన్‌లైన్ చెల్లింపు (Pay via Razorpay)
                   </span>
                 </button>
               </div>
