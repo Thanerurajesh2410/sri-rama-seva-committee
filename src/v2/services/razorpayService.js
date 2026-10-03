@@ -72,28 +72,31 @@ export const launchRazorpayDonation = async ({
   }
 
   let orderId = '';
-  const apiBaseUrl = window.location.origin.includes('localhost') ? 'http://localhost:5000' : '';
 
-  // STEP 1: Call Backend to Create Order
-  try {
-    const orderRes = await fetch(`${apiBaseUrl}/api/create-order`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        amount: amountInPaise,
-        currency: 'INR',
-        receipt: `srsc_rcpt_${Date.now()}`
-      })
-    });
+  // STEP 1: Call Backend to Create Order (Try Proxied Relative API & Direct Server Endpoint)
+  const orderEndpoints = [
+    '/api/create-order',
+    'http://localhost:5000/api/create-order'
+  ];
 
-    if (orderRes.ok) {
-      const orderData = await orderRes.json();
-      orderId = orderData.order_id || orderData.id || '';
-    } else {
-      console.warn("Backend order creation returned status:", orderRes.status);
-    }
-  } catch (err) {
-    console.warn("Backend API not reachable for order creation, continuing with client checkout:", err);
+  for (const endpoint of orderEndpoints) {
+    try {
+      const orderRes = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: amountInPaise,
+          currency: 'INR',
+          receipt: `srsc_rcpt_${Date.now()}`
+        })
+      });
+
+      if (orderRes.ok) {
+        const orderData = await orderRes.json();
+        orderId = orderData.order_id || orderData.id || '';
+        if (orderId) break;
+      }
+    } catch (err) {}
   }
 
   // STEP 2: Configure Razorpay Checkout Modal
@@ -112,30 +115,36 @@ export const launchRazorpayDonation = async ({
 
       // STEP 3: Call Backend Endpoint to Verify Signature
       let verified = true;
-      if (apiBaseUrl && returnedOrderId && signature) {
-        try {
-          const verifyRes = await fetch(`${apiBaseUrl}/api/verify-payment`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              razorpay_order_id: returnedOrderId,
-              razorpay_payment_id: paymentId,
-              razorpay_signature: signature
-            })
-          });
+      if (returnedOrderId && signature) {
+        const verifyEndpoints = [
+          '/api/verify-payment',
+          'http://localhost:5000/api/verify-payment'
+        ];
 
-          if (verifyRes.ok) {
-            const verifyData = await verifyRes.json();
-            if (verifyData.status !== 'success') {
+        for (const endpoint of verifyEndpoints) {
+          try {
+            const verifyRes = await fetch(endpoint, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_order_id: returnedOrderId,
+                razorpay_payment_id: paymentId,
+                razorpay_signature: signature
+              })
+            });
+
+            if (verifyRes.ok) {
+              const verifyData = await verifyRes.json();
+              if (verifyData.status !== 'success') {
+                verified = false;
+              }
+              break;
+            } else if (verifyRes.status === 400) {
+              console.error("Backend signature verification rejected");
               verified = false;
+              break;
             }
-          } else if (verifyRes.status === 400) {
-            const errData = await verifyRes.json().catch(() => ({}));
-            console.error("Backend signature verification rejected:", errData);
-            verified = false;
-          }
-        } catch (err) {
-          console.warn("Backend verification endpoint unreachable, validating client side:", err);
+          } catch (err) {}
         }
       }
 
