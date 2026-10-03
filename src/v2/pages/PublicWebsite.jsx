@@ -114,7 +114,7 @@ export default function PublicWebsite({ t, v2T, showToast, subSection, setSubSec
 
     showToast("Razorpay పేమెంట్ గేట్‌వే తెరవబడుతోంది...");
 
-    const keyId = websiteSettings.razorpayKeyId || 'rzp_test_SRSC1008Temple';
+    const keyId = websiteSettings.razorpayKeyId || import.meta.env.VITE_RAZORPAY_KEY_ID;
 
     launchRazorpayDonation({
       amount: numAmount,

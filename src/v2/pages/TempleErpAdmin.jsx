@@ -2461,7 +2461,7 @@ export default function TempleErpAdmin({ t, v2T, showToast }) {
                             saveDB(currentDB);
                             setDbState({ ...currentDB });
                           }}
-                          placeholder="rzp_live_xxxxxxxxxxxx (లేదా టెస్టింగ్ కోసం rzp_test_SRSC1008Temple)"
+                          placeholder="rzp_test_xxxxxxxxxxxx లేదా rzp_live_xxxxxxxxxxxx"
                           className="w-full bg-[#1A0306] border-2 border-amber-400/60 p-3 rounded-xl text-white font-mono text-xs sm:text-sm focus:border-[#FFD700] outline-none"
                         />
                       </div>

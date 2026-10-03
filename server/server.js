@@ -352,8 +352,11 @@ app.post('/api/contact', (req, res) => {
 
 // Initialize Razorpay Instance from Environment Variables
 const getRazorpayInstance = () => {
-  const key_id = process.env.RAZORPAY_KEY_ID || 'rzp_test_ThVSzD9qkeH0vN';
-  const key_secret = process.env.RAZORPAY_KEY_SECRET || 'yxS5RhCR5U4wMFiOtoJSdmMO';
+  const key_id = process.env.RAZORPAY_KEY_ID;
+  const key_secret = process.env.RAZORPAY_KEY_SECRET;
+  if (!key_id || !key_secret) {
+    throw new Error('Razorpay credentials (RAZORPAY_KEY_ID or RAZORPAY_KEY_SECRET) are missing in environment variables');
+  }
   return new Razorpay({ key_id, key_secret });
 };
 
@@ -419,7 +422,10 @@ const handleVerifyPayment = (req, res) => {
       });
     }
 
-    const keySecret = process.env.RAZORPAY_KEY_SECRET || 'yxS5RhCR5U4wMFiOtoJSdmMO';
+    const keySecret = process.env.RAZORPAY_KEY_SECRET;
+    if (!keySecret) {
+      return res.status(500).json({ error: 'RAZORPAY_KEY_SECRET is missing in server environment variables' });
+    }
     const bodyData = razorpay_order_id + '|' + razorpay_payment_id;
     
     const generatedSignature = crypto
