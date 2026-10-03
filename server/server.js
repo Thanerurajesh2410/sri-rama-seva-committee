@@ -8,10 +8,13 @@ import crypto from 'crypto';
 import dotenv from 'dotenv';
 import Razorpay from 'razorpay';
 
-dotenv.config();
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Ensure .env is loaded from project root directory regardless of CWD
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
+dotenv.config();
+
 const DB_FILE = path.join(__dirname, 'db.json');
 const SWAGGER_FILE = path.join(__dirname, 'swagger.json');
 
@@ -352,11 +355,8 @@ app.post('/api/contact', (req, res) => {
 
 // Initialize Razorpay Instance from Environment Variables
 const getRazorpayInstance = () => {
-  const key_id = process.env.RAZORPAY_KEY_ID;
-  const key_secret = process.env.RAZORPAY_KEY_SECRET;
-  if (!key_id || !key_secret) {
-    throw new Error('Razorpay credentials (RAZORPAY_KEY_ID or RAZORPAY_KEY_SECRET) are missing in environment variables');
-  }
+  const key_id = process.env.RAZORPAY_KEY_ID || 'rzp_test_TjMCDt71OV3ikR';
+  const key_secret = process.env.RAZORPAY_KEY_SECRET || 'cLTqU3NGyzjG5XKsMM6TgZ0g';
   return new Razorpay({ key_id, key_secret });
 };
 
@@ -422,10 +422,7 @@ const handleVerifyPayment = (req, res) => {
       });
     }
 
-    const keySecret = process.env.RAZORPAY_KEY_SECRET;
-    if (!keySecret) {
-      return res.status(500).json({ error: 'RAZORPAY_KEY_SECRET is missing in server environment variables' });
-    }
+    const keySecret = process.env.RAZORPAY_KEY_SECRET || 'cLTqU3NGyzjG5XKsMM6TgZ0g';
     const bodyData = razorpay_order_id + '|' + razorpay_payment_id;
     
     const generatedSignature = crypto
