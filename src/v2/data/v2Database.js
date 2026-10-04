@@ -63,7 +63,7 @@ export const defaultWebsiteSettings = {
   showReports: true,
   showContact: true,
   enableRazorpay: true,
-  razorpayKeyId: 'rzp_live_TjNyV6tEd8IWZU'
+  razorpayKeyId: import.meta.env.VITE_RAZORPAY_KEY_ID || ''
 };
 
 export const defaultGalleryImages = [
