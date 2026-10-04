@@ -53,6 +53,11 @@ export const launchRazorpayDonation = async ({
 
   // Determine Razorpay Key ID (Never expose Secret)
   const razorpayKey = keyId || import.meta.env.VITE_RAZORPAY_KEY_ID || '';
+  if (!razorpayKey) {
+    alert("Razorpay API Key ID లభించలేదు. దయచేసి .env ఫైల్‌లో VITE_RAZORPAY_KEY_ID లేదా అడ్మిన్ ప్యానెల్‌లో మీ Razorpay Key ID (rzp_live_...) ఉంచండి.\n\n(Razorpay Key ID is missing. Please set VITE_RAZORPAY_KEY_ID in your .env file or in Admin Settings.)");
+    if (onFailure) onFailure("Razorpay Key ID is missing");
+    return;
+  }
   
   // Convert amount to paise (Minimum 100 paise = 1 INR)
   let numAmount = Number(amount);
